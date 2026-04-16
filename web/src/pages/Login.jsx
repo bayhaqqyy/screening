@@ -1,13 +1,21 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, Navigate } from 'react-router-dom';
 import AnimatedPage from '../components/layout/AnimatedPage';
+import { useAuth } from '../contexts/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login, user } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Simulate login success and redirect to dashboard
+    login({ email, name: email.split('@')[0], role: 'premium' });
     navigate('/');
   };
 
@@ -59,6 +67,8 @@ const Login = () => {
                   placeholder="name@premium.com" 
                   required 
                   type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>
@@ -75,6 +85,8 @@ const Login = () => {
                   placeholder="••••••••••••" 
                   required 
                   type="password" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <button className="absolute right-0 top-1/2 -translate-y-1/2 text-outline-variant hover:text-on-surface-variant transition-colors" type="button">
                   <span className="material-symbols-outlined text-lg">visibility</span>
