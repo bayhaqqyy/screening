@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+yfinance
+pandas
+ta
+requests
+beautifulsoup4
+confluent-kafka
+sqlalchemy
+apscheduler
+pydantic

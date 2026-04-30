@@ -20,8 +20,17 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+import { useWebSocket } from './hooks/useWebSocket';
+
 function AppRoutes() {
   const location = useLocation();
+  
+  // Initialize WS globally when user is authenticated
+  const { user } = useAuth();
+  if (user) {
+    useWebSocket(); // Starts connection globally
+  }
+
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>

@@ -9,14 +9,32 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [error, setError] = useState('');
+
   if (user) {
     return <Navigate to="/" replace />;
   }
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    login({ email, name: email.split('@')[0], role: 'premium' });
-    navigate('/');
+    setError('');
+    
+    // In dev, if the DB is not ready, we can still use dummy data,
+    // but the plan is to use real API. So we send real credentials.
+    const result = await login({ email, password });
+    
+    if (result.success) {
+      navigate('/');
+    } else {
+      setError(result.error || 'Failed to login');
+      // TEMPORARY FALLBACK FOR DEVELOPMENT (so user can still login if backend is off)
+      if (result.error && result.error.includes("Failed to fetch")) {
+        console.warn("Backend is off. Using fallback mock login.");
+        localStorage.setItem('authed_user', JSON.stringify({ email, name: 'Dev User', role: 'admin' }));
+        localStorage.setItem('auth_token', 'mock_token');
+        window.location.reload();
+      }
+    }
   };
 
   return (
@@ -55,6 +73,12 @@ const Login = () => {
 
           {/* Authentication Form */}
           <form onSubmit={handleLogin} className="space-y-6">
+            {error && (
+              <div className="bg-error-container/20 border border-error/50 text-error px-4 py-3 rounded-xl text-sm font-medium">
+                {error}
+              </div>
+            )}
+            
             {/* Email Input */}
             <div className="group">
               <label className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-1" htmlFor="email">Email Address</label>

@@ -1,0 +1,148 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.0
+    container_name: sahamscreen-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - sahamscreen-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: sahamscreen-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_MESSAGE_MAX_BYTES: 10485760 # 10MB
+    networks:
+      - sahamscreen-network
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: sahamscreen-kafka-ui
+    depends_on:
+      - kafka
+    ports:
+      - "8090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: sahamscreen
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    networks:
+      - sahamscreen-network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: sahamscreen-postgres
+    environment:
+      POSTGRES_DB: sahamscreen
+      POSTGRES_USER: sahamscreen
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sahamscreen_dev}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./server/migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - sahamscreen-network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: sahamscreen-server
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=sahamscreen
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-sahamscreen_dev}
+      - DB_NAME=sahamscreen
+      - JWT_SECRET=super-secret-jwt-key-change-in-production
+      - KAFKA_BROKER=kafka:29092
+    depends_on:
+      - postgres
+      - kafka
+    networks:
+      - sahamscreen-network
+
+  engine-indicator:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+    container_name: sahamscreen-engine-indicator
+    environment:
+      - KAFKA_BROKER=kafka:29092
+    command: ["python", "streaming/indicator_consumer.py"]
+    depends_on:
+      - kafka
+    networks:
+      - sahamscreen-network
+
+  engine-bandar:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+    container_name: sahamscreen-engine-bandar
+    environment:
+      - KAFKA_BROKER=kafka:29092
+    command: ["python", "streaming/bandar_consumer.py"]
+    depends_on:
+      - kafka
+    networks:
+      - sahamscreen-network
+
+  engine-fetcher:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+    container_name: sahamscreen-engine-fetcher
+    environment:
+      - KAFKA_BROKER=kafka:29092
+    command: ["python", "data/fetcher.py"]
+    depends_on:
+      - kafka
+    networks:
+      - sahamscreen-network
+    restart: "no"
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: sahamscreen-web
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8080/api
+    depends_on:
+      - server
+    networks:
+      - sahamscreen-network
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+
+networks:
+  sahamscreen-network:
+    driver: bridge
+
+volumes:
+  pgdata:
