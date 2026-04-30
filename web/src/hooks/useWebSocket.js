@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-const WS_URL = import.meta.env.VITE_WS_URL || 'ws://0.0.0.0:8080/ws/stream';
+const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8080/ws/stream';
 
 export const useWebSocket = () => {
   const [messages, setMessages] = useState([]);

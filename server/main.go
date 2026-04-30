@@ -25,7 +25,8 @@ func main() {
 		w.Write([]byte(`{"status": "ok", "service": "SahamScreen API"}`))
 	}).Methods("GET")
 
-	r.HandleFunc("/api/auth/login", handlers.Login).Methods("POST")
+	r.HandleFunc("/api/auth/login", handlers.Login).Methods("POST", "OPTIONS")
+	r.HandleFunc("/api/auth/register", handlers.Register).Methods("POST", "OPTIONS")
 	
 	// Add other routes here
 	r.HandleFunc("/ws/stream", ws.ServeWs)

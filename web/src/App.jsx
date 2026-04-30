@@ -11,6 +11,8 @@ import News from './pages/News';
 import Watchlist from './pages/Watchlist';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
+import Signup from './pages/Signup';
+import ForgotPassword from './pages/ForgotPassword';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -35,6 +37,9 @@ function AppRoutes() {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/register" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/" element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
           <Route index element={<Dashboard />} />
           <Route path="scalping" element={<Scalping />} />

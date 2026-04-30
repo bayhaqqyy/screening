@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, Link } from 'react-router-dom';
 import AnimatedPage from '../components/layout/AnimatedPage';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -128,7 +128,7 @@ const Login = () => {
                 </div>
                 <span className="ml-3 text-on-surface-variant group-hover:text-on-surface transition-colors">Keep me signed in</span>
               </label>
-              <a className="text-primary-fixed-dim font-semibold hover:text-primary transition-colors" href="#">Forgot Access?</a>
+              <Link className="text-primary-fixed-dim font-semibold hover:text-primary transition-colors" to="/forgot-password">Forgot Access?</Link>
             </div>
 
             {/* Primary CTA */}
@@ -145,7 +145,7 @@ const Login = () => {
           <footer className="mt-10 text-center">
             <div className="inline-flex items-center px-4 py-2 bg-surface-container-low/40 rounded-full border border-outline-variant/10">
               <span className="text-on-surface-variant text-sm">New to the platform?</span>
-              <a className="ml-2 text-secondary-fixed-dim font-bold text-sm hover:underline" href="#">Sign Up Now</a>
+              <Link className="ml-2 text-secondary-fixed-dim font-bold text-sm hover:underline" to="/signup">Sign Up Now</Link>
             </div>
           </footer>
         </div>
