@@ -1,24 +1,84 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { newsService } from '../../services/newsService';
 
 const FeaturedNews = () => {
+  const [article, setArticle] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const res = await newsService.getFeatured();
+        if (res.data) setArticle(res.data);
+      } catch { /* fallback to null */ }
+      finally { setLoading(false); }
+    };
+    fetchFeatured();
+  }, []);
+
+  if (loading) {
+    return (
+      <article className="lg:col-span-8 group relative rounded-xl overflow-hidden aspect-[16/9] lg:aspect-auto lg:h-[500px] bg-surface-container animate-pulse">
+        <div className="absolute bottom-0 left-0 p-8 space-y-4 max-w-2xl">
+          <div className="h-4 bg-surface-container-highest rounded w-24"></div>
+          <div className="h-8 bg-surface-container-highest rounded w-96"></div>
+          <div className="h-4 bg-surface-container-highest rounded w-64"></div>
+        </div>
+      </article>
+    );
+  }
+
+  if (!article) {
+    return (
+      <article className="lg:col-span-8 group relative rounded-xl overflow-hidden aspect-[16/9] lg:aspect-auto lg:h-[500px] bg-surface-container flex items-center justify-center">
+        <span className="text-on-surface-variant text-sm">No featured news available</span>
+      </article>
+    );
+  }
+
+  const sentimentLabel = article.sentiment || 'Netral';
+  const sentimentCls = sentimentLabel.toLowerCase() === 'positif' || sentimentLabel.toLowerCase() === 'positive' 
+    ? 'bg-secondary-container text-on-secondary-container' 
+    : sentimentLabel.toLowerCase() === 'negatif' || sentimentLabel.toLowerCase() === 'negative'
+    ? 'bg-error-container text-on-error-container'
+    : 'bg-surface-container-highest text-on-surface-variant';
+
+  const formatTimeAgo = (dateStr) => {
+    if (!dateStr) return '';
+    const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 60000);
+    if (diff < 60) return `${diff}m ago`;
+    if (diff < 1440) return `${Math.floor(diff / 60)}h ago`;
+    return `${Math.floor(diff / 1440)}d ago`;
+  };
+
+  const tags = article.related_tickers 
+    ? (typeof article.related_tickers === 'string' ? article.related_tickers.split(',') : article.related_tickers)
+    : [];
+
   return (
-    <article className="lg:col-span-8 group relative rounded-xl overflow-hidden aspect-[16/9] lg:aspect-auto lg:h-[500px]">
-      <img className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="stock market" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkSwFYTCXWv-2bcC2ptCWL8msOBazOFjAiM_uopjPMjjY5uSmUfbzfhPmlM8MkcOhkJHbQc_MKYCgjYAXifxtR1ZHwzZDDReLMMU5OQR10Q4U5agEihgfwfYF_fljt5KfsAfsfxV4KVvZiQyZCZ5DwciXq7JwH8xPZjGEp7ZWELqMUxmOZve7GU6FVGyHOc7eEaxWWTfXDXg7JdnZmTnRZG5lgAhtnX5GigCjmu-zT--sGnI3WC5dd4HUDyeQParGPkjkD0c21gFY" />
+    <a href={article.link || article.url || '#'} target="_blank" rel="noopener noreferrer" className="lg:col-span-8 group relative rounded-xl overflow-hidden aspect-[16/9] lg:aspect-auto lg:h-[500px] block">
+      {article.image_url ? (
+        <img className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="featured news" src={article.image_url} />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-surface-container"></div>
+      )}
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
       <div className="absolute bottom-0 left-0 p-8 space-y-4 max-w-2xl">
         <div className="flex items-center space-x-3">
-          <span className="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2.5 py-1 rounded-sm uppercase tracking-wider">Positif</span>
-          <span className="text-blue-400 text-sm font-semibold">CNBC Indonesia • 12m ago</span>
+          <span className={`text-[10px] font-bold px-2.5 py-1 rounded-sm uppercase tracking-wider ${sentimentCls}`}>{sentimentLabel}</span>
+          <span className="text-blue-400 text-sm font-semibold">{article.source || 'Market News'} • {formatTimeAgo(article.published_at)}</span>
         </div>
-        <h3 className="text-3xl lg:text-4xl font-bold leading-tight tracking-tight">IHSG Berpotensi Menguat, Sektor Perbankan Jadi Penopang Utama di Awal Kuartal</h3>
-        <p className="text-on-surface-variant line-clamp-2">Analis memprediksi arus modal asing akan terus masuk ke pasar saham domestik seiring dengan stabilitas makroekonomi dan laporan laba emiten yang solid.</p>
-        <div className="flex gap-2">
-          <span className="px-2 py-1 bg-white/10 backdrop-blur-md rounded text-[11px] font-bold tabular-nums tracking-wider uppercase">#BBCA</span>
-          <span className="px-2 py-1 bg-white/10 backdrop-blur-md rounded text-[11px] font-bold tabular-nums tracking-wider uppercase">#BMRI</span>
-          <span className="px-2 py-1 bg-white/10 backdrop-blur-md rounded text-[11px] font-bold tabular-nums tracking-wider uppercase">#IHSG</span>
-        </div>
+        <h3 className="text-3xl lg:text-4xl font-bold leading-tight tracking-tight">{article.title}</h3>
+        <p className="text-on-surface-variant line-clamp-2">{article.description || article.summary || ''}</p>
+        {tags.length > 0 && (
+          <div className="flex gap-2">
+            {tags.slice(0, 4).map((tag) => (
+              <span key={tag} className="px-2 py-1 bg-white/10 backdrop-blur-md rounded text-[11px] font-bold tabular-nums tracking-wider uppercase">#{tag.trim()}</span>
+            ))}
+          </div>
+        )}
       </div>
-    </article>
+    </a>
   );
 };
 

@@ -13,6 +13,7 @@ import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
+import StockDetail from './pages/StockDetail';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -48,6 +49,7 @@ function AppRoutes() {
           <Route path="news" element={<News />} />
           <Route path="watchlist" element={<Watchlist />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="stock/:ticker" element={<StockDetail />} />
         </Route>
       </Routes>
     </AnimatePresence>

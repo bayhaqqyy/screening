@@ -116,12 +116,27 @@ services:
     container_name: sahamscreen-engine-fetcher
     environment:
       - KAFKA_BROKER=kafka:29092
+      - FETCH_INTERVAL_MINUTES=1
     command: ["python", "data/fetcher.py"]
     depends_on:
       - kafka
     networks:
       - sahamscreen-network
-    restart: "no"
+    restart: "always"
+
+  engine-news-fetcher:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+    container_name: sahamscreen-engine-news-fetcher
+    environment:
+      - KAFKA_BROKER=kafka:29092
+    command: ["python", "data/news_fetcher.py"]
+    depends_on:
+      - kafka
+    networks:
+      - sahamscreen-network
+    restart: "always"
 
   web:
     build:

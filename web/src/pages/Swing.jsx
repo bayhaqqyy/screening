@@ -1,11 +1,33 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import AnimatedPage from '../components/layout/AnimatedPage';
 import SwingFilterBar from '../components/swing/SwingFilterBar';
 import SwingTable from '../components/swing/SwingTable';
 import EventCalendar from '../components/swing/EventCalendar';
 import TechnicalHighlights from '../components/swing/TechnicalHighlights';
+import { useScreener } from '../hooks/useScreener';
 
 const Swing = () => {
+  const { data, loading } = useScreener('swing');
+  const [filters, setFilters] = useState({
+    timeframe: 'daily',
+    indicator: 'all',
+    sector: 'all',
+    corpAction: 'all'
+  });
+
+  const filteredData = useMemo(() => {
+    if (!data) return [];
+    return data.filter(item => {
+      // Very basic filtering mock since actual data might not have these fields structured this way from backend
+      if (filters.indicator !== 'all') {
+        const sig = (item.signal || '').toLowerCase();
+        if (filters.indicator === 'rsi_oversold' && !sig.includes('rsi')) return false;
+        // mock logic for others
+      }
+      return true;
+    });
+  }, [data, filters]);
+
   return (
     <AnimatedPage>
       <div className="mb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
@@ -21,10 +43,10 @@ const Swing = () => {
         </div>
       </div>
       
-      <SwingFilterBar />
+      <SwingFilterBar filters={filters} onFilterChange={setFilters} />
       
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-        <SwingTable />
+        <SwingTable data={filteredData} loading={loading} />
         <EventCalendar />
       </div>
       

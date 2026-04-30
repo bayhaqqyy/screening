@@ -1,12 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-
-const mockMovers = [
-  { ticker: 'ADRO', name: 'Adaro Energy', price: '3,820', change: '+4.25%', isGain: true, initial: 'A', bgCls: 'bg-blue-500/10', txtCls: 'text-blue-400' },
-  { ticker: 'BBCA', name: 'Bank Central Asia', price: '10,250', change: '+2.15%', isGain: true, initial: 'B', bgCls: 'bg-yellow-500/10', txtCls: 'text-yellow-400' },
-  { ticker: 'GOTO', name: 'GoTo Gojek Tokopedia', price: '58', change: '+1.75%', isGain: true, initial: 'G', bgCls: 'bg-green-500/10', txtCls: 'text-green-400' },
-  { ticker: 'TLKM', name: 'Telkom Indonesia', price: '2,840', change: '+1.43%', isGain: true, initial: 'T', bgCls: 'bg-red-500/10', txtCls: 'text-red-400' }
-];
+import { marketService } from '../../services/marketService';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -25,6 +19,23 @@ const itemVariants = {
 
 const TopMovers = () => {
   const [tab, setTab] = useState('gainers');
+  const [movers, setMovers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMovers = async () => {
+      setLoading(true);
+      try {
+        const data = await marketService.getTopMovers(tab);
+        setMovers(data);
+      } catch (error) {
+        console.error("Failed to fetch top movers:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMovers();
+  }, [tab]);
   
   return (
     <div className="col-span-12 lg:col-span-5 bg-surface-container-low rounded-xl flex flex-col overflow-hidden">
@@ -55,36 +66,49 @@ const TopMovers = () => {
               <th className="w-24 py-3 text-right font-normal">Change</th>
             </tr>
           </thead>
+          {loading ? (
+             <tbody className="block pt-8 text-center text-on-surface-variant text-sm">
+               <tr><td>Loading...</td></tr>
+             </tbody>
+          ) : (
           <motion.tbody 
             className="block space-y-4 pt-4"
             variants={containerVariants}
             initial="hidden"
             animate="show"
           >
-            {mockMovers.map((stock) => (
-              <motion.tr 
-                key={stock.ticker} 
-                variants={itemVariants}
-                whileHover={{ scale: 1.02, backgroundColor: 'rgba(53, 57, 67, 0.4)' }}
-                whileTap={{ scale: 0.98 }}
-                className="flex items-center p-2 rounded-lg transition-colors cursor-pointer"
-              >
-                <td className="flex-1 flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded flex items-center justify-center font-bold text-xs ${stock.bgCls} ${stock.txtCls}`}>
-                    {stock.initial}
-                  </div>
-                  <div>
-                    <p className="font-bold tabular-nums">{stock.ticker}</p>
-                    <p className="text-[10px] text-on-surface-variant">{stock.name}</p>
-                  </div>
-                </td>
-                <td className="w-24 text-right tabular-nums font-semibold">{stock.price}</td>
-                <td className={`w-24 text-right tabular-nums ${stock.isGain ? 'text-secondary' : 'text-error'}`}>
-                  {stock.change}
-                </td>
-              </motion.tr>
-            ))}
+            {movers.map((stock) => {
+              const isGain = stock.change_pct > 0;
+              const initial = stock.ticker.charAt(0);
+              const bgCls = isGain ? 'bg-secondary/10' : 'bg-error/10';
+              const txtCls = isGain ? 'text-secondary' : 'text-error';
+              
+              return (
+                <motion.tr 
+                  key={stock.ticker} 
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.02, backgroundColor: 'rgba(53, 57, 67, 0.4)' }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center p-2 rounded-lg transition-colors cursor-pointer"
+                >
+                  <td className="flex-1 flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded flex items-center justify-center font-bold text-xs ${bgCls} ${txtCls}`}>
+                      {initial}
+                    </div>
+                    <div>
+                      <p className="font-bold tabular-nums">{stock.ticker}</p>
+                      <p className="text-[10px] text-on-surface-variant truncate w-32">{stock.name}</p>
+                    </div>
+                  </td>
+                  <td className="w-24 text-right tabular-nums font-semibold">{stock.price}</td>
+                  <td className={`w-24 text-right tabular-nums ${isGain ? 'text-secondary' : 'text-error'}`}>
+                    {isGain ? '+' : ''}{stock.change_pct}%
+                  </td>
+                </motion.tr>
+              )
+            })}
           </motion.tbody>
+          )}
         </table>
       </div>
     </div>

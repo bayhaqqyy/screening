@@ -9,3 +9,5 @@ confluent-kafka
 sqlalchemy
 apscheduler
 pydantic
+feedparser
+schedule

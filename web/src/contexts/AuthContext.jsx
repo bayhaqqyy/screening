@@ -44,12 +44,24 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('auth_token');
   };
 
+  const updateProfile = async (data) => {
+    try {
+      const response = await api.put('/auth/profile', data);
+      setUser(response.user);
+      localStorage.setItem('authed_user', JSON.stringify(response.user));
+      return { success: true };
+    } catch (error) {
+      console.error('Update profile failed:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,48 +1,20 @@
-import React from 'react';
-import { useScreener } from '../../hooks/useScreener';
+import React, { useState } from 'react';
+import { watchlistService } from '../../services/watchlistService';
 
-const mockScalpingData = [
-  {
-    ticker: 'ADRO', name: 'Adaro Energy', lastPrice: '3,640', chg: '+4.12%', vol: '142.5', freq: '12,402',
-    isGain: true, initial: 'A', bgCls: 'bg-primary-container/20', txtCls: 'text-primary',
-    spikeLvl: 2, spikeText: '3.2x RATIO', spikeCls: 'text-tertiary',
-    trendConfig: [
-      { width: 'w-1', bg: 'bg-secondary/20', h: 'h-1/2' },
-      { width: 'w-1', bg: 'bg-secondary/30', h: 'h-3/4' },
-      { width: 'w-1', bg: 'bg-secondary/40', h: 'h-2/3' },
-      { width: 'w-1', bg: 'bg-secondary/60', h: 'h-full' },
-      { width: 'w-1', bg: 'bg-secondary', h: 'h-5/6' },
-    ]
-  },
-  {
-    ticker: 'GOTO', name: 'GoTo Gojek Toko', lastPrice: '64', chg: '-2.35%', vol: '2,450.1', freq: '45,190',
-    isGain: false, initial: 'G', bgCls: 'bg-error-container/20', txtCls: 'text-error', lastPriceBg: 'bg-error-container/10',
-    spikeLvl: 0, spikeText: 'NORMAL', spikeCls: 'text-outline',
-    trendConfig: [
-      { width: 'w-1', bg: 'bg-error/20', h: 'h-full' },
-      { width: 'w-1', bg: 'bg-error/40', h: 'h-3/4' },
-      { width: 'w-1', bg: 'bg-error/60', h: 'h-2/3' },
-      { width: 'w-1', bg: 'bg-error/80', h: 'h-1/2' },
-      { width: 'w-1', bg: 'bg-error', h: 'h-1/4' },
-    ]
-  },
-  {
-    ticker: 'BBRI', name: 'Bank Rakyat Indonesia', lastPrice: '5,150', chg: '+1.85%', vol: '89.2', freq: '22,105',
-    isGain: true, initial: 'B', bgCls: 'bg-primary-container/20', txtCls: 'text-primary', lastPriceBg: 'bg-secondary-container/10',
-    spikeLvl: 3, spikeText: 'VOL SHOCK', spikeCls: 'text-tertiary animate-pulse',
-    trendConfig: [
-      { width: 'w-1', bg: 'bg-secondary/10', h: 'h-1/4' },
-      { width: 'w-1', bg: 'bg-secondary/20', h: 'h-1/4' },
-      { width: 'w-1', bg: 'bg-secondary/40', h: 'h-2/4' },
-      { width: 'w-1', bg: 'bg-secondary/60', h: 'h-3/4' },
-      { width: 'w-1', bg: 'bg-secondary', h: 'h-full' },
-    ]
-  }
-];
+const ScalpingTable = ({ data = [], loading = false }) => {
+  const [addingTicker, setAddingTicker] = useState(null);
 
-const ScalpingTable = () => {
-  const { data } = useScreener('scalping');
-  const displayData = data && data.length > 0 ? data : mockScalpingData;
+  const handleAddToWatchlist = async (e, ticker) => {
+    e.stopPropagation();
+    setAddingTicker(ticker);
+    try {
+      await watchlistService.addTicker(ticker);
+    } catch (err) {
+      console.error("Failed to add to watchlist:", err);
+    } finally {
+      setAddingTicker(null);
+    }
+  };
 
   return (
     <div className="glass-panel rounded-xl overflow-hidden mt-6">
@@ -51,62 +23,96 @@ const ScalpingTable = () => {
           <tr className="bg-surface-container-high/50 text-[10px] font-bold uppercase tracking-widest text-outline">
             <th className="px-6 py-4">Ticker</th>
             <th className="px-4 py-4">Last Price</th>
-            <th className="px-4 py-4 text-right">Chg%</th>
-            <th className="px-4 py-4 text-right">Vol (M)</th>
-            <th className="px-4 py-4 text-right">Freq</th>
+            <th className="px-4 py-4 text-right">RSI</th>
+            <th className="px-4 py-4 text-right">Vol</th>
+            <th className="px-4 py-4 text-right">MACD</th>
             <th className="px-4 py-4">Spike Status</th>
-            <th className="px-6 py-4 text-right">Trend</th>
+            <th className="px-6 py-4 text-right">Signal</th>
+            <th className="px-4 py-4 text-center">Action</th>
           </tr>
         </thead>
+        {loading ? (
+           <tbody className="text-sm tabular-nums">
+              <tr><td colSpan="8" className="px-6 py-8 text-center text-sm text-on-surface-variant">Scanning market...</td></tr>
+           </tbody>
+        ) : data.length === 0 ? (
+           <tbody className="text-sm tabular-nums">
+              <tr><td colSpan="8" className="px-6 py-8 text-center text-sm text-on-surface-variant">No scalping candidates found.</td></tr>
+           </tbody>
+        ) : (
         <tbody className="text-sm tabular-nums">
-          {displayData.map((data) => (
-            <tr key={data.ticker} className="group hover:bg-surface-container-high transition-colors cursor-pointer border-b border-outline-variant/10">
-              <td className="px-6 py-5">
-                <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${data.bgCls} ${data.txtCls}`}>
-                    {data.initial}
+          {data.map((row) => {
+            const payload = row.payload || {};
+            const price = payload.price || 0;
+            const rsi = payload.rsi || 0;
+            const vol = payload.volume || 0;
+            const macd = payload.macd || 0;
+            
+            const isGain = row.score > 50;
+            const initial = row.ticker.charAt(0);
+            const bgCls = isGain ? 'bg-primary-container/20' : 'bg-error-container/20';
+            const txtCls = isGain ? 'text-primary' : 'text-error';
+            
+            const spikeLvl = vol > 10000000 ? 3 : vol > 1000000 ? 2 : 0;
+            const spikeText = spikeLvl === 3 ? 'VOL SHOCK' : spikeLvl === 2 ? 'HIGH VOL' : 'NORMAL';
+
+            return (
+              <tr key={row.ticker} className="group hover:bg-surface-container-high transition-colors cursor-pointer border-b border-outline-variant/10">
+                <td className="px-6 py-5">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${bgCls} ${txtCls}`}>
+                      {initial}
+                    </div>
+                    <div>
+                      <div className="font-bold text-on-surface">{row.ticker}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="font-bold text-on-surface">{data.ticker}</div>
-                    <div className="text-[10px] text-outline">{data.name}</div>
-                  </div>
-                </div>
-              </td>
-              <td className={`px-4 py-5 font-semibold ${data.lastPriceBg ? data.txtCls : ''} ${data.lastPriceBg || ''}`}>
-                {data.lastPrice}
-              </td>
-              <td className="px-4 py-5 text-right">
-                <span className={`${data.isGain ? 'bg-secondary-container/20 text-secondary-fixed-dim' : 'bg-error-container/20 text-error'} px-2 py-0.5 rounded text-xs font-bold`}>
-                  {data.chg}
-                </span>
-              </td>
-              <td className="px-4 py-5 text-right text-on-surface-variant">{data.vol}</td>
-              <td className="px-4 py-5 text-right text-on-surface-variant">{data.freq}</td>
-              <td className="px-4 py-5">
-                <div className={`flex items-center gap-1 ${data.spikeLvl > 0 ? 'text-tertiary' : 'text-outline'}`}>
-                  {data.spikeLvl === 0 && (
-                     <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0" }}>local_fire_department</span>
-                  )}
-                  {data.spikeLvl > 0 && Array.from({ length: 3 }).map((_, i) => (
-                      <span key={i} className={`material-symbols-outlined text-sm ${data.spikeLvl === 3 ? 'animate-pulse' : ''}`} style={{ fontVariationSettings: `'FILL' ${i < data.spikeLvl ? 1 : 0}` }}>
-                        local_fire_department
-                      </span>
-                  ))}
-                  <span className={`text-[10px] font-bold ml-1 ${data.spikeLvl === 3 ? 'animate-pulse' : ''}`}>{data.spikeText}</span>
-                </div>
-              </td>
-              <td className="px-6 py-5 text-right">
-                <div className="flex justify-end">
-                  <div className="w-24 h-6 flex items-end gap-[1px]">
-                    {data.trendConfig.map((col, idx) => (
-                       <div key={idx} className={`${col.width} ${col.bg} ${col.h}`}></div>
+                </td>
+                <td className="px-4 py-5 font-semibold">
+                  {price.toLocaleString()}
+                </td>
+                <td className="px-4 py-5 text-right">
+                  <span className={`${rsi > 70 ? 'bg-error-container/20 text-error' : rsi < 30 ? 'bg-secondary-container/20 text-secondary' : 'bg-surface-container/20 text-on-surface'} px-2 py-0.5 rounded text-xs font-bold`}>
+                    {rsi.toFixed(2)}
+                  </span>
+                </td>
+                <td className="px-4 py-5 text-right text-on-surface-variant">{(vol / 1000000).toFixed(1)}M</td>
+                <td className="px-4 py-5 text-right text-on-surface-variant">{macd.toFixed(3)}</td>
+                <td className="px-4 py-5">
+                  <div className={`flex items-center gap-1 ${spikeLvl > 0 ? 'text-tertiary' : 'text-outline'}`}>
+                    {spikeLvl === 0 && (
+                       <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0" }}>local_fire_department</span>
+                    )}
+                    {spikeLvl > 0 && Array.from({ length: 3 }).map((_, i) => (
+                        <span key={i} className={`material-symbols-outlined text-sm ${spikeLvl === 3 ? 'animate-pulse' : ''}`} style={{ fontVariationSettings: `'FILL' ${i < spikeLvl ? 1 : 0}` }}>
+                          local_fire_department
+                        </span>
                     ))}
+                    <span className={`text-[10px] font-bold ml-1 ${spikeLvl === 3 ? 'animate-pulse' : ''}`}>{spikeText}</span>
                   </div>
-                </div>
-              </td>
-            </tr>
-          ))}
+                </td>
+                <td className="px-6 py-5 text-right font-bold text-xs">
+                  <span className={`${isGain ? 'text-secondary' : 'text-error'}`}>{row.signal || 'Neutral'}</span>
+                </td>
+                <td className="px-4 py-5 text-center">
+                  <button 
+                    onClick={(e) => handleAddToWatchlist(e, row.ticker)}
+                    disabled={addingTicker === row.ticker}
+                    className="opacity-0 group-hover:opacity-100 p-1.5 rounded bg-surface-container-highest hover:bg-primary/20 hover:text-primary transition-all text-on-surface-variant disabled:opacity-50"
+                    title="Add to Watchlist"
+                  >
+                    {addingTicker === row.ticker ? (
+                      <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span>
+                    ) : (
+                      <span className="material-symbols-outlined text-sm">star_add</span>
+                    )}
+                  </button>
+                </td>
+              </tr>
+            )
+          })}
         </tbody>
+        )}
       </table>
     </div>
   );

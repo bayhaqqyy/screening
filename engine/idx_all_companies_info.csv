@@ -1,0 +1,958 @@
+Ticker,Name,Sector,Industry,MarketCap,PreviousClose,Status
+AALI,Astra Agro Lestari Tbk.,Consumer Defensive,Farm Products,15445624094720,8050.0,Success
+ACST,Acset Indonusa Tbk.,Industrials,Engineering & Construction,1749840822272,99.0,Success
+ACES,Aspirasi Hidup Indonesia Tbk.,Consumer Cyclical,Specialty Retail,6060618285056,368.0,Success
+ABDA,Asuransi Bina Dana Arta Tbk.,Financial Services,Insurance - Property & Casualty,1601681227776,2350.0,Success
+ABBA,Mahaka Media Tbk.,Communication Services,Publishing,169243394048,43.0,Success
+AISA,FKS Food Sejahtera Tbk.,Consumer Defensive,Packaged Foods,471909302272,127.0,Success
+ADHI,Adhi Karya (Persero) Tbk,Industrials,Engineering & Construction,1866489135104,182.0,Success
+AKKU,Anugerah Kagum Karya Utama Tbk.,Consumer Cyclical,Lodging,245079621632,38.0,Success
+ADES,Akasha Wira International Tbk.,Consumer Defensive,Beverages - Non-Alcoholic,11812683644928,20375.0,Success
+AKPI,Argha Karya Prima Industry Tbk.,Consumer Cyclical,Packaging & Containers,339797639168,570.0,Success
+ABMM,ABM Investama Tbk.,Energy,Thermal Coal,8039241875456,3010.0,Success
+AMFG,Asahimas Flat Glass Tbk,Basic Materials,Building Materials,1371440021504,3290.0,Success
+AKSI,Mineral Sumberdaya Mandiri Tbk.,Industrials,Trucking,239040004096,340.0,Success
+AMAG,Asuransi Multi Artha Guna Tbk,Financial Services,Insurance - Property & Casualty,2097631723520,436.0,Success
+ALTO,Tri Banyan Tirta Tbk.,Consumer Defensive,Beverages - Non-Alcoholic,39453667328,18.0,Success
+AMIN,Ateliers Mecaniques D Indonesie,Industrials,Specialty Industrial Machinery,244080001024,236.0,Success
+AKRA,AKR Corporindo Tbk,Energy,Oil & Gas Refining & Marketing,30788640833536,1550.0,Success
+ALMI,Alumindo Light Metal Industry T,Basic Materials,Aluminum,282384007168,74.0,Success
+ALKA,Alakasa Industrindo Tbk,Basic Materials,Aluminum,231537459200,630.0,Success
+ALDO,Alkindo Naratama Tbk.,Basic Materials,Paper & Paper Products,1590734225408,590.0,Success
+AMRT,Sumber Alfaria Trijaya Tbk,Consumer Defensive,Grocery Stores,54305675542528,1360.0,Success
+APEX,Apexindo Pratama Duta Tbk.,Energy,Oil & Gas Drilling,709293309952,212.0,Success
+ANJT,Austindo Nusantara Jaya Tbk.,Consumer Defensive,Farm Products,6087827783680,1815.0,Success
+APII,Arita Prima Indonesia Tbk.,Industrials,Tools & Accessories,209773199360,194.0,Success
+ANTM,Aneka Tambang Tbk.,Basic Materials,Gold,86991366520832,3880.0,Success
+APLI,Asiaplast Industries Tbk,Consumer Cyclical,Packaging & Containers,313414418432,234.0,Success
+ARII,Atlas Resources Tbk.,Energy,Thermal Coal,1065000042496,282.0,Success
+APLN,Agung Podomoro Land Tbk.,Real Estate,Real Estate - Development,4948453490688,216.0,Success
+APIC,Pacific Strategic Financial Tbk,Financial Services,Insurance - Life,23767954751488,1935.0,Success
+ARGO,Argo Pantes Tbk,Consumer Cyclical,Textile Manufacturing,3571131351040,1125.0,Success
+ARNA,Arwana Citramulia Tbk,Industrials,Building Products & Equipment,3444688814080,496.0,Success
+ASBI,Asuransi Bintang Tbk,Financial Services,Insurance - Diversified,146322309120,422.0,Success
+ARTA,Arthavest Tbk,Consumer Cyclical,Lodging,1156886167552,2720.0,Success
+ARTI,Ratu Prabu Energi Tbk,Energy,Oil & Gas Equipment & Services,15680000000,2.0,Success
+ARTO,Bank Jago Tbk.,Financial Services,Banks - Regional,18019730325504,1425.0,Success
+ASII,Astra International Tbk,Industrials,Conglomerates,241282303655936,6050.0,Success
+ASJT,Asuransi Jasa Tania Tbk,Financial Services,Insurance - Property & Casualty,263199997952,190.0,Success
+ASGR,Astra Graphia Tbk,Industrials,Specialty Business Services,2205256253440,1680.0,Success
+ASDM,Asuransi Dayin MitraTbk,Financial Services,Insurance - Diversified,234240000000,615.0,Success
+ASMI,Asuransi Maximus Graha Persada ,Financial Services,Insurance - Property & Casualty,170209214464,19.0,Success
+AUTO,Astra Otoparts Tbk,Consumer Cyclical,Auto Parts,12386713993216,2630.0,Success
+ASRM,Asuransi Ramayana Tbk,Financial Services,Insurance - Property & Casualty,360393768960,292.0,Success
+ATIC,Anabatic Technologies Tbk.,Technology,Information Technology Services,1227141414912,545.0,Success
+ASRI,Alam Sutera Realty Tbk.,Real Estate,Real Estate - Development,2574072938496,138.0,Success
+BABP,Bank MNC Internasional Tbk.,Financial Services,Banks - Regional,2267408760832,52.0,Success
+BAJA,Saranacentral Bajatama Tbk.,Basic Materials,Steel,286200004608,173.0,Success
+BALI,Bali Towerindo Sentra Tbk.,Communication Services,Telecom Services,4996932304896,1260.0,Success
+ASSA,Adi Sarana Armada Tbk.,Industrials,Rental & Leasing Services,2934454353920,830.0,Success
+BBHI,Allo Bank Indonesia Tbk.,Financial Services,Banks - Regional,27137543241728,1265.0,Success
+BAYU,Bayu Buana Tbk,Consumer Cyclical,Travel Services,476848029696,1375.0,Success
+BBCA,Bank Central Asia Tbk,Financial Services,Banks - Regional,719626199629824,5975.0,Success
+BBKP,Bank KB Indonesia Tbk.,Financial Services,Banks - Regional,11461139103744,63.0,Success
+BACA,Bank Capital Indonesia Tbk.,Financial Services,Banks - Regional,2693658312704,138.0,Success
+BATA,Sepatu Bata Tbk,Consumer Cyclical,Footwear & Accessories,81900003328,64.0,Success
+BBLD,Buana Finance Tbk,Financial Services,Credit Services,1094454411264,670.0,Success
+BAPA,Bekasi Asri Pemula Tbk,Real Estate,Real Estate - Development,157504716800,238.0,Success
+BBMD,Bank Mestika Dharma Tbk.,Financial Services,Banks - Regional,8017957879808,2000.0,Success
+BBNI,Bank Negara Indonesia  (Persero,Financial Services,Banks - Regional,140085559296000,3800.0,Success
+BBRM,Pelayaran Nasional Bina Buana R,Industrials,Marine Shipping,1238005579776,148.0,Success
+BCIC,Bank JTrust Indonesia Tbk.,Financial Services,Banks - Regional,2299959967744,128.0,Success
+BCIP,Bumi Citra Permai Tbk.,Real Estate,Real Estate - Development,95804342272,68.0,Success
+BBTN,Bank Tabungan Negara (Persero) ,Financial Services,Banks - Regional,18876326739968,1410.0,Success
+BBRI,Bank Rakyat Indonesia (Persero),Financial Services,Banks - Regional,454676982005760,3070.0,Success
+BEST,Bekasi Fajar Industrial Estate ,Real Estate,Real Estate Services,1041909547008,110.0,Success
+BBYB,Bank Neo Commerce Tbk.,Financial Services,Banks - Regional,4058546438144,316.0,Success
+BDMN,Bank Danamon Indonesia Tbk.,Financial Services,Banks - Regional,40169302392832,4250.0,Success
+BEKS,Bank Pembangunan Daerah Banten ,Financial Services,Banks - Regional,1400501829632,27.0,Success
+BCAP,MNC Kapital Indonesia Tbk.,Financial Services,Financial Conglomerates,2216180318208,54.0,Success
+BFIN,BFI Finance  Indonesia Tbk,Financial Services,Credit Services,11879506247680,830.0,Success
+BHIT,MNC Asia Holding Tbk.,Communication Services,Entertainment,2756910514176,33.0,Success
+BIKA,Binakarya Jaya Abadi Tbk.,Real Estate,Real Estate - Development,32575399936,55.0,Success
+BGTG,Bank Ganesha Tbk.,Financial Services,Banks - Regional,2852548509696,122.0,Success
+BIRD,Blue Bird Tbk.,Industrials,Railroads,3915786485760,1645.0,Success
+BIPP,Bhuwanatala Indah Permai Tbk.,Real Estate,Real Estate - Diversified,437494251520,95.0,Success
+BISI,BISI International Tbk,Basic Materials,Agricultural Inputs,2250000039936,770.0,Success
+BJBR,Bank Pembangunan Daerah Jawa Ba,Financial Services,Banks - Regional,9153655341056,875.0,Success
+BJTM,Bank Pembangunan Daerah Jawa Ti,Financial Services,Banks - Regional,8633911345152,580.0,Success
+BIMA,Primarindo Asia Infrastructure ,Consumer Cyclical,Footwear & Accessories,49870409728,82.0,Success
+BIPI,Astrindo Nusantara Infrastruktu,Industrials,Infrastructure Operations,15035605712896,252.0,Success
+BINA,Bank Ina Perdana Tbk.,Financial Services,Banks - Regional,25152337215488,4240.0,Success
+BKDP,Bukit Darmo Property Tbk,Real Estate,Real Estate Services,563549437952,74.0,Success
+BLTZ,Graha Layar Prima Tbk.,Communication Services,Entertainment,2359630233600,2700.0,Success
+BMRI,Bank Mandiri (Persero) Tbk,Financial Services,Banks - Regional,409733336924160,4430.0,Success
+BKSW,Bank QNB Indonesia Tbk.,Financial Services,Banks - Regional,2074324893696,60.0,Success
+BKSL,Sentul City Tbk.,Real Estate,Real Estate - Development,17441725874176,108.0,Success
+BLTA,Berlian Laju Tanker Tbk,Industrials,Marine Shipping,1062275579904,41.0,Success
+BMAS,Bank Maspion Indonesia Tbk.,Financial Services,Banks - Regional,9051331100672,500.0,Success
+BMSR,Bintang Mitra Semestaraya Tbk,Basic Materials,Chemicals,382535991296,340.0,Success
+BMTR,Global Mediacom Tbk,Communication Services,Entertainment,2730869391360,176.0,Success
+BNBA,Bank Bumi Arta Tbk,Financial Services,Banks - Regional,2676520124416,820.0,Success
+BNBR,Bakrie & Brothers Tbk,Industrials,Conglomerates,36070699827200,220.0,Success
+BNGA,Bank CIMB Niaga Tbk.,Financial Services,Banks - Regional,42226566561792,1695.0,Success
+BNII,Bank Maybank Indonesia Tbk.,Financial Services,Banks - Regional,15547900100608,202.0,Success
+BPII,Batavia Prosperindo Internasion,Financial Services,Asset Management,4606015307776,470.0,Success
+BPFI,Woori Finance Indonesia Tbk.,Financial Services,Credit Services,705934721024,274.0,Success
+BRAM,Indo Kordsa Tbk,Consumer Cyclical,Textile Manufacturing,2065761566720,4650.0,Success
+BNLI,Bank Permata Tbk,Financial Services,Banks - Regional,106011243315200,3100.0,Success
+BRNA,Berlina Tbk,Consumer Cyclical,Packaging & Containers,660899233792,685.0,Success
+BOLT,Garuda Metalindo Tbk.,Industrials,Tools & Accessories,2144531120128,900.0,Success
+BRMS,Bumi Resources Minerals Tbk.,Basic Materials,Other Industrial Metals & Mining,112009391636480,820.0,Success
+BRPT,Barito Pacific Tbk.,Basic Materials,Chemicals,172429615824896,1950.0,Success
+BSDE,Bumi Serpong Damai Tbk,Real Estate,Real Estate - Development,15998747934720,825.0,Success
+BSWD,Bank Of India Indonesia Tbk.,Financial Services,Banks - Regional,4979970015232,1350.0,Success
+BSIM,Bank Sinarmas Tbk.,Financial Services,Banks - Regional,17054479417344,875.0,Success
+BSSR,Baramulti Suksessarana Tbk.,Energy,Thermal Coal,10439834468352,4010.0,Success
+BTEL,"BTEL.JK,0P0000BGUU,0",N/A,N/A,0,0,Success
+BTEK,Bumi Teknokultura Unggul Tbk,Consumer Defensive,Farm Products,601607438336,13.0,Success
+BTON,Betonjaya Manunggal Tbk,Basic Materials,Steel,277919989760,368.0,Success
+BUKK,Bukaka Teknik Utama Tbk.,Industrials,Engineering & Construction,3432587722752,1230.0,Success
+BULL,Buana Lintas Lautan Tbk.,Industrials,Marine Shipping,7824690642944,535.0,Success
+BTPN,Bank SMBC Indonesia Tbk.,Financial Services,Banks - Regional,21025741864960,1965.0,Success
+BUVA,Bukit Uluwatu Villa Tbk.,Consumer Cyclical,Lodging,24986309885952,1075.0,Success
+BUDI,Budi Starch & Sweetener Tbk.,Consumer Defensive,Packaged Foods,943168159744,210.0,Success
+BWPT,Eagle High Plantations Tbk.,Consumer Defensive,Packaged Foods,4139274993664,135.0,Success
+BUMI,Bumi Resources Tbk,Energy,Thermal Coal,82436461428736,230.0,Success
+BVIC,Bank Victoria International Tbk,Financial Services,Banks - Regional,1878780805120,106.0,Success
+CASS,Cahaya Aero Services Tbk.,Industrials,Airports & Air Services,3756510150656,1825.0,Success
+BYAN,Bayan Resources Tbk,Energy,Thermal Coal,380833340850176,11500.0,Success
+CFIN,Clipan Finance Indonesia Tbk,Financial Services,Credit Services,1330829852672,344.0,Success
+CINT,Chitose Internasional Tbk.,Consumer Cyclical,"Furnishings, Fixtures & Appliances",217999998976,218.0,Success
+CENT,Centratama Telekomunikasi Indon,Communication Services,Telecom Services,3087162933248,103.0,Success
+CANI,Capitol Nusantara Indonesia Tbk,Industrials,Marine Shipping,117515042816,156.0,Success
+CEKA,Wilmar Cahaya Indonesia Tbk.,Consumer Defensive,Packaged Foods,1398250012672,2350.0,Success
+CITA,Cita Mineral Investindo Tbk,Basic Materials,Other Industrial Metals & Mining,14653336846336,4140.0,Success
+CLPI,Colorpak Indonesia Tbk,Basic Materials,Specialty Chemicals,508027043840,1680.0,Success
+CNTX,Century Textile Industry Tbk.,Consumer Cyclical,Textile Manufacturing,28400001024,142.0,Success
+CMPP,AirAsia Indonesia Tbk.,Industrials,Airlines,854809968640,81.0,Success
+CNKO,Exploitasi Energi Indonesia Tbk,Energy,Thermal Coal,501556183040,59.0,Success
+CMNP,Citra Marga Nusaphala Persada T,Industrials,Infrastructure Operations,10312385298432,1565.0,Success
+CPRO,Central Proteina Prima Tbk.,Consumer Defensive,Farm Products,3395625943040,59.0,Success
+COWL,"COWL.JK,0P0000D53W,0",N/A,N/A,0,0,Success
+CSAP,Catur Sentosa Adiprana Tbk.,Industrials,Industrial Distribution,1614021656576,288.0,Success
+CTRA,Ciputra Development Tbk,Real Estate,Real Estate - Development,12882307710976,720.0,Success
+DEWA,Darma Henwa Tbk,Energy,Thermal Coal,19285843902464,500.0,Success
+CPIN,Charoen Pokphand Indonesia Tbk,Consumer Defensive,Farm Products,65428021837824,4110.0,Success
+CTBN,Citra Tubindo Tbk,Energy,Oil & Gas Equipment & Services,4322006138880,5650.0,Success
+DGIK,Nusa Konstruksi Enjiniring Tbk.,Industrials,Engineering & Construction,704310214656,140.0,Success
+DILD,Intiland Development Tbk,Real Estate,Real Estate - Development,1337195102208,133.0,Success
+CTTH,Citatah Tbk.,Basic Materials,Building Materials,176010100736,148.0,Success
+DKFT,Central Omega Resources Tbk.,Basic Materials,Other Industrial Metals & Mining,4603760869376,835.0,Success
+DEFI,Danasupra Erapacific Tbk.,Financial Services,Credit Services,105456001024,166.0,Success
+DART,Duta Anggada Realty Tbk.,Real Estate,Real Estate Services,502622519296,161.0,Success
+DLTA,Delta Djakarta Tbk,Consumer Defensive,Beverages - Brewers,1585304961024,1995.0,Success
+DMAS,Puradelta Lestari Tbk.,Real Estate,Real Estate - Development,6554943225856,137.0,Success
+DNAR,Bank Oke Indonesia Tbk.,Financial Services,Banks - Regional,2415611871232,146.0,Success
+DOID,BUMA Internasional Grup Tbk.,Energy,Thermal Coal,1824578076672,254.0,Success
+DNET,Indoritel Makmur Internasional ,Communication Services,Telecom Services,134038798991360,9400.0,Success
+DSFI,Dharma Samudera Fishing Industr,Consumer Defensive,Farm Products,183856414720,98.0,Success
+DSNG,Dharma Satya Nusantara Tbk.,Consumer Defensive,Farm Products,18814720802816,1850.0,Success
+DSSA,Dian Swastatika Sentosa Tbk,Energy,Thermal Coal,237513805398016,1720.0,Success
+DYAN,Dyandra Media International Tbk,Communication Services,Entertainment,358929006592,87.0,Success
+DUTI,Duta Pertiwi Tbk,Real Estate,Real Estate - Development,7770000064512,4090.0,Success
+DVLA,Darya-Varia Laboratoria Tbk,Healthcare,Drug Manufacturers - Specialty & Generic,1792000000000,1605.0,Success
+ELTY,Bakrieland Development Tbk,Real Estate,Real Estate Services,1784398479360,45.0,Success
+EMDE,Megapolitan Developments Tbk.,Real Estate,Real Estate Services,264650014720,82.0,Success
+DPNS,Duta Pertiwi Nusantara Tbk,Basic Materials,Specialty Chemicals,102650281984,310.0,Success
+ENRG,Energi Mega Persada Tbk,Energy,Oil & Gas E&P,43471280799744,1720.0,Success
+ELSA,Elnusa Tbk,Energy,Oil & Gas Equipment & Services,5765815336960,830.0,Success
+ECII,Electronic City Indonesia Tbk.,Consumer Cyclical,Specialty Retail,211389431808,174.0,Success
+EPMT,Enseval Putera Megatrading Tbk,Healthcare,Medical Distribution,6365304061952,2370.0,Success
+EKAD,Ekadharma International Tbk,Basic Materials,Specialty Chemicals,628897480704,181.0,Success
+EMTK,Elang Mahkota Teknologi Tbk,Communication Services,Broadcasting,49251916709888,815.0,Success
+ERAA,Erajaya Swasembada Tbk.,Consumer Cyclical,Specialty Retail,6408094875648,416.0,Success
+ERTX,Eratex Djaja Tbk,Consumer Cyclical,Apparel Manufacturing,259881041920,206.0,Success
+ESTI,Ever Shine Tex Tbk.,Consumer Cyclical,Textile Manufacturing,332509446144,171.0,Success
+ESSA,ESSA Industries Indonesia Tbk.,Basic Materials,Chemicals,14729063956480,955.0,Success
+ETWA,"ETWA.JK,0P0000AV1H,0",N/A,N/A,326806994944,0,Success
+EXCL,XLSMART Telecom Sejahtera Tbk.,Communication Services,Telecom Services,53871594438656,3000.0,Success
+FISH,FKS Multi Agro Tbk,Consumer Defensive,Farm Products,4031999901696,800.0,Success
+FAST,Fast Food Indonesia Tbk,Consumer Cyclical,Restaurants,1301875916800,298.0,Success
+FPNI,Lotte Chemical Titan Tbk.,Basic Materials,Specialty Chemicals,2694144327680,520.0,Success
+GAMA,"GAMA.JK,0P0000WGD9,0",N/A,N/A,180198490112,0,Success
+GDST,Gunawan Dianjaya Steel Tbk.,Basic Materials,Steel,970462527488,115.0,Success
+GDYR,Goodyear Indonesia Tbk,Consumer Cyclical,Auto Parts,455100006400,1120.0,Success
+GEMS,Golden Energy Mines Tbk.,Energy,Thermal Coal,47058824200192,8125.0,Success
+FASW,Fajar Surya Wisesa Tbk,Consumer Cyclical,Packaging & Containers,17555842400256,5450.0,Success
+FMII,Fortune Mate Indonesia Tbk,Real Estate,Real Estate - Development,1536000000000,252.0,Success
+GEMA,Gema Grahasarana Tbk,Consumer Cyclical,"Furnishings, Fixtures & Appliances",142133002240,90.0,Success
+FORU,Fortune Indonesia Tbk,Communication Services,Advertising Agencies,600138973184,1295.0,Success
+GJTL,Gajah Tunggal Tbk,Consumer Cyclical,Auto Parts,4216194859008,1220.0,Success
+GLOB,Globe Kita Terang Tbk.,Consumer Cyclical,Specialty Retail,172222349312,155.0,Success
+GMTD,Gowa Makassar Tourism Developme,Real Estate,Real Estate - Development,1583992799232,1620.0,Success
+GGRM,Gudang Garam Tbk,Consumer Defensive,Tobacco,29342342053888,15825.0,Success
+GOLL,"GOLL.JK,0P000154MR,0",N/A,N/A,0,0,Success
+GIAA,Garuda Indonesia (Persero) Tbk.,Industrials,Airlines,27682236530688,69.0,Success
+GOLD,Visi Telekomunikasi Infrastrukt,Communication Services,Telecom Services,357637292032,288.0,Success
+GTBO,Garda Tujuh Buana Tbk,Energy,Thermal Coal,550000001024,224.0,Success
+GSMF,Equity Development Investment T,Financial Services,Insurance - Diversified,1423040053248,104.0,Success
+GWSA,Greenwood Sejahtera Tbk.,Real Estate,Real Estate - Development,1177914703872,156.0,Success
+GPRA,Perdana Gapuraprima Tbk,Real Estate,Real Estate - Development,496092020736,120.0,Success
+HADE,Himalaya Energi Perkasa Tbk.,Consumer Cyclical,Specialty Retail,40279998464,20.0,Success
+GZCO,Gozco Plantations Tbk,Consumer Defensive,Farm Products,1236847427584,232.0,Success
+HITS,Humpuss Intermoda Transportasi ,Industrials,Marine Shipping,823725850624,116.0,Success
+HDFA,Radana Bhaskara Finance Tbk.,Financial Services,Credit Services,713126576128,112.0,Success
+HERO,DFI Retail Nusantara Tbk.,Consumer Cyclical,Department Stores,1983042420736,380.0,Success
+HMSP,H.M. Sampoerna Tbk.,Consumer Defensive,Tobacco,85493790277632,775.0,Success
+HOME,"HOME.JK,0P0000JDAY,0",N/A,N/A,0,0,Success
+HEXA,Hexindo Adiperkasa Tbk,Industrials,Industrial Distribution,3712799997952,4460.0,Success
+HOTL,"HOTL.JK,0P0000XUPX,0",N/A,N/A,177500012544,0,Success
+IATA,MNC Energy Investments Tbk.,Energy,Thermal Coal,2533342052352,83.0,Success
+ICON,Island Concepts Indonesia Tbk.,Energy,Oil & Gas Equipment & Services,127500754944,125.0,Success
+HRUM,Harum Energy Tbk.,Energy,Thermal Coal,12951328129024,1010.0,Success
+IBFN,Intan Baru Prana Tbk.,Financial Services,Credit Services,121386590208,85.0,Success
+ICBP,Indofood CBP Sukses Makmur Tbk.,Consumer Defensive,Packaged Foods,77551691104256,6725.0,Success
+IIKP,"IIKP.JK,0P0000EKWR,0",N/A,N/A,0,0,Success
+IKBI,Sumi Indo Kabel Tbk,Industrials,Electrical Equipment & Parts,679320027136,570.0,Success
+IKAI,Intikeramik Alamasri Industri T,Industrials,Building Products & Equipment,345950781440,26.0,Success
+IBST,Inti Bangun Sejahtera Tbk.,Communication Services,Telecom Services,11448920047616,8475.0,Success
+IGAR,Champion Pacific Indonesia Tbk.,Consumer Cyclical,Packaging & Containers,445334683648,482.0,Success
+IMAS,Indomobil Sukses Internasional ,Consumer Cyclical,Auto & Truck Dealerships,4253919739904,1085.0,Success
+IMJS,Indomobil Multi Jasa Tbk.,Industrials,Conglomerates,2039661330432,202.0,Success
+INAF,Indofarma Tbk.,Healthcare,Drug Manufacturers - Specialty & Generic,390507724800,126.0,Success
+INAI,Indal Aluminium Industry Tbk,Basic Materials,Aluminum,116582400000,185.0,Success
+INDR,Indo-Rama Synthetics Tbk.,Consumer Cyclical,Textile Manufacturing,1701314428928,2790.0,Success
+INDF,Indofood Sukses Makmur Tbk,Consumer Defensive,Packaged Foods,59487385812992,6850.0,Success
+IMPC,Impack Pratama Industri Tbk.,Industrials,Building Products & Equipment,118756961419264,2310.0,Success
+INDX,Tanah Laut Tbk,Industrials,Marine Shipping,45543014400,111.0,Success
+INCI,Intanwijaya Internasional Tbk,Basic Materials,Specialty Chemicals,144321347584,725.0,Success
+INDY,Indika Energy Tbk,Energy,Thermal Coal,18365502455808,3720.0,Success
+INKP,Indah Kiat Pulp & Paper Tbk.,Basic Materials,Paper & Paper Products,53205312471040,9675.0,Success
+INPC,Bank Artha Graha Internasional ,Financial Services,Banks - Regional,3175075807232,160.0,Success
+INRU,Toba Pulp Lestari Tbk.,Basic Materials,Paper & Paper Products,819441172480,590.0,Success
+INDS,Indospring Tbk,Consumer Cyclical,Auto Parts,2401873952768,380.0,Success
+INTD,Inter Delta Tbk,Basic Materials,Paper & Paper Products,143222374400,250.0,Success
+ISAT,Indosat Tbk,Communication Services,Telecom Services,64501621719040,1985.0,Success
+INPP,Indonesian Paradise Property Tb,Real Estate,Real Estate Services,8945576968192,800.0,Success
+INTA,Intraco Penta Tbk,Industrials,Industrial Distribution,244107247616,78.0,Success
+ITMA,Sumber Energi Andalan Tbk.,Basic Materials,Other Industrial Metals & Mining,1948153675776,1970.0,Success
+INTP,Indocement Tunggal Prakarsa Tbk,Basic Materials,Building Materials,17269201567744,5200.0,Success
+INCO,Vale Indonesia Tbk.,Basic Materials,Other Industrial Metals & Mining,71407035744256,6825.0,Success
+ISSP,Steel Pipe Industry of Indonesi,Basic Materials,Steel,3116753485824,456.0,Success
+JECC,Jembo Cable Company Tbk,Industrials,Electrical Equipment & Parts,721980030976,965.0,Success
+JAWA,Jaya Agra Wattie Tbk.,Consumer Defensive,Farm Products,2743368941568,176.0,Success
+JIHD,Jakarta International  Hotels &,Consumer Cyclical,Lodging,1187810639872,520.0,Success
+ITMG,Indo Tambangraya Megah Tbk,Energy,Thermal Coal,29305356681216,26200.0,Success
+JSMR,Jasa Marga (Persero) Tbk,Industrials,Infrastructure Operations,21991350337536,3140.0,Success
+JTPE,Jasuindo Tiga Perkasa Tbk,Industrials,Specialty Business Services,4240645029888,645.0,Success
+KAEF,Kimia Farma Tbk.,Healthcare,Medical Distribution,2649696501760,480.0,Success
+JKON,Jaya Konstruksi Manggala Pratam,Industrials,Conglomerates,1239447502848,77.0,Success
+KARW,Meratus Jasa Prima Tbk.,Industrials,Marine Shipping,176145809408,300.0,Success
+JRPT,Jaya Real Property Tbk,Real Estate,Real Estate - Development,13997682196480,1095.0,Success
+KBLI,KMI Wire & Cable Tbk.,Industrials,Electrical Equipment & Parts,1306358579200,324.0,Success
+JPFA,Japfa Comfeed Indonesia Tbk.,Consumer Defensive,Farm Products,28487790362624,2440.0,Success
+KBLM,Kabelindo Murni Tbk,Industrials,Electrical Equipment & Parts,365119995904,328.0,Success
+KBRI,"KBRI.JK,0P0000JDAP,0",N/A,N/A,434400002048,0,Success
+JSPT,Jakarta Setiabudi Internasional,Real Estate,Real Estate Services,3246230339584,1430.0,Success
+KBLV,First Media Tbk.,Communication Services,Entertainment,203833655296,122.0,Success
+KICI,Kedaung Indah Can Tbk,Consumer Cyclical,"Furnishings, Fixtures & Appliances",61271998464,224.0,Success
+KIJA,Kawasan Industri Jababeka Tbk,Real Estate,Real Estate - Development,3722632495104,187.0,Success
+KKGI,Resource Alam Indonesia Tbk,Energy,Thermal Coal,1530225360896,320.0,Success
+KONI,Perdana Bangun Pusaka Tbk,Consumer Cyclical,Specialty Retail,808079982592,2960.0,Success
+KOIN,Kokoh Inti Arebama Tbk,Industrials,Building Products & Equipment,82390867968,84.0,Success
+KIAS,Keramika Indonesia Assosiasi Tb,Industrials,Building Products & Equipment,313511084032,21.0,Success
+KLBF,Kalbe Farma Tbk,Healthcare,Drug Manufacturers - General,39172844814336,875.0,Success
+KRAS,Krakatau Steel (Persero) Tbk.,Basic Materials,Steel,5610455171072,306.0,Success
+KOBX,Kobexindo Tractors Tbk.,Industrials,Farm & Heavy Construction Machinery,429502496768,194.0,Success
+KREN,Quantum Clovera Investama Tbk.,Financial Services,Asset Management,327676461056,19.0,Success
+KPIG,MNC Tourism Indonesia Tbk.,Real Estate,Real Estate Services,10984330625024,119.0,Success
+LEAD,Logindo Samudramakmur Tbk.,Industrials,Marine Shipping,788747845632,147.0,Success
+LINK,Link Net Tbk.,Communication Services,Telecom Services,4884632436736,1800.0,Success
+IPOL,Indopoly Swakarsa Industry Tbk.,Consumer Cyclical,Packaging & Containers,824752603136,135.0,Success
+LAPD,Leyand International Tbk,N/A,N/A,356971511808,104.0,Success
+LMAS,"LMAS.JK,0P0000B77G,0",N/A,N/A,39392600064,0,Success
+KDSI,Kedawung Setia Industrial Tbk.,Consumer Cyclical,Packaging & Containers,732240019456,462.0,Success
+LMSH,Lionmesh Prima Tbk.,Industrials,Metal Fabrication,24576000000,256.0,Success
+LMPI,Langgeng Makmur Industri Tbk.,Consumer Cyclical,"Furnishings, Fixtures & Appliances",169430974464,172.0,Success
+LCGP,"LCGP.JK,0P0000EOLE,0",N/A,N/A,0,0,Success
+KOPI,Mitra Energi Persada Tbk.,Energy,Oil & Gas Refining & Marketing,171527602176,262.0,Success
+LPCK,Lippo Cikarang Tbk,Real Estate,Real Estate - Development,3209178644480,630.0,Success
+LPGI,Lippo General Insurance Tbk,Financial Services,Insurance - Diversified,2085000052736,695.0,Success
+LION,Lion Metal Works Tbk,Industrials,Business Equipment & Supplies,216386568192,416.0,Success
+LSIP,PP London Sumatra Indonesia Tbk,Consumer Defensive,Farm Products,11423439650816,1735.0,Success
+LRNA,Eka Sari Lorena Transport Tbk.,Industrials,Railroads,70700007424,200.0,Success
+LTLS,Lautan Luas Tbk,Basic Materials,Specialty Chemicals,1157104140288,810.0,Success
+LPIN,Multi Prima Sejahtera Tbk,Consumer Cyclical,Auto Parts,195499999232,472.0,Success
+MAGP,"MAGP.JK,0P0000XUPW,0",N/A,N/A,449999962112,0,Success
+MAIN,Malindo Feedmill Tbk,Consumer Defensive,Packaged Foods,2152430174208,1000.0,Success
+LPLI,Star Pacific Tbk,Real Estate,Real Estate Services,351129829376,306.0,Success
+MAPI,Mitra Adiperkasa Tbk,Consumer Cyclical,Department Stores,20417999798272,1290.0,Success
+MAYA,Bank Mayapada Internasional Tbk,Financial Services,Banks - Regional,5155068051456,202.0,Success
+LPPS,Lenox Pasifik Investama Tbk.,Financial Services,Capital Markets,225177763840,88.0,Success
+LPPF,Matahari Department Store Tbk.,Consumer Cyclical,Department Stores,1895758954496,1610.0,Success
+MBAP,Mitrabara Adiperdana Tbk.,Energy,Thermal Coal,2049544159232,1670.0,Success
+MBTO,Martina Berto Tbk.,Consumer Defensive,Household & Personal Products,129469997056,120.0,Success
+LPKR,Lippo Karawaci Tbk,Healthcare,Medical Care Facilities,5741062651904,84.0,Success
+MDIA,Intermedia Capital Tbk.,Communication Services,Broadcasting,4901942329344,136.0,Success
+MDRN,Modern Internasional Tbk.,Industrials,Business Equipment & Supplies,404504903680,55.0,Success
+MDLN,Modernland Realty Tbk.,Real Estate,Real Estate - Development,657102405632,57.0,Success
+MEDC,Medco Energi Internasional Tbk.,Energy,Oil & Gas E&P,43314493521920,1800.0,Success
+MBSS,Mitrabahtera Segara Sejati Tbk.,Industrials,Marine Shipping,3990060793856,2370.0,Success
+MDKA,Merdeka Copper Gold Tbk.,Basic Materials,Other Industrial Metals & Mining,77645744177152,3400.0,Success
+MFMI,Multifiling Mitra Indonesia Tbk,Industrials,Specialty Business Services,984855281664,1300.0,Success
+META,"META.JK,0P0000ENQT,0",N/A,N/A,4123410563072,0,Success
+MIDI,Midi Utama Indonesia Tbk.,Consumer Defensive,Grocery Stores,11434871226368,344.0,Success
+MICE,Multi Indocitra Tbk,Consumer Defensive,Household & Personal Products,298911531008,505.0,Success
+MGNA,Magna Investama Mandiri Tbk.,Financial Services,Credit Services,627627393024,184.0,Success
+MEGA,Bank Mega Tbk,Financial Services,Banks - Regional,51190423355392,2510.0,Success
+MITI,Mitra Investindo Tbk,Industrials,Marine Shipping,922629570560,256.0,Success
+MKPI,Metropolitan Kentjana Tbk,Real Estate,Real Estate Services,21144725880832,22275.0,Success
+MLIA,Mulia Industrindo Tbk,Industrials,Building Products & Equipment,1746360074240,264.0,Success
+MLPL,Multipolar Tbk,Consumer Cyclical,Department Stores,1514496065536,100.0,Success
+MIKA,Mitra Keluarga Karyasehat Tbk.,Healthcare,Medical Care Facilities,26563290595328,1940.0,Success
+MERK,Merck Tbk,Healthcare,Drug Manufacturers - Specialty & Generic,1850240008192,4300.0,Success
+MCOR,Bank China Construction Bank In,Financial Services,Banks - Regional,2616461361152,69.0,Success
+MMLP,Mega Manunggal Property Tbk.,Real Estate,Real Estate Services,2300971057152,342.0,Success
+MLBI,Multi Bintang Indonesia Tbk,Consumer Defensive,Beverages - Brewers,12167925465088,5800.0,Success
+MPPA,Matahari Putra Prima Tbk,Consumer Cyclical,Department Stores,661298610176,52.0,Success
+MPMX,Mitra Pinasthika Mustika Tbk.,Consumer Cyclical,Auto & Truck Dealerships,4270328119296,995.0,Success
+MIRA,Mitra International Resources T,Energy,Oil & Gas Equipment & Services,91113398272,23.0,Success
+MREI,Maskapai Reasuransi Indonesia T,Financial Services,Insurance - Reinsurance,517791678464,1045.0,Success
+MLPT,Multipolar Technology Tbk.,Technology,Information Technology Services,41015624859648,22900.0,Success
+MNCN,Media Nusantara Citra Tbk,Communication Services,Advertising Agencies,3174518751232,260.0,Success
+MTFN,Capitalinc Investment Tbk,Energy,Oil & Gas E&P,732367880192,24.0,Success
+MTLA,Metropolitan Land Tbk.,Real Estate,Real Estate Services,3904114524160,510.0,Success
+MTSM,Metro Realty Tbk,Real Estate,Real Estate Services,116423999488,500.0,Success
+MYOR,Mayora Indah Tbk,Consumer Defensive,Packaged Foods,37727642845184,1780.0,Success
+MRAT,Mustika Ratu Tbk,Consumer Defensive,Household & Personal Products,171200004096,410.0,Success
+MSKY,MNC Sky Vision Tbk.,Communication Services,Entertainment,827663712256,87.0,Success
+MYTX,Asia Pacific Investama Tbk.,Consumer Cyclical,Textile Manufacturing,472584192000,59.0,Success
+MTDL,Metrodata Electronics Tbk,Technology,Electronics & Computer Distribution,6936439816192,575.0,Success
+NELY,Pelayaran Nelly Dwi Putri Tbk.,Industrials,Marine Shipping,723800031232,322.0,Success
+MYOH,Samindo Resources Tbk.,Energy,Thermal Coal,2724795777024,1260.0,Success
+NIKL,Pelat Timah Nusantara Tbk.,Industrials,Metal Fabrication,787285213184,284.0,Success
+NISP,Bank OCBC NISP Tbk,Financial Services,Banks - Regional,30517244198912,1340.0,Success
+OCAP,"OCAP.JK,0P0000EKZ2,0",N/A,N/A,0,0,Success
+NOBU,Bank Nationalnobu Tbk.,Financial Services,Banks - Regional,3926183116800,535.0,Success
+OKAS,Ancora Indonesia Resources Tbk,Basic Materials,Specialty Chemicals,284813918208,127.0,Success
+OMRE,Indonesia Prima Property Tbk,Real Estate,Real Estate Services,2518155264000,950.0,Success
+PADI,Minna Padi Investama Sekuritas ,Financial Services,Capital Markets,1187260923904,110.0,Success
+NIRO,City Retail Developments Tbk.,Real Estate,Real Estate Services,4617365618688,214.0,Success
+PANS,Panin Sekuritas Tbk,Financial Services,Capital Markets,1245000368128,1775.0,Success
+PANR,Panorama Sentrawisata Tbk,Consumer Cyclical,Travel Services,707625025536,510.0,Success
+NRCA,Nusa Raya Cipta Tbk.,Industrials,Engineering & Construction,1392438411264,630.0,Success
+PEGE,Panca Global Kapital Tbk.,Financial Services,Capital Markets,413678862336,151.0,Success
+PDES,Destinasi Tirta Nusantara Tbk,Consumer Cyclical,Travel Services,353210007552,510.0,Success
+PGLI,Pembangunan Graha Lestari Indah,Consumer Cyclical,Lodging,114191998976,240.0,Success
+PALM,Provident Investasi Bersama Tbk,Financial Services,Asset Management,5617718657024,360.0,Success
+PICO,Pelangi Indah Canindo Tbk,Consumer Cyclical,Packaging & Containers,89803243520,159.0,Success
+PJAA,Pembangunan Jaya Ancol Tbk,Consumer Cyclical,Leisure,790400008192,505.0,Success
+PKPK,Paragon Karya Perkasa Tbk.,Industrials,Engineering & Construction,3671999905792,3310.0,Success
+PBRX,Pan Brothers Tbk.,Consumer Cyclical,Apparel Manufacturing,794835091456,40.0,Success
+PGAS,Perusahaan Gas Negara (Persero),Utilities,Utilities - Regulated Gas,45452829392896,1920.0,Success
+PLIN,Plaza Indonesia Realty Tbk,Real Estate,Real Estate Services,8874741465088,2510.0,Success
+PNBN,Bank Pan Indonesia Tbk,Financial Services,Banks - Regional,24071871922176,1020.0,Success
+PNBS,Bank Panin Dubai Syariah Tbk.,Financial Services,Banks - Regional,1979495743488,51.0,Success
+PNLF,Panin Financial Tbk,Financial Services,Banks - Regional,7685297668096,248.0,Success
+PSKT,Red Planet Indonesia Tbk.,Consumer Cyclical,Lodging,2546403115008,260.0,Success
+PSAB,J Resources Asia Pasifik Tbk.,Basic Materials,Gold,13759200362496,540.0,Success
+PNIN,Paninvest Tbk,Financial Services,Insurance - Life,3132609265664,790.0,Success
+PTIS,Indo Straits Tbk.,Industrials,Marine Shipping,171651579904,310.0,Success
+PLAS,"PLAS.JK,0P0000EJOZ,0",N/A,N/A,59209998336,0,Success
+PSDN,Prasidha Aneka Niaga Tbk,Consumer Defensive,Packaged Foods,322560000000,194.0,Success
+PTRO,Petrosea Tbk,Basic Materials,Other Industrial Metals & Mining,48917341274112,5350.0,Success
+PTBA,Bukit Asam (Persero) Tbk.,Energy,Thermal Coal,33046203990016,2910.0,Success
+PTPP,PP (Persero) Tbk.,Industrials,Engineering & Construction,1620559396864,248.0,Success
+PTSN,Sat Nusapersada Tbk,Technology,Electronic Components,1647446589440,306.0,Success
+PUDP,Pudjiadi Prestige Tbk.,Real Estate,Real Estate Services,221464313856,330.0,Success
+PTSP,Pioneerindo Gourmet Internation,Consumer Cyclical,Restaurants,195415080960,935.0,Success
+PYFA,Pyridam Farma Tbk,Healthcare,Drug Manufacturers - Specialty & Generic,3371008524288,324.0,Success
+RAJA,Rukun Raharja Tbk,Utilities,Utilities - Regulated Gas,17035142627328,4260.0,Success
+RALS,Ramayana Lestari Sentosa Tbk,Consumer Cyclical,Department Stores,2609755979776,450.0,Success
+PWON,Pakuwon Jati Tbk.,Real Estate,Real Estate - Diversified,15314753421312,328.0,Success
+RANC,Supra Boga Lestari Tbk.,Consumer Defensive,Grocery Stores,860468150272,565.0,Success
+RBMS,Ristia Bintang Mahkotasejati Tb,Real Estate,Real Estate - Development,167341408256,68.0,Success
+RDTX,Roda Vivatex Tbk,Real Estate,Real Estate Services,4166400081920,15500.0,Success
+RIGS,Rig Tenders Indonesia Tbk.,Industrials,Marine Shipping,408117084160,670.0,Success
+RIMO,"RIMO.JK,0P0000BRSP,0",N/A,N/A,0,0,Success
+RICY,Ricky Putra Globalindo Tbk,Consumer Cyclical,Apparel Manufacturing,60963164160,98.0,Success
+RODA,Pikko Land Development Tbk.,Real Estate,Real Estate - Development,1046593863680,80.0,Success
+RELI,Reliance Sekuritas Indonesia Tb,Financial Services,Capital Markets,882000003072,490.0,Success
+SAME,Sarana Meditama Metropolitan Tb,Healthcare,Medical Care Facilities,5767316373504,342.0,Success
+ROTI,Nippon Indosari Corpindo Tbk.,Consumer Defensive,Packaged Foods,3626367713280,650.0,Success
+SAFE,Steady Safe Tbk,Industrials,Railroads,266071228416,358.0,Success
+RUIS,Radiant Utama Interinsco Tbk,Energy,Oil & Gas Equipment & Services,174020001792,234.0,Success
+SCCO,Supreme Cable Manufacturing & C,Industrials,Electrical Equipment & Parts,1932483887104,2340.0,Success
+SCMA,Surya Citra Media Tbk,Communication Services,Broadcasting,15749166923776,256.0,Success
+SCPI,"SCPI.JK,0P0000B82V,0",N/A,N/A,0,0,Success
+SGRO,Prime Agri Resources Tbk.,Consumer Defensive,Farm Products,8820316176384,4970.0,Success
+SILO,Siloam International Hospitals ,Healthcare,Medical Care Facilities,32598634004480,2520.0,Success
+SHID,Hotel Sahid Jaya International ,Consumer Cyclical,Lodging,828301377536,745.0,Success
+SIDO,Industri Jamu dan Farmasi Sido ,Healthcare,Drug Manufacturers - Specialty & Generic,14658729672704,515.0,Success
+SDPC,Millennium Pharmacon Internatio,Healthcare,Medical Distribution,239511994368,192.0,Success
+SIMA,"SIMA.JK,0P0000C0M9,0",N/A,N/A,0,0,Success
+SDRA,Bank Woori Saudara Indonesia 19,Financial Services,Banks - Regional,3790585200640,264.0,Success
+SDMU,Sidomulyo Selaras Tbk.,Industrials,Trucking,267832229888,98.0,Success
+SIMP,Salim Ivomas Pratama Tbk.,Consumer Defensive,Packaged Foods,11858502221824,820.0,Success
+SMAR,Sinar Mas Agro Resources and Te,Consumer Defensive,Farm Products,17304964300800,6600.0,Success
+SMBR,Semen Baturaja (Persero) Tbk.,Basic Materials,Building Materials,2185157672960,224.0,Success
+SKBM,Sekar Bumi Tbk.,Consumer Defensive,Packaged Foods,1167819669504,655.0,Success
+SKYB,"SKYB.JK,0P0000PSUD,0",N/A,N/A,0,0,Success
+SKLT,Sekar Laut Tbk,Consumer Defensive,Packaged Foods,1359512600576,226.0,Success
+SIPD,Sreeya Sewu Indonesia Tbk.,Consumer Defensive,Farm Products,1747147030528,955.0,Success
+SMDR,Samudera Indonesia  Tbk,Industrials,Marine Shipping,5698709094400,360.0,Success
+SMCB,Solusi Bangun Indonesia Tbk,Basic Materials,Building Materials,6990021001216,775.0,Success
+SMGR,Semen Indonesia (Persero) Tbk.,Basic Materials,Building Materials,13605799985152,2090.0,Success
+SMDM,Suryamas Dutamakmur Tbk,Real Estate,Real Estate - Development,2934864871424,620.0,Success
+SMRU,"SMRU.JK,0P0000UBAV,0",N/A,N/A,0,0,Success
+SMRA,Summarecon Agung Tbk,Real Estate,Real Estate - Development,5084638871552,322.0,Success
+SOCI,Soechi Lines Tbk.,Industrials,Marine Shipping,3360083935232,492.0,Success
+SONA,Sona Topas Tourism Industry Tbk,Consumer Cyclical,Travel Services,1708991971328,2230.0,Success
+SMMT,Golden Eagle Energy Tbk.,Energy,Thermal Coal,8219999600640,2580.0,Success
+SQMI,Wilton Makmur Indonesia Tbk.,Basic Materials,Gold,885642690560,57.0,Success
+SMSM,Selamat Sempurna Tbk,Consumer Cyclical,Auto Parts,10653549985792,1865.0,Success
+SPMA,Suparma Tbk,Basic Materials,Paper & Paper Products,836464738304,210.0,Success
+SRSN,Indo Acidatama Tbk,Basic Materials,Chemicals,415379980288,70.0,Success
+SRAJ,Sejahteraraya Anugrahjaya Tbk.,Healthcare,Medical Care Facilities,182360502960128,15175.0,Success
+SMMA,Sinarmas Multiartha Tbk.,Financial Services,Insurance - Diversified,95514972389376,15000.0,Success
+SRIL,"SRIL.JK,0P0000YZ2P,0",N/A,N/A,2986021224448,0,Success
+SSIA,Surya Semesta Internusa Tbk,Industrials,Engineering & Construction,7551925092352,1705.0,Success
+SRTG,Saratoga Investama Sedaya Tbk.,Financial Services,Asset Management,23576709169152,1840.0,Success
+SSMS,Sawit Sumbermas Sarana Tbk.,Consumer Defensive,Farm Products,13144499945472,1430.0,Success
+STAR,Calculus Global Ventures Tbk.,Financial Services,Asset Management,2880000229376,600.0,Success
+SUGI,"SUGI.JK,0P0000BT07,0",N/A,N/A,0,0,Success
+SUPR,Solusi Tunas Pratama Tbk.,Real Estate,Real Estate Services,49882865860608,43850.0,Success
+SSTM,Sunson Textile Manufacture Tbk,Consumer Cyclical,Textile Manufacturing,731818229760,665.0,Success
+SULI,SLJ Global Tbk.,Basic Materials,Lumber & Wood Production,644719247360,105.0,Success
+STTP,Siantar Top Tbk.,Consumer Defensive,Packaged Foods,12641500135424,10100.0,Success
+TALF,Tunas Alfin Tbk.,Consumer Cyclical,Packaging & Containers,933870174208,685.0,Success
+TAXI,Express Transindo Utama Tbk.,Industrials,Railroads,173801996288,18.0,Success
+TBLA,Tunas Baru Lampung Tbk,Consumer Defensive,Packaged Foods,4383030378496,750.0,Success
+TARA,Agung Semesta Sejahtera Tbk.,Real Estate,Real Estate - Diversified,332298289152,33.0,Success
+TBIG,Tower Bersama Infrastructure Tb,Communication Services,Telecom Services,40241599610880,1855.0,Success
+TBMS,Tembaga Mulia Semanan Tbk,Industrials,Metal Fabrication,1017531793408,1380.0,Success
+TCID,Mandom Indonesia Tbk,Consumer Defensive,Household & Personal Products,1154122645504,2870.0,Success
+TIFA,KDB Tifa Finance Tbk.,Financial Services,Credit Services,1172230242304,350.0,Success
+TIRT,Tirta Mahakam Resources Tbk,Basic Materials,Lumber & Wood Production,556476071936,550.0,Success
+TELE,Omni Inovasi Indonesia Tbk.,Communication Services,Telecom Services,65798365184,9.0,Success
+TKIM,Pabrik Kertas Tjiwi Kimia Tbk,Basic Materials,Paper & Paper Products,26929384128512,8525.0,Success
+TFCO,Tifico Fiber Indonesia Tbk.,Consumer Cyclical,Textile Manufacturing,3496730427392,725.0,Success
+TINS,Timah Tbk.,Basic Materials,Other Industrial Metals & Mining,25247883460608,3630.0,Success
+TMAS,Temas Tbk.,Industrials,Marine Shipping,7108607082496,127.0,Success
+TIRA,Tira Austenite Tbk,Industrials,Industrial Distribution,511559991296,875.0,Success
+TLKM,Telkom Indonesia (Persero) Tbk.,Communication Services,Telecom Services,280346071400448,2870.0,Success
+TGKA,Tigaraksa Satria Tbk,Consumer Defensive,Food Distribution,4845049217024,4980.0,Success
+TOBA,TBS Energi Utama Tbk.,Energy,Thermal Coal,4537147981824,580.0,Success
+TOWR,Sarana Menara Nusantara Tbk.,Real Estate,Real Estate Services,27475866288128,478.0,Success
+TOTO,Surya Toto Indonesia Tbk,Industrials,Building Products & Equipment,2827679956992,276.0,Success
+TMPO,Tempo Intimedia Tbk.,Communication Services,Publishing,142874984448,131.0,Success
+TOTL,Total Bangun Persada Tbk,Industrials,Engineering & Construction,4074949836800,1205.0,Success
+TRIM,Trimegah Sekuritas Indonesia Tb,Financial Services,Capital Markets,4087847583744,595.0,Success
+TRIL,"TRIL.JK,0P0000EOL4,0",N/A,N/A,0,0,Success
+TPIA,Chandra Asri Pacific Tbk.,Basic Materials,Specialty Chemicals,434682130857984,5300.0,Success
+TPMA,Trans Power Marine Tbk.,Industrials,Marine Shipping,1992993800192,575.0,Success
+TRIS,Trisula International Tbk.,Consumer Cyclical,Apparel Manufacturing,559288090624,191.0,Success
+TRIO,"TRIO.JK,0P0000KSHE,0",N/A,N/A,0,0,Success
+TRAM,"TRAM.JK,0P0000I0JV,0",N/A,N/A,0,0,Success
+TRST,Trias Sentosa Tbk,Consumer Cyclical,Packaging & Containers,1336608030720,480.0,Success
+TRUS,Trust Finance Indonesia Tbk,Financial Services,Credit Services,310399991808,386.0,Success
+UNIC,Unggul Indah Cahaya Tbk,Basic Materials,Chemicals,4772475174912,12400.0,Success
+UNSP,Bakrie Sumatera Plantations Tbk,Consumer Defensive,Farm Products,930060369920,380.0,Success
+ULTJ,Ultrajaya Milk Industry & Tradi,Consumer Defensive,Beverages - Non-Alcoholic,17416943828992,1695.0,Success
+UNIT,"UNIT.JK,0P0000EL10,0",N/A,N/A,23833415680,0,Success
+TSPC,Tempo Scan Pacific Tbk,Industrials,Conglomerates,11094266478592,2500.0,Success
+UNVR,Unilever Indonesia Tbk,Consumer Defensive,Household & Personal Products,58301194698752,1575.0,Success
+VICO,Victoria Investama Tbk.,Financial Services,Asset Management,2495600394240,164.0,Success
+UNTR,United Tractors Tbk,Basic Materials,Other Industrial Metals & Mining,102626641313792,30425.0,Success
+VINS,Victoria Insurance Tbk.,Financial Services,Insurance - Property & Casualty,254762647552,173.0,Success
+WEHA,WEHA Transportasi Indonesia Tbk,Industrials,Railroads,184029921280,129.0,Success
+VOKS,Voksel Electric Tbk,Industrials,Electrical Equipment & Parts,880987799552,214.0,Success
+WAPO,Wahana Pronatural Tbk.,Consumer Defensive,Packaged Foods,171247386624,140.0,Success
+VIVA,Visi Media Asia Tbk.,Communication Services,Broadcasting,856142053376,57.0,Success
+WICO,Wicaksana Overseas Internationa,Consumer Defensive,Food Distribution,294426378240,123.0,Success
+VRNA,Mizuho Leasing Indonesia Tbk.,Financial Services,Credit Services,454988300288,84.0,Success
+WIKA,Wijaya Karya (Persero) Tbk,Industrials,Engineering & Construction,8133880578048,204.0,Success
+WIIM,Wismilak Inti Makmur Tbk.,Consumer Defensive,Tobacco,3902453841920,1930.0,Success
+WINS,Wintermar Offshore Marine Tbk.,Industrials,Marine Shipping,2490353057792,545.0,Success
+WOMF,Wahana Ottomitra Multiartha Tbk,Financial Services,Credit Services,1023555534848,300.0,Success
+YPAS,Yanaprima Hastapersada Tbk,Consumer Cyclical,Packaging & Containers,814960082944,1350.0,Success
+WTON,Wijaya Karya Beton Tbk.,Basic Materials,Building Materials,793107496960,90.0,Success
+ZBRA,Dosni Roha Indonesia Tbk.,Healthcare,Medical Distribution,26710364160,50.0,Success
+YULE,Yulie Sekuritas Indonesia Tbk.,Financial Services,Capital Markets,5380901961728,3340.0,Success
+CASA,Capital Financial Indonesia Tbk,Financial Services,Insurance - Life,73542968279040,1350.0,Success
+WSKT,"WSKT.JK,0P0000XQCT,0",N/A,N/A,5818974994432,0,Success
+SHIP,Sillo Maritime Perdana Tbk.,Energy,Oil & Gas Equipment & Services,10008827789312,3980.0,Success
+DAYA,Duta Intidaya Tbk.,Consumer Cyclical,Specialty Retail,2602088005632,1075.0,Success
+JGLE,Graha Andrasentra Propertindo T,Consumer Cyclical,Leisure,1693643177984,79.0,Success
+KINO,Kino Indonesia Tbk.,Consumer Defensive,Beverages - Non-Alcoholic,1502912708608,1125.0,Success
+DPUM,Dua Putra Utama Makmur Tbk.,Consumer Defensive,Packaged Foods,483086630912,122.0,Success
+MARI,Mahaka Radio Integra Tbk.,Communication Services,Broadcasting,157579313152,30.0,Success
+MKNT,Mitra Komunikasi Nusantara Tbk.,Technology,Communication Equipment,5500000256,1.0,Success
+IDPR,Indonesia Pondasi Raya Tbk.,Industrials,Engineering & Construction,604905996288,304.0,Success
+POWR,Cikarang Listrindo Tbk.,Utilities,Utilities - Independent Power Producers,11650851667968,740.0,Success
+OASA,Maharaksa Biru Energi Tbk.,Utilities,Utilities - Renewable,2310388056064,396.0,Success
+MTRA,"MTRA.JK,0P00017FWO,0",N/A,N/A,0,0,Success
+WSBP,Waskita Beton Precast Tbk.,Basic Materials,Building Materials,988833513472,18.0,Success
+PBSA,Paramita Bangun Sarana Tbk.,Industrials,Engineering & Construction,3330000027648,1175.0,Success
+INCF,Indo Komoditi Korpora Tbk.,Basic Materials,Specialty Chemicals,83425484800,60.0,Success
+PORT,Nusantara Pelabuhan Handal Tbk.,Industrials,Marine Shipping,2518478225408,895.0,Success
+BOGA,Apollo Global Interactive Tbk.,Consumer Cyclical,Auto & Truck Dealerships,5401007357952,1420.0,Success
+PRDA,Prodia Widyahusada Tbk.,Healthcare,Diagnostics & Research,2233336594432,2540.0,Success
+CARS,Industri dan Perdagangan Bintra,Consumer Cyclical,Auto & Truck Dealerships,1380000071680,94.0,Success
+BRIS,Bank Syariah Indonesia (Persero,Financial Services,Banks - Regional,80034266087424,1790.0,Success
+TAMU,Pelayaran Tamarin Samudra Tbk.,Industrials,Marine Shipping,1087499927552,30.0,Success
+MINA,Sanurhasta Mitra Tbk.,Consumer Cyclical,Lodging,3130312359936,324.0,Success
+CSIS,Cahayasakti Investindo Sukses T,Real Estate,Real Estate - Development,336683204608,174.0,Success
+TGRA,Terregra Asia Energy Tbk.,Utilities,Utilities - Renewable,74250002432,27.0,Success
+CLEO,Sariguna Primatirta Tbk.,Consumer Defensive,Beverages - Non-Alcoholic,9311999754240,390.0,Success
+KMTR,Kirana Megatara Tbk.,Consumer Cyclical,Auto Parts,2119564525568,268.0,Success
+ARMY,"ARMY.JK,0P0001AP00,0",N/A,N/A,0,0,Success
+WOOD,Integra Indocabinet Tbk.,Consumer Cyclical,"Furnishings, Fixtures & Appliances",1866659135488,304.0,Success
+FIRE,Alfa Energi Investama Tbk.,Energy,Thermal Coal,203600117760,142.0,Success
+TOPS,Totalindo Eka Persada Tbk.,Industrials,Engineering & Construction,33329999872,1.0,Success
+MAPB,MAP Boga Adiperkasa Tbk.,Consumer Cyclical,Restaurants,3629642940416,1520.0,Success
+MABA,"MABA.JK,0P0001B2S6,0",N/A,N/A,0,0,Success
+HRTA,Hartadinata Abadi Tbk.,Consumer Cyclical,Luxury Goods,12019734413312,2760.0,Success
+HOKI,Buyung Poetra Sembada Tbk.,Consumer Defensive,Packaged Foods,638731681792,67.0,Success
+MARK,Mark Dynamics Indonesia Tbk.,Healthcare,Medical Instruments & Supplies,3059000279040,810.0,Success
+MDKI,Emdeki Utama Tbk.,Basic Materials,Specialty Chemicals,480728481792,190.0,Success
+NASA,Andalan Perkasa Abadi Tbk.,Real Estate,Real Estate - Development,418187313152,39.0,Success
+BELL,Trisula Textile Industries Tbk.,Consumer Cyclical,Textile Manufacturing,1031377584128,158.0,Success
+MTWI,Malacca Trust Wuwungan Insuranc,Financial Services,Insurance - Diversified,900741857280,314.0,Success
+MPOW,Megapower Makmur Tbk.,Utilities,Utilities - Independent Power Producers,89052676096,112.0,Success
+MCAS,M Cash Integrasi Tbk.,Industrials,Business Equipment & Supplies,282640449536,336.0,Success
+GMFI,Garuda Maintenance Facility Aer,Industrials,Aerospace & Defense,7864621465600,66.0,Success
+KIOS,Kioson Komersial Indonesia Tbk.,Technology,Software - Application,116193198080,114.0,Success
+PPRE,PP Presisi Tbk.,Industrials,Engineering & Construction,1315107635200,141.0,Success
+WEGE,Wijaya Karya Bangunan Gedung Tb,Industrials,Engineering & Construction,564747960320,58.0,Success
+MORA,Ekamas Mora Republik Tbk.,Communication Services,Telecom Services,107592344928256,4750.0,Success
+PSSI,IMC Pelita Logistik Tbk.,Industrials,Marine Shipping,1730961997824,338.0,Success
+JMAS,Asuransi Jiwa Syariah Jasa Mitr,Financial Services,Insurance - Life,240000008192,240.0,Success
+DWGL,Dwi Guna Laksana Tbk.,Energy,Thermal Coal,2368722173952,274.0,Success
+PCAR,Prima Cakrawala Abadi Tbk.,Consumer Defensive,Packaged Foods,44333334528,38.0,Success
+LCKM,LCK Global Kedaton Tbk.,Communication Services,Telecom Services,137000001536,125.0,Success
+BOSS,"BOSS.JK,0P0001CQ56,0",N/A,N/A,70000001024,0,Success
+PBID,Panca Budi Idaman Tbk.,Consumer Cyclical,Packaging & Containers,3937500135424,535.0,Success
+CAMP,Campina Ice Cream Industry Tbk.,Consumer Defensive,Packaged Foods,1200540090368,206.0,Success
+ZINC,Kapuas Prima Coal Tbk.,Basic Materials,Other Industrial Metals & Mining,757500018688,30.0,Success
+IPCM,Jasa Armada Indonesia Tbk.,Industrials,Marine Shipping,1712278863872,324.0,Success
+JSKY,"JSKY.JK,0P0001D26O,0",N/A,N/A,105692078080,0,Success
+GHON,Gihon Telekomunikasi Indonesia ,Communication Services,Telecom Services,984500011008,1795.0,Success
+INPS,Indah Prakasa Sentosa Tbk.,Industrials,Trucking,428999999488,730.0,Success
+TDPM,"TDPM.JK,0P0001D349,0",N/A,N/A,1247726796800,0,Success
+DFAM,Dafam Property Indonesia Tbk.,Real Estate,Real Estate Services,193784987648,102.0,Success
+SPTO,Surya Pertiwi Tbk.,Consumer Cyclical,"Furnishings, Fixtures & Appliances",1741500055552,640.0,Success
+HEAL,Medikaloka Hermina Tbk.,Healthcare,Medical Care Facilities,17594012663808,1170.0,Success
+BTPS,Bank BTPN Syariah Tbk.,Financial Services,Banks - Regional,7588144480256,1005.0,Success
+TRUK,Guna Timur Raya Tbk.,Industrials,Trucking,224025001984,565.0,Success
+PRIM,Royal Prima Tbk.,Healthcare,Medical Care Facilities,280400560128,86.0,Success
+TUGU,Asuransi Tugu Pratama Indonesia,Financial Services,Insurance - Diversified,4426691510272,1270.0,Success
+PZZA,Sarimelati Kencana Tbk.,Consumer Cyclical,Restaurants,631153033216,216.0,Success
+MSIN,MNC Digital Entertainment Tbk.,Communication Services,Entertainment,48540940238848,830.0,Success
+NICK,Charnic Capital Tbk.,Real Estate,Real Estate Services,768357040128,1190.0,Success
+SWAT,Sriwahana Adityakarta Tbk.,Consumer Cyclical,Packaging & Containers,48307200000,16.0,Success
+TNCA,Trimuda Nuansa Citra Tbk.,Industrials,Integrated Freight & Logistics,81798160384,193.0,Success
+MAPA,Map Aktif Adiperkasa Tbk.,Consumer Cyclical,Specialty Retail,17244920741888,630.0,Success
+BPTR,Batavia Prosperindo Trans Tbk.,Industrials,Rental & Leasing Services,296855994368,85.0,Success
+POLL,Pollux Properties Indonesia Tbk,Real Estate,Real Estate - Development,931708207104,112.0,Success
+RISE,Jaya Sukses Makmur Sentosa Tbk.,Real Estate,Real Estate - Development,26322724192256,1655.0,Success
+IPCC,Indonesia Kendaraan Terminal Tb,Industrials,Integrated Freight & Logistics,2363900297216,1350.0,Success
+MGRO,Mahkota Group Tbk.,Consumer Defensive,Packaged Foods,2379570479104,680.0,Success
+NFCX,NFC Indonesia Tbk.,Communication Services,Internet Content & Information,1185717944320,1795.0,Success
+TCPI,Transcoal Pacific Tbk.,Industrials,Marine Shipping,57499998748672,11450.0,Success
+PANI,Pantai Indah Kapuk Dua Tbk.,Real Estate,Real Estate - Development,151730088050688,8650.0,Success
+MOLI,Madusari Murni Indah Tbk.,Basic Materials,Chemicals,817210982400,284.0,Success
+LAND,Trimitra Propertindo Tbk.,Real Estate,Real Estate Services,237372702720,92.0,Success
+FILM,MD Entertainment Tbk.,Communication Services,Entertainment,24388147609600,2200.0,Success
+NUSA,"NUSA.JK,0P0001DYYE,0",N/A,N/A,0,0,Success
+HELI,Jaya Trishindo Tbk.,Industrials,Airports & Air Services,160742440960,199.0,Success
+SAPX,Satria Antaran Prima Tbk.,Industrials,Integrated Freight & Logistics,203333320704,256.0,Success
+HKMU,"HKMU.JK,0P0001EQEZ,0",N/A,N/A,161087504384,0,Success
+ANDI,Andira Agro Tbk.,Consumer Defensive,Farm Products,233749987328,26.0,Success
+MPRO,Maha Properti Indonesia Tbk.,Real Estate,Real Estate - Development,91719563476992,9225.0,Success
+YELO,Yelooo Integra Datanet Tbk.,Consumer Cyclical,Travel Services,189364666368,104.0,Success
+CITY,Natura City Developments Tbk.,Real Estate,Real Estate - Development,1091848175616,212.0,Success
+SURE,Super Energy Tbk.,Energy,Oil & Gas Integrated,4193215053824,2820.0,Success
+DUCK,"DUCK.JK,0P0001EQP8,0",N/A,N/A,225866088448,0,Success
+SKRN,Superkrane Mitra Utama Tbk.,Industrials,Rental & Leasing Services,3430875922432,488.0,Success
+SATU,Kota Satu Properti Tbk.,Real Estate,Real Estate - Development,371250003968,270.0,Success
+GOOD,Garudafood Putra Putri Jaya Tbk,Consumer Defensive,Packaged Foods,12833405272064,350.0,Success
+CAKK,Cahayaputra Asa Keramik Tbk.,Industrials,Building Products & Equipment,200951136256,169.0,Success
+DIGI,Arkadia Digital Media Tbk.,Communication Services,Internet Content & Information,63374999552,38.0,Success
+DEAL,"DEAL.JK,0P0001EXWI,0",N/A,N/A,6877026304,0,Success
+URBN,Urban Jakarta Propertindo Tbk.,Real Estate,Real Estate - Development,717507526656,218.0,Success
+SOTS,Satria Mega Kencana Tbk.,Consumer Cyclical,Lodging,995003924480,1055.0,Success
+ZONE,Mega Perintis Tbk.,Consumer Cyclical,Apparel Retail,295858307072,340.0,Success
+SOSS,Shield On Service Tbk.,Industrials,Staffing & Employment Services,784493248512,805.0,Success
+PEHA,Phapros Tbk.,Healthcare,Drug Manufacturers - Specialty & Generic,250319994880,300.0,Success
+BEEF,Estika Tata Tiara Tbk.,Consumer Defensive,Packaged Foods,1624049844224,206.0,Success
+POLA,Pool Advista Finance Tbk.,Financial Services,Credit Services,281490358272,88.0,Success
+DIVA,Distribusi Voucher Nusantara Tb,Technology,Software - Application,237997883392,161.0,Success
+CLAY,Citra Putra Realty Tbk.,Consumer Cyclical,Lodging,7298799894528,2840.0,Success
+NATO,Olympus Strategic Indonesia Tbk,Consumer Cyclical,Lodging,4800667189248,600.0,Success
+POLI,Pollux Hotels Group Tbk.,Real Estate,Real Estate - Development,2362368589824,1165.0,Success
+LUCK,Sentral Mitra Informatika Tbk.,Technology,Computer Hardware,80163962880,129.0,Success
+COCO,Wahana Interfood Nusantara Tbk.,Consumer Defensive,Confectioners,1082074595328,336.0,Success
+MTPS,Meta Epsi Tbk.,Industrials,Engineering & Construction,168872919040,81.0,Success
+FOOD,Sentra Food Indonesia Tbk.,Consumer Defensive,Packaged Foods,120900001792,193.0,Success
+JAST,Jasnita Telekomindo Tbk.,Communication Services,Telecom Services,106092421120,99.0,Success
+CCSI,Communication Cable Systems Ind,Technology,Communication Equipment,349333356544,268.0,Success
+JAYA,Armada Berjaya Trans Tbk.,Industrials,Trucking,112588414976,139.0,Success
+POSA,"POSA.JK,0P0001HEPA,0",N/A,N/A,419443507200,0,Success
+POLU,Golden Flower Tbk.,Consumer Cyclical,Apparel Manufacturing,10912500023296,14750.0,Success
+SFAN,Surya Fajar Capital Tbk.,Financial Services,Asset Management,2651871510528,1955.0,Success
+CPRI,"CPRI.JK,0P0001H7PD,0",N/A,N/A,121668993024,0,Success
+KJEN,Krida Jaringan Nusantara Tbk.,Industrials,Integrated Freight & Logistics,67999997952,140.0,Success
+KAYU,"KAYU.JK,0P0001HX07,0",N/A,N/A,11969999872,0,Success
+ITIC,Indonesian Tobacco Tbk.,Consumer Defensive,Tobacco,238942879744,266.0,Success
+PAMG,Bima Sakti Pertiwi Tbk.,Real Estate,Real Estate - Diversified,190624989184,65.0,Success
+BOLA,Bali Bintang Sejahtera Tbk.,Communication Services,Entertainment,1055999983616,178.0,Success
+FITT,Hotel Fitra International Tbk.,Consumer Cyclical,Lodging,532142981120,408.0,Success
+ENVY,"ENVY.JK,0P0001HYU3,0",N/A,N/A,89999998976,0,Success
+BLUE,Berkah Prima Perkasa Tbk.,Technology,Electronics & Computer Distribution,1404479995904,3860.0,Success
+KOTA,DMS Propertindo Tbk.,Real Estate,Real Estate Services,1444827365376,143.0,Success
+HRME,Menteng Heritage Realty Tbk.,Consumer Cyclical,Lodging,309854994432,52.0,Success
+LIFE,MSIG Life Insurance Indonesia T,Financial Services,Insurance - Life,15067500249088,7500.0,Success
+EAST,Eastparc Hotel Tbk.,Consumer Cyclical,Lodging,383755714560,94.0,Success
+SMKL,Satyamitra Kemas Lestari Tbk.,Consumer Cyclical,Packaging & Containers,533221310464,164.0,Success
+IPTV,MNC Vision Networks Tbk.,Communication Services,Entertainment,1730115928064,43.0,Success
+HDIT,Hensel Davest Indonesia Tbk.,Technology,Software - Infrastructure,96054837248,66.0,Success
+TFAS,Telefast Indonesia Tbk.,Industrials,Staffing & Employment Services,371126992896,230.0,Success
+KEEN,Kencana Energi Lestari Tbk.,Utilities,Utilities - Independent Power Producers,3318012706816,980.0,Success
+INOV,Inocycle Technology Group Tbk.,Industrials,Waste Management,274849742848,167.0,Success
+ARKA,Arkha Jayanti Persada Tbk.,Industrials,Specialty Business Services,62000001024,31.0,Success
+PURE,"PURE.JK,0P0001IIHI,0",N/A,N/A,70134177792,0,Success
+IRRA,Itama Ranoraya Tbk.,Healthcare,Medical Distribution,582017482752,392.0,Success
+BAPI,Bhakti Agung Propertindo Tbk.,Real Estate,Real Estate - Development,167759396864,30.0,Success
+GGRP,Gunung Raja Paksi Tbk.,Basic Materials,Steel,3512299159552,292.0,Success
+FUJI,Fuji Finance Indonesia Tbk.,Financial Services,Credit Services,426399989760,334.0,Success
+SLIS,Gaya Abadi Sempurna Tbk.,Technology,Electronics & Computer Distribution,204457263104,86.0,Success
+OPMS,Optima Prima Metal Sinergi Tbk.,Industrials,Waste Management,105043804160,136.0,Success
+ESIP,Sinergi Inti Plastindo Tbk.,Consumer Cyclical,Packaging & Containers,184252334080,163.0,Success
+WOWS,Ginting Jaya Energi Tbk.,Energy,Oil & Gas Equipment & Services,195581870080,79.0,Success
+SINI,Singaraja Putra Tbk.,Basic Materials,Lumber & Wood Production,6252999999488,14000.0,Success
+IFSH,Ifishdeco Tbk.,Basic Materials,Other Industrial Metals & Mining,4307850100736,2480.0,Success
+AGAR,Asia Sejahtera Mina Tbk.,Consumer Defensive,Farm Products,245999992832,246.0,Success
+DMMX,Digital Mediatama Maxima Tbk.,Communication Services,Advertising Agencies,1582556774400,218.0,Success
+TEBE,Dana Brata Luhur Tbk.,Industrials,Infrastructure Operations,1599824855040,1285.0,Success
+REAL,Repower Asia Indonesia Tbk.,Real Estate,Real Estate - Diversified,364848578560,56.0,Success
+PSGO,Palma Serasih Tbk.,Consumer Defensive,Farm Products,3770000080896,202.0,Success
+KEJU,Mulia Boga Raya Tbk.,Consumer Defensive,Packaged Foods,3065624920064,539.0,Success
+NZIA,Nusantara Almazia Tbk.,Real Estate,Real Estate - Development,338421252096,163.0,Success
+UCID,Uni-Charm Indonesia Tbk.,Consumer Defensive,Household & Personal Products,1662628921344,404.0,Success
+INDO,Royalindo Investa Wijaya Tbk.,Consumer Cyclical,Lodging,698995703808,163.0,Success
+CSRA,Cisadane Sawit Raya Tbk.,Consumer Defensive,Farm Products,1865499934720,935.0,Success
+PMJS,Putra Mandiri Jembar Tbk.,Consumer Cyclical,Auto & Truck Dealerships,1801983623168,134.0,Success
+IFII,Indonesia Fibreboard Industry T,Basic Materials,Lumber & Wood Production,2070639935488,224.0,Success
+AMOR,Ashmore Asset Management Indone,Financial Services,Asset Management,772076142592,356.0,Success
+GLVA,Galva Technologies Tbk.,Technology,Electronics & Computer Distribution,506999996416,346.0,Success
+PGJO,Bahtera Bumi Raya Tbk.,Consumer Cyclical,Travel Services,660563034112,830.0,Success
+AMAR,Bank Amar Indonesia Tbk.,Financial Services,Banks - Regional,3566707408896,199.0,Success
+PTPW,Pratama Widya Tbk.,Industrials,Engineering & Construction,834278129664,960.0,Success
+TAMA,Lancartama Sejati Tbk.,Real Estate,Real Estate - Development,204000116736,170.0,Success
+DMND,Diamond Food Indonesia Tbk.,Consumer Defensive,Packaged Foods,6012407906304,650.0,Success
+TRIN,Perintis Triniti Properti Tbk.,Real Estate,Real Estate - Development,3163263074304,715.0,Success
+SAMF,Saraswanti Anugerah Makmur Tbk.,Basic Materials,Agricultural Inputs,3362000207872,332.0,Success
+KBAG,Karya Bersama Anugerah Tbk.,Consumer Cyclical,Residential Construction,378950156288,55.0,Success
+SBAT,Sejahtera Bintang Abadi Textile,Consumer Cyclical,Textile Manufacturing,4752982528,1.0,Success
+PURA,Putra Rajawali Kencana Tbk.,Industrials,Trucking,195359866880,30.0,Success
+RONY,Aracord Nusantara Group Tbk.,Industrials,Engineering & Construction,2006250029056,1740.0,Success
+BBSS,Bumi Benowo Sukses Sejahtera Tb,Industrials,Engineering & Construction,705602322432,167.0,Success
+CASH,Cashlez Worldwide Indonesia Tbk,Industrials,Business Equipment & Supplies,380679389184,242.0,Success
+IKAN,Era Mandiri Cemerlang Tbk.,Consumer Defensive,Farm Products,80833298432,101.0,Success
+PGUN,Pradiksi Gunatama Tbk.,Consumer Defensive,Farm Products,49345500020736,9025.0,Success
+EPAC,Megalestari Epack Sentosaraya T,Consumer Cyclical,Packaging & Containers,260968595456,75.0,Success
+PPGL,Prima Globalindo Logistik Tbk.,Industrials,Integrated Freight & Logistics,160405028864,216.0,Success
+SOFA,Solusi Environment Asia Tbk.,Utilities,Utilities - Renewable,681272737792,420.0,Success
+CSMI,Cipta Selera Murni Tbk.,Consumer Cyclical,Restaurants,81606148096,105.0,Success
+UANG,Pakuan Tbk.,Consumer Cyclical,Leisure,4307600015360,3680.0,Success
+BHAT,Bhakti Multi Artha Tbk.,Financial Services,Insurance - Life,6999999774720,1400.0,Success
+TRJA,Transkon Jaya Tbk.,Industrials,Rental & Leasing Services,197836210176,132.0,Success
+SGER,Sumber Global Energy Tbk.,Energy,Thermal Coal,5798330105856,388.0,Success
+TECH,"TECH.JK,0P0001K0MO,0",N/A,N/A,62815002624,0,Success
+CBMF,"CBMF.JK,0P0001JLXG,0",N/A,N/A,93750001664,0,Success
+SCNP,Selaras Citra Nusantara Perkasa,Technology,Consumer Electronics,385380089856,168.0,Success
+PURI,Puri Global Sukses Tbk.,Real Estate,Real Estate - Development,166999998464,171.0,Success
+SOHO,Soho Global Health Tbk.,Healthcare,Medical Distribution,24494947172352,1935.0,Success
+HOMI,Grand House Mulia Tbk.,Real Estate,Real Estate - Development,333900021760,228.0,Success
+ENZO,Morenzo Abadi Perkasa Tbk.,Consumer Defensive,Packaged Foods,155703394304,76.0,Success
+BBSI,Krom Bank Indonesia Tbk.,Financial Services,Banks - Regional,17418188488704,4740.0,Success
+ATAP,Trimitra Prawara Goldland Tbk.,Consumer Cyclical,Residential Construction,622499987456,530.0,Success
+PTDU,Djasa Ubersakti Tbk.,Industrials,Engineering & Construction,105000001536,70.0,Success
+PNGO,Pinago Utama Tbk.,Consumer Defensive,Farm Products,2742187458560,3490.0,Success
+VICI,Victoria Care Indonesia Tbk.,Consumer Defensive,Household & Personal Products,4091879882752,615.0,Success
+TOYS,Sunindo Adipersada Tbk.,Consumer Cyclical,Leisure,11480005632,8.0,Success
+ROCK,Rockfields Properti Indonesia T,Real Estate,Real Estate Services,3530555392000,2560.0,Success
+PMMP,Panca Mitra Multiperdana Tbk.,Consumer Defensive,Packaged Foods,129415004160,50.0,Success
+KMDS,Kurniamitra Duta Sentosa Tbk.,Consumer Defensive,Food Distribution,439999987712,595.0,Success
+WMUU,Widodo Makmur Unggas Tbk.,Consumer Defensive,Farm Products,867058843648,71.0,Success
+PLAN,Planet Properindo Jaya Tbk.,Consumer Cyclical,Lodging,47525605376,56.0,Success
+UNIQ,Ulima Nitra Tbk.,Energy,Thermal Coal,398650834944,134.0,Success
+BEBS,Berkah Beton Sadaya Tbk.,Basic Materials,Building Materials,224999997440,5.0,Success
+FIMP,Fimperkasa Utama Tbk.,Industrials,Engineering & Construction,27600066560,69.0,Success
+NPGF,Nusa Palapa Gemilang Tbk.,Basic Materials,Agricultural Inputs,236537217024,75.0,Success
+TAPG,Triputra Agro Persada Tbk.,Consumer Defensive,Farm Products,40697705005056,2090.0,Success
+ADCP,Adhi Commuter Properti Tbk.,Real Estate,Real Estate - Development,1133333315584,52.0,Success
+EDGE,Indointernet Tbk.,Technology,Information Technology Services,9676997525504,4790.0,Success
+ZYRX,Zyrexindo Mandiri Buana Tbk.,Technology,Computer Hardware,186666827776,153.0,Success
+BANK,Bank Aladin Syariah Tbk.,Financial Services,Banks - Regional,8506075774976,575.0,Success
+TRUE,Triniti Dinamik Tbk.,Real Estate,Real Estate - Development,1120523911168,159.0,Success
+MGLV,Panca Anugrah Wisesa Tbk.,Consumer Cyclical,"Furnishings, Fixtures & Appliances",14905713360896,8675.0,Success
+ARCI,Archi Indonesia Tbk.,Basic Materials,Gold,38231022239744,1570.0,Success
+LABA,Green Power Group Tbk.,Basic Materials,Steel,139028709376,134.0,Success
+LUCY,Lima Dua Lima Tiga Tbk.,Consumer Cyclical,Restaurants,2370621145088,1605.0,Success
+SNLK,Sunter Lakeside Hotel Tbk.,Consumer Cyclical,Lodging,100800004096,234.0,Success
+LFLO,Imago Mulia Persada Tbk.,Consumer Cyclical,"Furnishings, Fixtures & Appliances",725792849920,560.0,Success
+HOPE,Harapan Duta Pertiwi Tbk.,Industrials,Metal Fabrication,338727272448,178.0,Success
+NICL,PAM Mineral Tbk.,Basic Materials,Other Industrial Metals & Mining,9199832530944,895.0,Success
+BMHS,Bundamedik Tbk.,Healthcare,Medical Care Facilities,1574425198592,185.0,Success
+UVCR,Trimegah Karya Pratama Tbk.,Technology,Software - Application,412029845504,200.0,Success
+BUKA,Bukalapak.com Tbk.,Consumer Cyclical,Internet Retail,15369157738496,155.0,Success
+IPAC,Era Graharealty Tbk.,Real Estate,Real Estate Services,139630673920,153.0,Success
+FLMC,Falmaco Nonwoven Industri Tbk.,Consumer Defensive,Household & Personal Products,134374998016,175.0,Success
+RSGK,Kedoya Adyaraya Tbk.,Healthcare,Medical Care Facilities,1278303141888,1375.0,Success
+MASB,Bank Multiarta Sentosa Tbk.,Financial Services,Banks - Regional,4430354186240,3150.0,Success
+SBMA,Surya Biru Murni Acetylene Tbk.,Basic Materials,Chemicals,108801376256,119.0,Success
+MCOL,Prima Andalan Mandiri Tbk.,Energy,Thermal Coal,14151128711168,3980.0,Success
+OILS,Indo Oil Perkasa Tbk.,Consumer Defensive,Packaged Foods,121687162880,268.0,Success
+GPSO,Geoprima Solusi Tbk.,Technology,Scientific & Technical Instruments,228025466880,346.0,Success
+IDEA,Idea Indonesia Akademi Tbk.,Consumer Defensive,Education & Training Services,80745250816,79.0,Success
+RUNS,Global Sukses Solusi Tbk.,Technology,Software - Application,80431292416,84.0,Success
+BOBA,Formosa Ingredient Factory Tbk.,Consumer Defensive,Packaged Foods,316675489792,322.0,Success
+HAIS,Hasnur Internasional Shipping T,Industrials,Marine Shipping,509492494336,197.0,Success
+CMRY,Cisarua Mountain Dairy Tbk.,Consumer Defensive,Packaged Foods,34674564923392,4620.0,Success
+CMNT,Cemindo Gemilang Tbk.,Basic Materials,Building Materials,13700403560448,805.0,Success
+WGSH,Wira Global Solusi Tbk.,Technology,Software - Infrastructure,208499998720,101.0,Success
+KUAS,Ace Oldfields Tbk.,Industrials,Building Products & Equipment,147380142080,119.0,Success
+DEPO,Caturkarda Depo Bangunan Tbk.,Consumer Cyclical,Home Improvement Retail,1806140047360,266.0,Success
+MTEL,Dayamitra Telekomunikasi Tbk.,Communication Services,Telecom Services,41106666422272,515.0,Success
+GTSI,GTS Internasional Tbk.,Industrials,Marine Shipping,3385296683008,230.0,Success
+BINO,Perma Plasindo Tbk.,Industrials,Business Equipment & Supplies,273037950976,123.0,Success
+RMKE,RMK Energy Tbk.,Energy,Thermal Coal,13737500082176,3250.0,Success
+OBMD,OBM Drilchem Tbk.,Basic Materials,Specialty Chemicals,185378373632,232.0,Success
+AVIA,Avia Avian Tbk.,Basic Materials,Specialty Chemicals,22894713241600,392.0,Success
+WMPP,Widodo Makmur Perkasa Tbk.,Industrials,Conglomerates,1235598049280,45.0,Success
+SEMA,Semacom Integrated Tbk.,Industrials,Specialty Industrial Machinery,150893002752,114.0,Success
+NETV,MDTV Media Technologies Tbk.,Communication Services,Broadcasting,3598365229056,87.0,Success
+IPPE,Indo Pureco Pratama Tbk.,Consumer Defensive,Packaged Foods,64399998976,14.0,Success
+BSML,Bintang Samudera Mandiri Lines ,Industrials,Marine Shipping,736389562368,404.0,Success
+NASI,Wahana Inti Makmur Tbk.,Consumer Defensive,Farm Products,126761803776,154.0,Success
+DRMA,Dharma Polimetal Tbk.,Consumer Cyclical,Auto Parts,4541176086528,990.0,Success
+ENAK,Champ Resto Indonesia Tbk.,Consumer Cyclical,Restaurants,758333374464,360.0,Success
+SMKM,Sumber Mas Konstruksi Tbk.,Industrials,Engineering & Construction,112769990656,93.0,Success
+NTBK,Nusatama Berkah Tbk.,Industrials,Farm & Heavy Construction Machinery,229505499136,87.0,Success
+NANO,Nanotech Indonesia Global Tbk.,Healthcare,Medical Devices,154268418048,39.0,Success
+WIRG,WIR ASIA Tbk.,Technology,Information Technology Services,931212558336,79.0,Success
+ADMR,Alamtri Minerals Indonesia Tbk.,Basic Materials,Coking Coal,73179372453888,1860.0,Success
+GOTO,GoTo Gojek Tokopedia Tbk.,Technology,Software - Infrastructure,57348550819840,55.0,Success
+SICO,Sigma Energy Compressindo Tbk.,Energy,Oil & Gas Equipment & Services,112849641472,124.0,Success
+BAUT,Mitra Angkasa Sejahtera Tbk.,Industrials,Tools & Accessories,158406033408,34.0,Success
+ASLC,Autopedia Sukses Lestari Tbk.,Consumer Cyclical,Auto & Truck Dealerships,955976581120,78.0,Success
+TLDN,Teladan Prima Agro Tbk.,Consumer Defensive,Farm Products,8091581546496,645.0,Success
+STAA,Sumber Tani Agung Resources Tbk,Consumer Defensive,Farm Products,13299742670848,1300.0,Success
+MTMH,Murni Sadar Tbk.,Healthcare,Medical Care Facilities,1965100630016,1000.0,Success
+WINR,Winner Nusantara Jaya Tbk.,Real Estate,Real Estate - Development,167530119168,33.0,Success
+IBOS,Indo Boga Sukses Tbk.,Consumer Cyclical,Restaurants,782381547520,104.0,Success
+OLIV,Oscar Mitra Sukses Sejahtera Tb,Consumer Cyclical,"Furnishings, Fixtures & Appliances",106404110336,57.0,Success
+DEWI,Dewi Shri Farmindo Tbk.,Consumer Defensive,Farm Products,249999998976,130.0,Success
+BIKE,Sepeda Bersama Indonesia Tbk.,Consumer Cyclical,Leisure,659897384960,510.0,Success
+ARKO,Arkora Hydro Tbk.,Utilities,Utilities - Renewable,28479615664128,10975.0,Success
+CHEM,Chemstar Indonesia Tbk.,Basic Materials,Specialty Chemicals,154702987264,94.0,Success
+ASHA,Cilacap Samudera Fishing Indust,Consumer Defensive,Farm Products,370000003072,76.0,Success
+SWID,Saraswanti Indoland Development,Real Estate,Real Estate - Development,565427044352,106.0,Success
+TRGU,Cerestar Indonesia Tbk.,Consumer Defensive,Packaged Foods,1477846761472,182.0,Success
+GULA,Aman Agrindo Tbk.,Consumer Defensive,Farm Products,372486144000,362.0,Success
+JARR,Jhonlin Agro Raya Tbk.,Consumer Defensive,Farm Products,19938236432384,2300.0,Success
+KRYA,Bangun Karya Perkasa Jaya Tbk.,Industrials,Engineering & Construction,118139985920,76.0,Success
+TAYS,Jaya Swarasa Agung Tbk.,Consumer Defensive,Packaged Foods,68133036032,66.0,Success
+ELPI,Pelayaran Nasional Ekalya Purna,Industrials,Marine Shipping,13341599727616,1850.0,Success
+EURO,Estee Gold Feet Tbk.,Consumer Defensive,Household & Personal Products,8691498090496,3100.0,Success
+HATM,Habco Trans Maritima Tbk.,Industrials,Marine Shipping,2586639859712,300.0,Success
+KLIN,Klinko Karya Imaji Tbk.,Consumer Cyclical,Home Improvement Retail,198744621056,153.0,Success
+AMMS,Agung Menjangan Mas Tbk.,Consumer Defensive,Farm Products,468000014336,392.0,Success
+AXIO,Tera Data Indonusa Tbk.,Technology,Computer Hardware,665774391296,117.0,Success
+BUAH,Segar Kumala Indonesia Tbk.,Consumer Defensive,Food Distribution,1010000003072,520.0,Success
+TOOL,Rohartindo Nusantara Luas Tbk.,Consumer Cyclical,"Furnishings, Fixtures & Appliances",194751938560,94.0,Success
+RAFI,Sari Kreasi Boga Tbk.,Consumer Cyclical,Restaurants,112613056512,36.0,Success
+KKES,Kusuma Kemindo Sentosa Tbk.,Basic Materials,Specialty Chemicals,61499998208,39.0,Success
+CRAB,Toba Surimi Industries Tbk.,Consumer Defensive,Packaged Foods,409499992064,212.0,Success
+COAL,Black Diamond Resources Tbk.,Energy,Thermal Coal,399999991808,66.0,Success
+RCCC,Utama Radar Cahaya Tbk.,Industrials,Trucking,83475005440,104.0,Success
+PRAY,Famon Awal Bros Sedaya Tbk.,Healthcare,Medical Care Facilities,10399769427968,745.0,Success
+MKTR,Menthobi Karyatama Raya Tbk.,Consumer Defensive,Farm Products,1507553574912,127.0,Success
+OMED,Jayamas Medica Industri Tbk.,Healthcare,Medical Instruments & Supplies,7454241325056,290.0,Success
+PDPP,Primadaya Plastisindo Tbk.,Consumer Cyclical,Packaging & Containers,1071469494272,358.0,Success
+MEDS,Hetzer Medical Indonesia Tbk.,Healthcare,Medical Instruments & Supplies,121874997248,78.0,Success
+NINE,Techno9 Indonesia Tbk.,Technology,Information Technology Services,314921975808,133.0,Success
+CBUT,Citra Borneo Utama Tbk.,Consumer Defensive,Packaged Foods,2609374822400,885.0,Success
+MMIX,Multi Medika Internasional Tbk.,Healthcare,Pharmaceutical Retailers,1411325100032,302.0,Success
+BELI,Global Digital Niaga Tbk.,Consumer Cyclical,Internet Retail,50533553405952,372.0,Success
+PADA,Personel Alih Daya Tbk.,Industrials,Staffing & Employment Services,548100014080,191.0,Success
+ISAP,Isra Presisi Indonesia Tbk.,Industrials,Metal Fabrication,124630835200,32.0,Success
+KDTN,Puri Sentul Permai Tbk.,Consumer Cyclical,Restaurants,1168771776512,985.0,Success
+BEER,Jobubu Jarum Minahasa Tbk.,Consumer Defensive,Beverages - Wineries & Distilleries,515999989760,135.0,Success
+CBPE,Citra Buana Prasida Tbk.,Real Estate,Real Estate - Development,423149993984,310.0,Success
+SUNI,Sunindo Pratama Tbk.,Energy,Oil & Gas Equipment & Services,1455872016384,620.0,Success
+CBRE,Cakra Buana Resources Energi Tb,Industrials,Marine Shipping,3902738006016,900.0,Success
+BSBK,Wulandari Bangun Laksana Tbk.,Real Estate,Real Estate - Development,1505512914944,62.0,Success
+VTNY,Venteny Fortuna International T,Industrials,Staffing & Employment Services,438563536896,74.0,Success
+SOUL,Mitra Tirta Buwana Tbk.,Industrials,Specialty Business Services,54126309376,53.0,Success
+BMBL,Lavender Bina Cendikia Tbk.,Consumer Defensive,Education & Training Services,40173158400,40.0,Success
+PEVE,Penta Valent Tbk.,Healthcare,Pharmaceutical Retailers,734499962880,420.0,Success
+FWCT,Wijaya Cahaya Timber Tbk.,Basic Materials,Lumber & Wood Production,180595998720,94.0,Success
+LAJU,Jasa Berdikari Logistics Tbk.,Industrials,Integrated Freight & Logistics,169845506048,82.0,Success
+ZATA,Bersama Zatta Jaya Tbk.,Consumer Cyclical,Apparel Retail,781632012288,100.0,Success
+IRSX,Folago Global Nusantara Tbk.,Technology,Software - Application,3330255618048,406.0,Success
+CHIP,Pelita Teknologi Global Tbk.,Communication Services,Telecom Services,814060011520,1045.0,Success
+VAST,Vastland Indonesia Tbk.,Real Estate,Real Estate Services,375855677440,126.0,Success
+KING,Hoffmen Cleanindo Tbk.,Industrials,Specialty Business Services,1108814987264,446.0,Success
+ELIT,Data Sinergitama Jaya Tbk.,Technology,Information Technology Services,404794343424,206.0,Success
+PGEO,Pertamina Geothermal Energy Tbk,Utilities,Utilities - Renewable,41480542486528,970.5577,Success
+NAYZ,Hassana Boga Sejahtera Tbk.,Consumer Defensive,Packaged Foods,160650723328,65.0,Success
+WINE,Hatten Bali Tbk.,Consumer Defensive,Beverages - Wineries & Distilleries,495930015744,185.0,Success
+BDKR,Berdikari Pondasi Perkasa Tbk.,Industrials,Engineering & Construction,793817055232,179.0,Success
+PACK,Abadi Nusantara Hijau Investama,Consumer Cyclical,Packaging & Containers,6796386762752,230.0,Success
+HILL,Hillcon Tbk.,Basic Materials,Other Industrial Metals & Mining,309571485696,22.0,Success
+PTMP,Mitra Pack Tbk.,Industrials,Specialty Industrial Machinery,221844013056,72.0,Success
+HALO,Haloni Jane Tbk.,Basic Materials,Chemicals,461983416320,77.0,Success
+CUAN,Petrindo Jaya Kreasi Tbk.,Energy,Thermal Coal,136021807202304,1300.0,Success
+NSSS,Nusantara Sawit Sejahtera Tbk.,Consumer Defensive,Farm Products,18327208460288,855.0,Success
+FUTR,Futura Energi Global Tbk.,Utilities,Utilities - Renewable,1433279135744,230.0,Success
+GTRA,Grahaprima Suksesmandiri Tbk.,Industrials,Integrated Freight & Logistics,481171275776,256.0,Success
+JATI,Informasi Teknologi Indonesia T,Technology,Information Technology Services,352352174080,109.0,Success
+MPXL,MPX Logistics International Tbk,Industrials,Trucking,330002432000,168.0,Success
+SAGE,Saptausaha Gemilangindah Tbk.,Real Estate,Real Estate - Development,241005821952,31.0,Success
+TRON,Teknologi Karya Digital Nusa Tb,Technology,Information Technology Services,398250016768,139.0,Success
+MAXI,Maxindo Karya Anugerah Tbk.,Consumer Defensive,Packaged Foods,490115072000,54.0,Success
+VKTR,VKTR Teknologi Mobilitas Tbk.,Consumer Cyclical,Recreational Vehicles,36531246989312,905.0,Success
+RELF,Graha Mitra Asia Tbk.,Real Estate,Real Estate - Development,240568942592,39.0,Success
+AMMN,Amman Mineral Internasional Tbk,Basic Materials,Other Precious Metals & Mining,365682675941376,5200.0,Success
+HAJJ,Arsy Buana Travelindo Tbk.,Consumer Cyclical,Travel Services,320904495104,136.0,Success
+TYRE,King Tire Indonesia Tbk.,Consumer Cyclical,Auto Parts,393305718784,121.0,Success
+GRPM,Graha Prima Mentari Tbk.,Consumer Defensive,Beverages - Non-Alcoholic,473808797696,318.0,Success
+WIDI,Widiant Jaya Krenindo Tbk.,Industrials,Rental & Leasing Services,52801048576,34.0,Success
+KLAS,Pelayaran Kurnia Lautan Semesta,Industrials,Marine Shipping,306130944000,85.0,Success
+TGUK,Platinum Wahab Nusantara Tbk.,Consumer Defensive,Food Distribution,489288925184,137.0,Success
+INET,Sinergi Inti Andalan Prima Tbk.,Communication Services,Telecom Services,6443743838208,310.0,Success
+CRSN,Carsurin Tbk.,Industrials,Specialty Business Services,321012006912,115.0,Success
+HBAT,Minahasa Membangun Hebat Tbk.,Real Estate,Real Estate - Development,520370388992,505.0,Success
+SMIL,Sarana Mitra Luas Tbk.,Industrials,Rental & Leasing Services,2351610462208,284.0,Success
+ERAL,Sinar Eka Selaras Tbk.,Consumer Cyclical,Specialty Retail,1545874964480,306.0,Success
+GRIA,Ingria Pratama Capitalindo Tbk.,Real Estate,Real Estate - Development,737572028416,101.0,Success
+RMKO,Royaltama Mulia Kontraktorindo ,Energy,Thermal Coal,580000022528,505.0,Success
+MAHA,Mandiri Herindo Adiperkasa Tbk.,Industrials,Trucking,2475640487936,151.0,Success
+FOLK,Multi Garam Utama Tbk.,Consumer Cyclical,Internet Retail,1309234429952,346.0,Success
+CNMA,Nusantara Sejahtera Raya Tbk.,Communication Services,Entertainment,8410031980544,104.0,Success
+MUTU,Mutuagung Lestari Tbk.,Industrials,Specialty Business Services,326866862080,107.0,Success
+PPRI,Paperocks Indonesia Tbk.,Consumer Cyclical,Packaging & Containers,197805031424,187.0,Success
+CYBR,ITSEC Asia Tbk.,Technology,Software - Infrastructure,8246314139648,1255.0,Success
+KOCI,Kokoh Exa Nusantara Tbk.,Real Estate,Real Estate - Development,562832080896,143.0,Success
+HUMI,Humpuss Maritim Internasional T,Industrials,Marine Shipping,3160958566400,182.0,Success
+PTPS,Pulau Subur Tbk.,Consumer Defensive,Farm Products,383650136064,181.0,Success
+MSIE,Multisarana Intan Eduka Tbk.,Real Estate,Real Estate Services,163520872448,102.0,Success
+BABY,Multitrend Indo Tbk.,Consumer Cyclical,Apparel Retail,654056685568,276.0,Success
+RSCH,Charlie Hospital Semarang Tbk.,Healthcare,Medical Care Facilities,720799989760,282.0,Success
+IOTF,Sumber Sinergi Makmur Tbk.,Technology,Communication Equipment,333288767488,65.0,Success
+STRK,Lovina Beach Brewery Tbk.,Consumer Defensive,Beverages - Brewers,1168680157184,112.0,Success
+KOKA,Koka Indonesia Tbk.,Industrials,Engineering & Construction,503594614784,184.0,Success
+UDNG,Agro Bahari Nusantara Tbk.,Consumer Defensive,Farm Products,1548785418240,960.0,Success
+MSTI,Mastersystem Infotama Tbk.,Technology,Information Technology Services,4238212071424,1395.0,Success
+AEGS,Anugerah Spareparts Sejahtera T,Consumer Cyclical,Auto Parts,53322276864,54.0,Success
+LMAX,Lupromax Pelumas Indonesia Tbk.,Energy,Oil & Gas Refining & Marketing,102701383680,166.0,Success
+LOPI,Logisticsplus International Tbk,Industrials,Integrated Freight & Logistics,126501298176,121.0,Success
+BREN,Barito Renewables Energy Tbk.,Utilities,Utilities - Renewable,588632985436160,4730.0,Success
+RGAS,Kian Santang Muliatama Tbk.,Energy,Oil & Gas Equipment & Services,129871831040,93.0,Success
+AYAM,Janu Putra Sejahtera Tbk.,Consumer Defensive,Farm Products,1303999938560,338.0,Success
+SURI,Maja Agung Latexindo Tbk.,Healthcare,Medical Instruments & Supplies,519418740736,77.0,Success
+GRPH,Griptha Putra Persada Tbk.,Consumer Cyclical,Lodging,64000000000,63.0,Success
+IKPM,Ikapharmindo Putramas Tbk.,Healthcare,Pharmaceutical Retailers,343671144448,204.0,Success
+ASLI,Asri Karya Lestari Tbk.,Industrials,Engineering & Construction,2300000075776,384.0,Success
+MKAP,Multikarya Asia Pasifik Raya Tb,Energy,Oil & Gas Equipment & Services,3493749850112,1075.0,Success
+LIVE,Homeco Victoria Makmur Tbk.,Consumer Cyclical,"Furnishings, Fixtures & Appliances",1028833148928,234.0,Success
+MEJA,Harta Djaya Karya Tbk.,Industrials,Engineering & Construction,276457095168,112.0,Success
+UNTD,Terang Dunia Internusa Tbk.,Consumer Cyclical,Auto Manufacturers,566666657792,89.0,Success
+ALII,Ancara Logistics Indonesia Tbk.,Industrials,Marine Shipping,14876252569600,980.0,Success
+TOSK,Topindo Solusi Komunika Tbk.,Technology,Software - Application,280017731584,67.0,Success
+SMGA,Sumber Mineral Global Abadi Tbk,Basic Materials,Other Industrial Metals & Mining,778750001152,93.0,Success
+MHKI,Multi Hanna Kreasindo Tbk.,Industrials,Waste Management,678749995008,193.0,Success
+BATR,Benteng Api Technic Tbk.,Basic Materials,Building Materials,281326125056,94.0,Success
+SOLA,Xolare RCR Energy Tbk.,Industrials,Engineering & Construction,407634509824,125.0,Success
+MPIX,Mitra Pedagang Indonesia Tbk.,Technology,Software - Infrastructure,132818821120,87.0,Success
+HYGN,Ecocare Indo Pasifik Tbk.,Industrials,Specialty Business Services,351367823360,143.0,Success
+SPRE,Soraya Berjaya Indonesia Tbk.,Consumer Cyclical,"Furnishings, Fixtures & Appliances",74399997952,95.0,Success
+AREA,Dunia Virtual Online Tbk.,Technology,Information Technology Services,822830694400,330.0,Success
+GOLF,Intra Golflink Resorts Tbk.,Consumer Cyclical,Leisure,3644024422400,193.0,Success
+VISI,Satu Visi Putra Tbk.,Industrials,Industrial Distribution,2598374998016,850.0,Success
+BAIK,Bersama Mencapai Puncak Tbk.,Consumer Cyclical,Restaurants,749785907200,665.0,Success
+BLES,Superior Prima Sukses Tbk.,Basic Materials,Building Materials,1449103589376,163.0,Success
+ISEA,Indo American Seafoods Tbk.,Consumer Defensive,Packaged Foods,119541145600,88.0,Success
+ATLA,Atlantis Subsea Indonesia Tbk.,Energy,Oil & Gas Equipment & Services,328577613824,54.0,Success
+DATA,Remala Abadi Tbk.,Communication Services,Telecom Services,2763750113280,2140.0,Success
+GUNA,Gunanusa Eramandiri Tbk.,Consumer Defensive,Packaged Foods,560000008192,224.0,Success
+NEST,Esta Indonesia Tbk.,Consumer Defensive,Farm Products,1768374927360,440.0,Success
+LABS,UBC Medical Indonesia Tbk.,Healthcare,Medical Devices,572750036992,148.0,Success
+PTMR,Master Print Tbk.,Consumer Cyclical,Packaging & Containers,713217998848,374.0,Success
+PART,Cipta Perdana Lancar Tbk.,Consumer Cyclical,Auto Parts,334913830912,125.0,Success
+BOAT,Newport Marine Services Tbk.,Energy,Oil & Gas Drilling,483231858688,139.0,Success
+VERN,Verona Indah Pictures Tbk.,Communication Services,Entertainment,662425108480,141.0,Success
+DAAZ,Daaz Bara Lestari Tbk.,Basic Materials,Other Industrial Metals & Mining,4593099997184,2360.0,Success
+AADI,Adaro Andalan Indonesia Tbk.,Energy,Thermal Coal,87213186482176,11300.0,Success
+YOII,Asuransi Digital Bersama Tbk.,Financial Services,Insurance - Diversified,332194709504,96.0,Success
+NAIK,Adiwarna Anugerah Abadi Tbk.,Basic Materials,Building Materials,332765528064,101.0,Success
+HGII,Hero Global Investment Tbk.,Utilities,Utilities - Renewable,883999965184,138.0,Success
+CBDK,Bangun Kosambi Sukses Tbk.,Real Estate,Real Estate Services,25850386841600,4610.0,Success
+DOSS,Global Sukses Digital Tbk.,Consumer Cyclical,Specialty Retail,270824996864,149.0,Success
+MDIY,Daya Intiguna Yasa Tbk.,Consumer Cyclical,Department Stores,22419448266752,895.0,Success
+OBAT,Brigit Biofarmaka Teknologi Tbk,Consumer Defensive,Packaged Foods,196800004096,336.0,Success
+BRRC,Raja Roti Cemerlang Tbk.,Consumer Defensive,Packaged Foods,73836797952,81.0,Success
+KSIX,Kentanix Supra International Tb,Real Estate,Real Estate - Development,688381820928,322.0,Success
+PSAT,Pancaran Samudera Transport Tbk,Industrials,Marine Shipping,1356352978944,955.0,Success
+RATU,Raharja Energi Cepu Tbk.,Energy,Oil & Gas E&P,16095069077504,6400.0,Success
+MINE,Sinar Terang Mandiri Tbk.,Basic Materials,Other Industrial Metals & Mining,1470396628992,358.0,Success
+DGWG,Delta Giri Wacana Tbk.,Basic Materials,Agricultural Inputs,2247058784256,396.0,Success
+BLOG,Trimitra Trans Persada Tbk.,Industrials,Integrated Freight & Logistics,1318000001024,398.0,Success
+ASPR,Asia Pramulia Tbk.,Consumer Cyclical,Packaging & Containers,791903993856,256.0,Success
+PMUI,Prima Multi Usaha Indonesia Tbk,Technology,Electronics & Computer Distribution,591600025600,104.0,Success
+CDIA,Chandra Daya Investasi Tbk.,Utilities,Utilities - Regulated Electric,131070842372096,1100.0,Success
+SUPA,Super Bank Indonesia Tbk.,Financial Services,Banks - Regional,28473494077440,880.0,Success
+KAQI,Jantra Grupo Indonesia Tbk.,Consumer Cyclical,Auto Parts,230413811712,117.0,Success
+MERI,Merry Riana Edukasi Tbk.,Consumer Defensive,Education & Training Services,142848278528,144.0,Success
+YUPI,Yupi Indo Jelly Gum Tbk.,Consumer Defensive,Confectioners,12987622490112,1530.0,Success
+CHEK,Diastika Biotekindo Tbk.,Healthcare,Medical Devices,559413067776,140.0,Success
+FORE,Fore Kopi Indonesia Tbk.,Consumer Cyclical,Restaurants,8160298401792,945.0,Success
+COIN,Indokripto Koin Semesta Tbk.,Financial Services,Financial Data & Stock Exchanges,16617646850048,1190.0,Success
+RLCO,Abadi Lestari Indonesia Tbk.,Consumer Defensive,Farm Products,15593750134784,5375.0,Success
+MDLA,Medela Potentia Tbk.,Healthcare,Medical Distribution,2914667462656,210.0,Success
+PJHB,Pelayaran Jaya Hidup Baru Tbk.,Industrials,Marine Shipping,418560016384,230.0,Success
+EMAS,Merdeka Gold Resources Tbk.,Basic Materials,Gold,131477446590464,9475.0,Success
+DKHH,Cipta Sarana Medika Tbk.,Healthcare,Medical Care Facilities,178505531392,74.0,Success
+WBSA,BSA Logistics Indonesia Tbk.,Industrials,Integrated Freight & Logistics,11537750163456,1330.0,Success
+AMAN,Makmur Berkah Amanda Tbk.,Real Estate,Real Estate - Development,983868964864,262.0,Success
+NCKL,Trimegah Bangun Persada Tbk.,Basic Materials,Other Industrial Metals & Mining,65507382263808,1105.0,Success
+ASPI,Andalan Sakti Primaindo Tbk.,Consumer Cyclical,Residential Construction,255745228800,384.0,Success
+DADA,Diamond Citra Propertindo Tbk.,Real Estate,Real Estate Services,371576537088,50.0,Success
+BESS,Batulicin Nusantara Maritim Tbk,Industrials,Marine Shipping,3939321511936,1170.0,Success
+CARE,Metro Healthcare Indonesia Tbk.,Healthcare,Medical Care Facilities,13499500593152,408.0,Success
+PIPA,Multi Makmur Lemindo Tbk.,Industrials,Building Products & Equipment,455670923264,141.0,Success
+MENN,Menn Teknologi Indonesia Tbk.,Industrials,Electrical Equipment & Parts,76004753408,53.0,Success
+AYLS,Agro Yasa Lestari Tbk.,Consumer Defensive,Food Distribution,166417530880,200.0,Success
+NICE,Adhi Kartiko Pratama Tbk.,Basic Materials,Other Industrial Metals & Mining,1873262149632,320.0,Success
+AWAN,Era Digital Media Tbk.,Communication Services,Internet Content & Information,553035038720,155.0,Success
+MBMA,Merdeka Battery Materials Tbk.,Basic Materials,Other Precious Metals & Mining,70197025177600,690.0,Success
+RAAM,Tripar Multivision Plus Tbk.,Communication Services,Entertainment,1430860201984,218.0,Success
+DOOH,Era Media Sejahtera Tbk.,Communication Services,Advertising Agencies,1300133707776,181.0,Success
+WIFI,Solusi Sinergi Digital Tbk.,Technology,Information Technology Services,12103491518464,2370.0,Success
+FAPA,FAP Agri Tbk.,Consumer Defensive,Farm Products,24656302047232,7050.0,Success
+ESTA,Esta Multi Usaha Tbk.,Consumer Cyclical,Lodging,504473681920,218.0,Success
+CGAS,Citra Nusantara Gemilang Tbk.,Energy,Oil & Gas Refining & Marketing,299383324672,174.0,Success
+SMLE,Sinergi Multi Lestarindo Tbk.,Basic Materials,Specialty Chemicals,302659895296,133.0,Success
+DCII,DCI Indonesia Tbk.,Technology,Information Technology Services,473769487368192,198750.0,Success
+DGNS,Diagnos Laboratorium Utama Tbk.,Healthcare,Diagnostics & Research,342500016128,278.0,Success
+ACRO,Samcro Hyosung Adilestari Tbk.,Consumer Cyclical,Apparel Manufacturing,260200923136,77.0,Success
+UFOE,Damai Sejahtera Abadi Tbk.,Consumer Cyclical,Department Stores,426044489728,157.0,Success
+MANG,Manggung Polahraya Tbk.,Industrials,Engineering & Construction,198255280128,54.0,Success
+MSJA,Multi Spunindo Jaya Tbk.,Consumer Cyclical,Textile Manufacturing,2894773354496,525.0,Success
+AGII,Samator Indo Gas Tbk.,Basic Materials,Chemicals,9169313726464,3100.0,Success
+AGRS,Bank IBK Indonesia Tbk.,Financial Services,Banks - Regional,3254778331136,70.0,Success
+KETR,Ketrosden Triasmitra Tbk.,Technology,Communication Equipment,1375171248128,510.0,Success
+ADMG,Polychem Indonesia Tbk,Basic Materials,Chemicals,770057568256,218.0,Success
+ADMF,Adira Dinamika Multi Finance Tb,Financial Services,Credit Services,10788685217792,8975.0,Success
+POLY,Asia Pacific Fibers Tbk,Basic Materials,Specialty Chemicals,79864111104,32.0,Success
+AHAP,Asuransi Harta Aman Pratama Tbk,Financial Services,Insurance - Property & Casualty,519399964672,109.0,Success
+AGRO,Bank Raya Indonesia Tbk.,Financial Services,Banks - Regional,4465189978112,186.0,Success
+AIMS,Artha Mahiya Investama Tbk.,Energy,Thermal Coal,92840001536,460.0,Success
+ADRO,Alamtri Resources Indonesia Tbk,Energy,Thermal Coal,70273206321152,2440.0,Success
+POOL,"POOL.JK,0P0000EQUC,0",N/A,N/A,0,0,Success
+PNSE,Pudjiadi & Sons Tbk.,Consumer Cyclical,Resorts & Casinos,498633441280,630.0,Success
+PPRO,PP Properti Tbk.,Real Estate,Real Estate - Development,1233513480192,21.0,Success

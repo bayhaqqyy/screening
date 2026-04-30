@@ -1,23 +1,63 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { AnimatePresence, motion } from 'framer-motion';
+import { searchService } from '../../services/searchService';
 
 const TopNavBar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
   const menuRef = useRef(null);
+  const searchRef = useRef(null);
+  const debounceTimer = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setShowProfileMenu(false);
       }
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSearchResults(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleSearch = useCallback((query) => {
+    setSearchQuery(query);
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+
+    if (query.trim().length < 2) {
+      setSearchResults([]);
+      setShowSearchResults(false);
+      return;
+    }
+
+    debounceTimer.current = setTimeout(async () => {
+      setSearchLoading(true);
+      try {
+        const res = await searchService.search(query);
+        setSearchResults(res.data || []);
+        setShowSearchResults(true);
+      } catch {
+        setSearchResults([]);
+      } finally {
+        setSearchLoading(false);
+      }
+    }, 300);
+  }, []);
+
+  const handleSelectStock = (ticker) => {
+    setShowSearchResults(false);
+    setSearchQuery('');
+    navigate(`/stock/${ticker}`);
+  };
 
   const handleLogout = () => {
     logout();
@@ -36,13 +76,59 @@ const TopNavBar = () => {
       </div>
       
       <div className="flex items-center gap-4">
-        <div className="relative bg-surface-container-low px-4 py-1.5 rounded-full flex items-center gap-2 outline-variant/20 outline outline-1">
-          <span className="material-symbols-outlined text-slate-400 text-lg">search</span>
-          <input 
-            className="bg-transparent border-none focus:outline-none text-sm w-48 text-on-surface-variant placeholder-slate-500" 
-            placeholder="Search stocks..." 
-            type="text"
-          />
+        <div className="relative" ref={searchRef}>
+          <div className="bg-surface-container-low px-4 py-1.5 rounded-full flex items-center gap-2 outline-variant/20 outline outline-1">
+            <span className="material-symbols-outlined text-slate-400 text-lg">search</span>
+            <input 
+              className="bg-transparent border-none focus:outline-none text-sm w-48 text-on-surface-variant placeholder-slate-500" 
+              placeholder="Search stocks..." 
+              type="text"
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              onFocus={() => searchResults.length > 0 && setShowSearchResults(true)}
+            />
+            {searchLoading && (
+              <span className="material-symbols-outlined text-primary text-sm animate-spin">progress_activity</span>
+            )}
+          </div>
+
+          <AnimatePresence>
+            {showSearchResults && searchResults.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                transition={{ duration: 0.15 }}
+                className="absolute top-full mt-2 w-80 bg-surface-container-high border border-outline-variant/20 rounded-xl shadow-2xl overflow-hidden backdrop-blur-xl z-50 max-h-80 overflow-y-auto custom-scrollbar"
+              >
+                {searchResults.map((stock) => (
+                  <button
+                    key={stock.ticker}
+                    onClick={() => handleSelectStock(stock.ticker)}
+                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 transition-colors text-left border-b border-outline-variant/5 last:border-b-0"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-[10px] font-black text-primary">
+                        {stock.ticker?.substring(0, 2)}
+                      </div>
+                      <div>
+                        <span className="text-sm font-bold text-on-surface block">{stock.ticker}</span>
+                        <span className="text-[11px] text-on-surface-variant line-clamp-1">{stock.name}</span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      {stock.last_price > 0 && (
+                        <span className="text-xs font-bold tabular-nums text-on-surface block">Rp {stock.last_price?.toLocaleString()}</span>
+                      )}
+                      {stock.sector && (
+                        <span className="text-[10px] text-on-surface-variant">{stock.sector}</span>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
         <button className="material-symbols-outlined text-slate-400 hover:text-slate-200 transition-colors">notifications</button>
         

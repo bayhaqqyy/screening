@@ -99,4 +99,14 @@ def download_all_idx(period="60d"):
     print(f"Total: {len(all_tickers)} tickers downloaded")
 
 if __name__ == "__main__":
-    download_all_idx()
+    import os
+    interval_minutes = int(os.getenv("FETCH_INTERVAL_MINUTES", "15"))
+    print(f"Starting fetcher service. Will fetch every {interval_minutes} minutes.")
+    while True:
+        try:
+            download_all_idx()
+        except Exception as e:
+            print(f"Error in main loop: {e}")
+        
+        print(f"Sleeping for {interval_minutes} minutes...")
+        time.sleep(interval_minutes * 60)
