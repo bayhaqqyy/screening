@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8088/api';
 
 async function fetchWithAuth(endpoint, options = {}) {
   const token = localStorage.getItem('auth_token');
@@ -24,7 +24,14 @@ async function fetchWithAuth(endpoint, options = {}) {
     throw new Error('Unauthorized');
   }
 
-  const data = await response.json();
+  let data;
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    data = await response.json();
+  } else {
+    data = { message: await response.text() };
+  }
+
   if (!response.ok) {
     throw new Error(data.message || 'API Error');
   }

@@ -28,7 +28,7 @@ export const useScreener = (strategy) => {
     // Listen to WS updates for this specific strategy
     const topicMap = {
       'bsjp': 'idx.bandar.flow', // depends on how engine maps it
-      'scalping': 'idx.ohlcv.raw',
+      'scalping': 'idx.ohlcv.enriched',
     };
     
     const targetTopic = topicMap[strategy];

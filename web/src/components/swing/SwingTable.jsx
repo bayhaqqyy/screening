@@ -1,4 +1,5 @@
 import React from 'react';
+import { useScreener } from '../../hooks/useScreener';
 
 const mockCandidates = [
   { ticker: 'BBCA', name: 'Bank Central Asia', signal: 'MA 20 CROSS 50', price: '9,850.00', target: '10,400.00', rr: '1:3.4' },
@@ -8,6 +9,9 @@ const mockCandidates = [
 ];
 
 const SwingTable = () => {
+  const { data } = useScreener('swing');
+  const displayData = data && data.length > 0 ? data : mockCandidates;
+
   return (
     <div className="xl:col-span-3">
       <div className="bg-surface-container-high rounded-xl overflow-hidden">
@@ -32,7 +36,7 @@ const SwingTable = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant/10">
-              {mockCandidates.map((row) => (
+              {displayData.map((row) => (
                 <tr key={row.ticker} className="hover:bg-surface-container-low transition-colors group">
                   <td className="px-6 py-4">
                     <div className="flex flex-col">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useScreener } from '../../hooks/useScreener';
 
 const mockBSJP = [
   {
@@ -25,6 +26,9 @@ const mockBSJP = [
 ];
 
 const BSJPCandidates = () => {
+  const { data } = useScreener('bsjp');
+  const displayData = data && data.length > 0 ? data : mockBSJP;
+
   return (
     <div className="bg-surface-container-low rounded-xl overflow-hidden shadow-xl">
       <div className="px-6 py-4 flex justify-between items-center bg-surface-container/50">
@@ -48,7 +52,7 @@ const BSJPCandidates = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-outline-variant/5">
-            {mockBSJP.map((item) => (
+            {displayData.map((item) => (
               <tr key={item.ticker} className={`group hover:bg-surface-container-high transition-colors cursor-pointer ${item.rowClass || ''}`}>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">

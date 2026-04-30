@@ -1,4 +1,5 @@
 import React from 'react';
+import { useScreener } from '../../hooks/useScreener';
 
 const mockScalpingData = [
   {
@@ -40,6 +41,9 @@ const mockScalpingData = [
 ];
 
 const ScalpingTable = () => {
+  const { data } = useScreener('scalping');
+  const displayData = data && data.length > 0 ? data : mockScalpingData;
+
   return (
     <div className="glass-panel rounded-xl overflow-hidden mt-6">
       <table className="w-full text-left border-collapse">
@@ -55,7 +59,7 @@ const ScalpingTable = () => {
           </tr>
         </thead>
         <tbody className="text-sm tabular-nums">
-          {mockScalpingData.map((data) => (
+          {displayData.map((data) => (
             <tr key={data.ticker} className="group hover:bg-surface-container-high transition-colors cursor-pointer border-b border-outline-variant/10">
               <td className="px-6 py-5">
                 <div className="flex items-center gap-3">

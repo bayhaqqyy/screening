@@ -24,8 +24,8 @@ const Settings = () => {
       </div>
       
       <footer className="mt-12 pt-8 border-t border-outline-variant/10 flex justify-end gap-4">
-        <button className="px-8 py-3 rounded-full text-sm font-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors">Discard Changes</button>
-        <button className="px-8 py-3 rounded-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-sm shadow-xl shadow-primary-container/20 hover:scale-[1.02] active:scale-95 transition-all">Save Preferences</button>
+        <button onClick={() => alert("Changes discarded.")} className="px-8 py-3 rounded-full text-sm font-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors">Discard Changes</button>
+        <button onClick={() => alert("Preferences saved successfully!")} className="px-8 py-3 rounded-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-sm shadow-xl shadow-primary-container/20 hover:scale-[1.02] active:scale-95 transition-all">Save Preferences</button>
       </footer>
     </AnimatedPage>
   );
