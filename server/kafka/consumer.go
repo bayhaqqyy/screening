@@ -3,6 +3,7 @@ package kafka
 import (
 	"context"
 	"log"
+	"time"
 
 	"github.com/sahamscreen/server/config"
 	"github.com/sahamscreen/server/ws"
@@ -29,6 +30,7 @@ func consumeTopic(topic string) {
 		m, err := r.ReadMessage(context.Background())
 		if err != nil {
 			log.Printf("Error reading message from %s: %v", topic, err)
+			time.Sleep(3 * time.Second) // wait before retrying to avoid log spam
 			continue
 		}
 		
