@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -24,12 +24,25 @@ const ProtectedRoute = ({ children }) => {
 };
 
 import { useWebSocket } from './hooks/useWebSocket';
+import { settingsService } from './services/settingsService';
 
 function AppRoutes() {
   const location = useLocation();
-  
-  // Initialize WS globally when user is authenticated
   const { user } = useAuth();
+  
+  // Initialize WS and Global Theme when user is authenticated
+  useEffect(() => {
+    if (user) {
+      settingsService.getSettings().then(res => {
+        if (res.data && res.data.theme === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          document.documentElement.classList.add('dark');
+        }
+      }).catch(console.error);
+    }
+  }, [user]);
+
   if (user) {
     useWebSocket(); // Starts connection globally
   }

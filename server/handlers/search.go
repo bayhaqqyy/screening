@@ -81,3 +81,51 @@ func GetStockDetail(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(s)
 }
+
+type ChartData struct {
+	Time   string  `json:"time"`
+	Open   float64 `json:"open"`
+	High   float64 `json:"high"`
+	Low    float64 `json:"low"`
+	Close  float64 `json:"close"`
+	Volume int64   `json:"volume"`
+}
+
+func GetStockChart(w http.ResponseWriter, r *http.Request) {
+	ticker := r.URL.Query().Get("ticker")
+	if ticker == "" {
+		http.Error(w, "ticker required", http.StatusBadRequest)
+		return
+	}
+
+	rows, err := database.DB.Query(`
+		SELECT to_char(date, 'YYYY-MM-DD'), open, high, low, close, volume
+		FROM ohlcv_daily
+		WHERE ticker = $1
+		ORDER BY date ASC
+		LIMIT 365
+	`, ticker)
+
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode([]ChartData{})
+		return
+	}
+	defer rows.Close()
+
+	var results []ChartData
+	for rows.Next() {
+		var c ChartData
+		if err := rows.Scan(&c.Time, &c.Open, &c.High, &c.Low, &c.Close, &c.Volume); err != nil {
+			continue
+		}
+		results = append(results, c)
+	}
+
+	if results == nil {
+		results = []ChartData{}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(results)
+}

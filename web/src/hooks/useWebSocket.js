@@ -23,7 +23,8 @@ export const useWebSocket = () => {
           setMessages(prev => [data, ...prev].slice(0, 50)); // Keep last 50 messages
           
           // Optionally dispatch custom events so individual components can listen
-          const customEvent = new CustomEvent(`ws_${data.topic}`, { detail: data });
+          const topicName = data.type || data.topic;
+          const customEvent = new CustomEvent(`ws_${topicName}`, { detail: data });
           window.dispatchEvent(customEvent);
         } catch (e) {
           console.error("Failed to parse WS message", e);

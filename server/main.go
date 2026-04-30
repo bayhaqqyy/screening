@@ -10,6 +10,7 @@ import (
 	"github.com/sahamscreen/server/handlers"
 	"github.com/sahamscreen/server/kafka"
 	"github.com/sahamscreen/server/middleware"
+	"github.com/sahamscreen/server/workers"
 	"github.com/sahamscreen/server/ws"
 )
 
@@ -47,6 +48,7 @@ func main() {
 	// Search routes
 	r.HandleFunc("/api/search", handlers.SearchStocks).Methods("GET")
 	r.HandleFunc("/api/stock", handlers.GetStockDetail).Methods("GET")
+	r.HandleFunc("/api/stock/chart", handlers.GetStockChart).Methods("GET")
 
 	// Watchlist routes (auth required)
 	r.HandleFunc("/api/watchlist", handlers.GetWatchlist).Methods("GET")
@@ -70,6 +72,7 @@ func main() {
 
 	go ws.AppHub.Run()
 	kafka.StartConsumers()
+	workers.StartAlertWorker()
 
 	log.Printf("Server starting on port %s...", config.AppConfig.Port)
 	if err := http.ListenAndServe(":"+config.AppConfig.Port, r); err != nil {

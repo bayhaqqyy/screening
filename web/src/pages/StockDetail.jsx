@@ -3,11 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import AnimatedPage from '../components/layout/AnimatedPage';
 import { searchService } from '../services/searchService';
 import { watchlistService } from '../services/watchlistService';
+import AdvancedChart from '../components/stock/AdvancedChart';
 
 const StockDetail = () => {
   const { ticker } = useParams();
   const navigate = useNavigate();
   const [stock, setStock] = useState(null);
+  const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [addingWatchlist, setAddingWatchlist] = useState(false);
 
@@ -15,13 +17,16 @@ const StockDetail = () => {
     const fetchStock = async () => {
       try {
         setLoading(true);
-        // Fallback to searching if getStockDetail fails or isn't completely functional yet
         const res = await searchService.getStockDetail(ticker);
         if (res.data) {
           setStock(res.data);
         }
+        const chartRes = await searchService.getStockChart(ticker);
+        if (chartRes.data) {
+          setChartData(chartRes.data);
+        }
       } catch (err) {
-        console.error("Failed to fetch stock:", err);
+        console.error("Failed to fetch stock or chart:", err);
       } finally {
         setLoading(false);
       }
@@ -116,13 +121,8 @@ const StockDetail = () => {
       {/* Grid Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Chart Area */}
-        <div className="lg:col-span-2 glass-panel p-6 rounded-xl min-h-[400px] flex flex-col items-center justify-center text-center">
-          <span className="material-symbols-outlined text-6xl text-outline mb-4">candlestick_chart</span>
-          <h3 className="text-xl font-bold text-on-surface mb-2">Advanced Chart</h3>
-          <p className="text-on-surface-variant max-w-sm">
-            Integration with lightweight-charts or TV lightweight-charts goes here. 
-            Requires historical OHLCV endpoint.
-          </p>
+        <div className="lg:col-span-2">
+          <AdvancedChart data={chartData} theme="dark" />
         </div>
 
         {/* Info Sidebar */}
