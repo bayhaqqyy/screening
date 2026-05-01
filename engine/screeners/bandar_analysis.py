@@ -50,15 +50,15 @@ def analyze_accumulation(df, ticker):
     
     return {
         'ticker': ticker,
-        'price': latest['Close'],
-        'volume': latest['Volume'],
-        'vol_ratio': round(vol_ratio, 2),
+        'price': float(latest['Close']),
+        'volume': int(latest['Volume']),
+        'vol_ratio': round(float(vol_ratio), 2),
         'obv_trend': 'UP' if obv_trend > 0 else 'DOWN',
-        'ad_value': round(ad_value, 0),
-        'close_position': round(close_position, 2),
-        'mfi': round(mfi if pd.notnull(mfi) else 50, 1),
+        'ad_value': round(float(ad_value), 0),
+        'close_position': round(float(close_position), 2),
+        'mfi': round(float(mfi) if pd.notnull(mfi) else 50.0, 1),
         'net_buy_proxy': bool(net_buy_signal),
-        'accum_score': round(min(accum_score, 100), 1),
+        'accum_score': round(float(min(accum_score, 100)), 1),
         'signal': 'STRONG_ACCUM' if accum_score >= 70 else 
                   'ACCUMULATING' if accum_score >= 50 else
                   'NEUTRAL' if accum_score >= 30 else 'DISTRIBUTING'

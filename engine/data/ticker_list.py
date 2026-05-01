@@ -65,14 +65,14 @@ def load_tickers(force_refresh=False):
         fallback = [
             {"code": "BBCA"}, {"code": "BBRI"}, {"code": "BMRI"}, {"code": "BBNI"},
             {"code": "TLKM"}, {"code": "ASII"}, {"code": "GOTO"}, {"code": "AMMN"},
-            {"code": "BREN"}, {"code": "CUAN"}, {"code": "POGO"}, {"code": "UNVR"},
+            {"code": "BREN"}, {"code": "CUAN"}, {"code": "UNVR"},
             {"code": "ICBP"}, {"code": "INDF"}, {"code": "KLBF"}, {"code": "PGAS"},
             {"code": "PTBA"}, {"code": "ADRO"}, {"code": "ITMG"}, {"code": "UNTR"},
             {"code": "AMRT"}, {"code": "MDKA"}, {"code": "ANTM"}, {"code": "TINS"},
             {"code": "INCO"}, {"code": "BRIS"}, {"code": "CPIN"}, {"code": "JPFA"},
             {"code": "SMGR"}, {"code": "INTP"}, {"code": "EXCL"}, {"code": "ISAT"},
             {"code": "TOWR"}, {"code": "TBIG"}, {"code": "MAPI"}, {"code": "ACES"},
-            {"code": "AKRA"}, {"code": "MEDC"}, {"code": "ESSA"}, {"code": "BRPT"},
+            {"code": "INET"}, {"code": "MEDC"}, {"code": "ESSA"}, {"code": "BRPT"},
             {"code": "TPIA"}, {"code": "HRUM"}, {"code": "GGRM"}, {"code": "HMSP"},
             {"code": "SIDO"}, {"code": "MYOR"}, {"code": "NISP"}, {"code": "PNLF"}
         ]
