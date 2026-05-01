@@ -172,19 +172,47 @@ def process_message(data, conn, producer):
         return
 
     # Save to DB and emit
+    tz = pytz.timezone('Asia/Jakarta')
+    now = datetime.now(tz)
+    
     try:
         with conn.cursor() as cur:
             for r in results:
-                # Upsert into screener_results
+                # Issue #1: Check for locking mechanism
                 cur.execute("""
-                    INSERT INTO screener_results (strategy, ticker, signal, score, payload, screened_at)
-                    VALUES (%s, %s, %s, %s, %s, NOW())
-                """, (r['strategy'], r['ticker'], r['signal'], r['score'], Json(r['payload'])))
+                    SELECT id, is_locked FROM screener_results 
+                    WHERE strategy = %s AND ticker = %s 
+                    ORDER BY screened_at DESC LIMIT 1
+                """, (r['strategy'], r['ticker']))
+                row = cur.fetchone()
+
+                # Determine if it should be locked (BSJP after 15:30 or market closed)
+                should_lock = False
+                if r['strategy'] == 'bsjp':
+                    market_end = datetime_time(15, 30)
+                    if now.time() >= market_end or not is_market_open():
+                        should_lock = True
+                
+                if row:
+                    row_id, is_locked = row[0], row[1]
+                    if is_locked and r['strategy'] == 'bsjp':
+                        continue # Skip updating if locked
+                    
+                    cur.execute("""
+                        UPDATE screener_results 
+                        SET signal=%s, score=%s, payload=%s, screened_at=NOW(), is_locked=%s
+                        WHERE id = %s
+                    """, (r['signal'], r['score'], Json(r['payload']), should_lock, row_id))
+                else:
+                    cur.execute("""
+                        INSERT INTO screener_results (strategy, ticker, signal, score, payload, screened_at, is_locked)
+                        VALUES (%s, %s, %s, %s, %s, NOW(), %s)
+                    """, (r['strategy'], r['ticker'], r['signal'], r['score'], Json(r['payload']), should_lock))
                 
                 # Emit to WS topic
                 producer.produce(
                     TOPIC_SCREENER_WS,
-                    key=ticker,
+                    key=r['ticker'],
                     value=json.dumps(r)
                 )
         conn.commit()

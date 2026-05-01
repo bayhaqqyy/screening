@@ -18,6 +18,7 @@ func StartConsumers() {
 	go consumeTopic("idx.news.updates")
 	go consumeTopic("idx.screener.updates")
 	go aggregateMarketOverview() // periodic aggregation
+	go cleanupOldNews()          // retention policy for news
 }
 
 // --- Data structs for parsing Kafka messages ---
@@ -225,5 +226,24 @@ func aggregateMarketOverview() {
 			`, sector, sectorChange, sectorVol)
 		}
 		sectorRows.Close()
+	}
+}
+
+// cleanupOldNews runs periodically (e.g. daily) to remove old news
+// preventing the news table from bloating storage.
+func cleanupOldNews() {
+	for {
+		_, err := database.DB.Exec(`
+			DELETE FROM news 
+			WHERE published_at < NOW() - INTERVAL '7 days'
+		`)
+		if err != nil {
+			log.Printf("Failed to cleanup old news: %v", err)
+		} else {
+			log.Printf("Successfully cleaned up old news (>7 days)")
+		}
+
+		// Run once a day
+		time.Sleep(24 * time.Hour)
 	}
 }
