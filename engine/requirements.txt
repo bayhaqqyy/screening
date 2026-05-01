@@ -11,3 +11,5 @@ apscheduler
 pydantic
 feedparser
 schedule
+psycopg2-binary
+pytz

@@ -16,6 +16,7 @@ func StartConsumers() {
 	go consumeTopic("idx.ohlcv.enriched")
 	go consumeTopic("idx.bandar.flow")
 	go consumeTopic("idx.news.updates")
+	go consumeTopic("idx.screener.updates")
 	go aggregateMarketOverview() // periodic aggregation
 }
 

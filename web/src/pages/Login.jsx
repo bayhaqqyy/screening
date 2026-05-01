@@ -19,21 +19,13 @@ const Login = () => {
     e.preventDefault();
     setError('');
     
-    // In dev, if the DB is not ready, we can still use dummy data,
-    // but the plan is to use real API. So we send real credentials.
+    // Send real credentials to backend API
     const result = await login({ email, password });
     
     if (result.success) {
       navigate('/');
     } else {
       setError(result.error || 'Failed to login');
-      // TEMPORARY FALLBACK FOR DEVELOPMENT (so user can still login if backend is off)
-      if (result.error && result.error.includes("Failed to fetch")) {
-        console.warn("Backend is off. Using fallback mock login.");
-        localStorage.setItem('authed_user', JSON.stringify({ email, name: 'Dev User', role: 'admin' }));
-        localStorage.setItem('auth_token', 'mock_token');
-        window.location.reload();
-      }
     }
   };
 
@@ -160,7 +152,7 @@ const Login = () => {
             <span className="text-[10px] font-bold uppercase tracking-tighter text-on-surface-variant">Server Status</span>
             <div className="flex items-center space-x-1">
               <div className="w-1 h-1 bg-secondary rounded-full animate-pulse"></div>
-              <span className="text-[10px] font-mono text-secondary">NYSE CONNECTED</span>
+              <span className="text-[10px] font-mono text-secondary">IDX CONNECTED</span>
             </div>
           </div>
         </div>

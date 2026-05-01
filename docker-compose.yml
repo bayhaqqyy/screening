@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   zookeeper:
@@ -61,6 +60,39 @@ services:
     networks:
       - sahamscreen-network
 
+  engine-seeder:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+    container_name: sahamscreen-seeder
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=sahamscreen
+      - DB_USER=sahamscreen
+      - DB_PASS=${POSTGRES_PASSWORD:-sahamscreen_dev}
+    command: ["python", "seed_stock_info.py"]
+    depends_on:
+      db-migrator:
+        condition: service_completed_successfully
+    networks:
+      - sahamscreen-network
+
+  engine-market:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+    container_name: sahamscreen-engine-market
+    environment:
+      - KAFKA_BROKER=kafka:29092
+    command: ["python", "streaming/market_producer.py"]
+    depends_on:
+      kafka:
+        condition: service_healthy
+    networks:
+      - sahamscreen-network
+    restart: "always"
+
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: sahamscreen-kafka-ui
@@ -105,7 +137,7 @@ services:
       - DB_USER=sahamscreen
       - DB_PASSWORD=${POSTGRES_PASSWORD:-sahamscreen_dev}
       - DB_NAME=sahamscreen
-      - JWT_SECRET=super-secret-jwt-key-change-in-production
+      - JWT_SECRET=${JWT_SECRET:-super-secret-jwt-key-change-in-production}
       - KAFKA_BROKER=kafka:29092
     depends_on:
       postgres:
@@ -142,6 +174,26 @@ services:
       - kafka
     networks:
       - sahamscreen-network
+
+  engine-screener:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+    container_name: sahamscreen-engine-screener
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=sahamscreen
+      - DB_USER=sahamscreen
+      - DB_PASS=${POSTGRES_PASSWORD:-sahamscreen_dev}
+    command: ["python", "streaming/screener_consumer.py"]
+    depends_on:
+      - kafka
+      - postgres
+    networks:
+      - sahamscreen-network
+
 
   engine-fetcher:
     build:

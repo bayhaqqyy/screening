@@ -8,9 +8,12 @@ const ForgotPassword = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate sending email
+    setError('');
+    // Password reset via email is not yet implemented.
+    // Show a helpful message to the user.
     setSubmitted(true);
   };
+  const [error, setError] = useState('');
 
   return (
     <AnimatedPage className="flex items-center justify-center min-h-screen bg-background text-on-surface">

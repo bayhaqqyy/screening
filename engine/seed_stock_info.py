@@ -18,8 +18,8 @@ CSV_PATH = "idx_all_companies_info.csv"
 DB_HOST = os.environ.get("DB_HOST", "localhost")
 DB_PORT = os.environ.get("DB_PORT", "5432")
 DB_NAME = os.environ.get("DB_NAME", "sahamscreen")
-DB_USER = os.environ.get("DB_USER", "postgres")
-DB_PASS = os.environ.get("DB_PASS", "postgres")
+DB_USER = os.environ.get("DB_USER", "sahamscreen")
+DB_PASS = os.environ.get("DB_PASS", "sahamscreen_dev")
 
 def main():
     print(f"Connecting to PostgreSQL at {DB_HOST}:{DB_PORT}/{DB_NAME}...")

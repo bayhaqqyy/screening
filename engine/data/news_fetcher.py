@@ -73,16 +73,26 @@ def fetch_market_news():
             
         # Extract dynamic tickers
         found_tickers = extract_tickers_from_text(entry.title)
+        ticker_str = found_tickers[0] if found_tickers else ""
         tags_str = "Market • Update"
         if found_tickers:
             tags_str = " • ".join(found_tickers[:3]) # Show up to 3 tickers
+
+        # Compute a simple sentiment score
+        sentiment_score = 0.0
+        if sentiment == "Bullish":
+            sentiment_score = 0.7
+        elif sentiment == "Bearish":
+            sentiment_score = -0.7
             
         news_item = {
-            "title": entry.title,
-            "link": entry.link,
-            "time": entry.published,
-            "desc": entry.get('description', ''),
+            "headline": entry.title,
+            "url": entry.link,
+            "source": "CNBC Indonesia",
+            "ticker": ticker_str,
+            "timestamp": entry.published,
             "sentiment": sentiment,
+            "sentiment_score": sentiment_score,
             "sentimentCls": sentiment_cls,
             "dotCls": dot_cls,
             "tags": tags_str
@@ -101,11 +111,9 @@ def fetch_market_news():
 
 def run_scheduler():
     print("News fetcher scheduler started.")
-    print("News will be fetched at 08:30, 11:30, and 16:15.")
+    print("News will be fetched every 15 minutes.")
     
-    schedule.every().day.at("08:30").do(fetch_market_news)
-    schedule.every().day.at("11:30").do(fetch_market_news)
-    schedule.every().day.at("16:15").do(fetch_market_news)
+    schedule.every(15).minutes.do(fetch_market_news)
     
     # Run once immediately so we have data
     fetch_market_news()

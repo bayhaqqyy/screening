@@ -2,69 +2,72 @@ import json
 import time
 import random
 import threading
-import csv
+import os
 import yfinance as yf
 from datetime import datetime
 from kafka import KafkaProducer
+import sys
 
-KAFKA_BROKER = "localhost:9092"
-TOPIC_MARKET = "idx.ohlcv.enriched"
-TOPIC_BANDAR = "idx.bandar.flow"
-CSV_PATH = "idx_all_companies_info.csv"
+# Add parent directory to path to import ticker_list
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from data.ticker_list import get_ticker_codes
+
+KAFKA_BROKER = os.getenv("KAFKA_BROKER", "localhost:9092")
+TOPIC_MARKET = "idx.ohlcv.raw"
 
 # Shared memory for real prices
 real_price_cache = {}
 
 def load_all_tickers():
-    tickers = []
     try:
-        with open(CSV_PATH, 'r', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            next(reader) # skip header
-            for row in reader:
-                if row and len(row) > 0:
-                    tickers.append(row[0].strip())
+        tickers = get_ticker_codes()
+        if tickers:
+            return tickers
     except Exception as e:
-        print(f"Error loading CSV: {e}")
-        tickers = ["BBCA", "BBRI", "BMRI", "BBNI", "ASII", "TLKM", "GOTO"]
-    return tickers
+        print(f"Error loading tickers from IDX: {e}")
+    return ["BBCA", "BBRI", "BMRI", "BBNI", "ASII", "TLKM", "GOTO"]
 
 def update_baseline_prices(all_tickers):
     """
     Runs every 60 seconds.
-    Fetches the REAL current prices for a RANDOM batch of 50 tickers from the CSV.
-    This ensures all 900+ tickers eventually rotate into the live feed without hitting rate limits.
+    Fetches the REAL current prices for a RANDOM batch of 50 tickers from the list.
     """
     while True:
         try:
-            # Randomly pick 50 tickers for this minute's live feed
             batch = random.sample(all_tickers, min(50, len(all_tickers)))
             jk_tickers = [t + ".JK" for t in batch]
             
             print(f"[{datetime.now().strftime('%H:%M:%S')}] Fetching real data for a new batch of {len(batch)} tickers (Syncing...)")
-            data = yf.download(jk_tickers, period="1d", interval="1d", group_by="ticker", progress=False)
+            data = yf.download(jk_tickers, period="60d", interval="1d", group_by="ticker", progress=False)
             
-            # Clear old cache to only emit the newly fetched ones, or we can accumulate
-            # Accumulating is fine, but clearing keeps the dashboard focused on the "active" random batch
             new_cache = {}
             
             for t_idx, ticker in enumerate(batch):
                 try:
-                    ticker_data = data[jk_tickers[t_idx]]
+                    if len(batch) == 1:
+                        ticker_data = data
+                    else:
+                        ticker_data = data[jk_tickers[t_idx]]
+                        
                     if ticker_data.empty:
                         continue
                     
-                    latest = ticker_data.iloc[-1]
-                    if str(latest['Close']) == 'nan':
-                        continue
-
-                    new_cache[ticker] = {
-                        "open": float(latest['Open']),
-                        "close": float(latest['Close']),
-                        "high": float(latest['High']),
-                        "low": float(latest['Low']),
-                        "volume": int(latest['Volume'])
-                    }
+                    # Store up to 60 days of history for indicators
+                    history = []
+                    for date, row in ticker_data.iterrows():
+                        if str(row['Close']) == 'nan':
+                            continue
+                        history.append({
+                            "Date": date.isoformat(),
+                            "Open": float(row['Open']),
+                            "High": float(row['High']),
+                            "Low": float(row['Low']),
+                            "Close": float(row['Close']),
+                            "Volume": int(row['Volume'])
+                        })
+                    
+                    if len(history) > 0:
+                        new_cache[ticker] = history
                 except Exception:
                     pass
             
@@ -78,31 +81,7 @@ def update_baseline_prices(all_tickers):
         except Exception as e:
             print(f"Failed to sync with YFinance: {e}")
         
-        # Wait 60 seconds before rotating to the next batch
         time.sleep(60)
-
-def generate_bandar_flow(ticker, change_pct):
-    if change_pct > 0.5:
-        flow_type = "Accumulation"
-    elif change_pct < -0.5:
-        flow_type = "Distribution"
-    else:
-        flow_type = random.choice(["Accumulation", "Distribution", "Neutral"])
-        
-    net_volume = random.randint(10000, 500000)
-    if flow_type == "Distribution":
-        net_volume = -net_volume
-    elif flow_type == "Neutral":
-        net_volume = random.randint(-10000, 10000)
-
-    return {
-        "ticker": ticker,
-        "timestamp": datetime.now().isoformat(),
-        "flow_type": flow_type,
-        "net_volume": net_volume,
-        "top_buyers": random.sample(["YP", "CC", "PD", "NI", "AZ", "MG", "DR"], 2),
-        "top_sellers": random.sample(["BK", "AK", "ZP", "CS", "RX", "YU", "KZ"], 2)
-    }
 
 def main():
     print(f"Connecting to Kafka broker at {KAFKA_BROKER}...")
@@ -113,13 +92,11 @@ def main():
     print("Successfully connected to Kafka.")
 
     all_tickers = load_all_tickers()
-    print(f"Loaded {len(all_tickers)} total tickers from CSV.")
+    print(f"Loaded {len(all_tickers)} total tickers.")
 
-    # Start background updater
     updater_thread = threading.Thread(target=update_baseline_prices, args=(all_tickers,), daemon=True)
     updater_thread.start()
 
-    # Wait for the first cache population
     print("Waiting for initial data sync...")
     while len(real_price_cache) == 0:
         time.sleep(1)
@@ -127,15 +104,14 @@ def main():
     print("Starting High-Frequency Emitter...")
     try:
         while True:
-            # Pick a random ticker from our cached real data
             ticker = random.choice(list(real_price_cache.keys()))
-            base_data = real_price_cache[ticker]
+            history = real_price_cache[ticker]
+            base_data = history[-1]
             
-            # Simulate high-frequency trading noise (Jitter: +/- 0.1% from the real close price)
+            # Simulate real-time tick based on latest close
             jitter_pct = random.uniform(-0.001, 0.001)
-            live_price = base_data["close"] * (1 + jitter_pct)
+            live_price = base_data["Close"] * (1 + jitter_pct)
             
-            # Round to nearest logical fraction (for IDX usually round to nearest 1, 5, or 25)
             if live_price > 5000:
                 live_price = round(live_price / 25) * 25
             elif live_price > 500:
@@ -143,31 +119,34 @@ def main():
             else:
                 live_price = round(live_price)
 
-            open_price = base_data["open"]
+            open_price = base_data["Open"]
             change_pct = 0.0
             if open_price > 0:
                 change_pct = round((live_price - open_price) / open_price * 100, 2)
-
-            tick = {
-                "ticker": ticker,
-                "timestamp": datetime.now().isoformat(),
-                "last_price": live_price,
-                "open": open_price,
-                "high": max(base_data["high"], live_price),
-                "low": min(base_data["low"], live_price),
-                "volume": base_data["volume"] + random.randint(10, 500), # simulate volume increasing
-                "change_pct": change_pct
+            
+            # Update the latest day in history with live tick
+            latest_tick = {
+                "Date": datetime.now().isoformat(),
+                "Open": open_price,
+                "High": max(base_data["High"], live_price),
+                "Low": min(base_data["Low"], live_price),
+                "Close": live_price,
+                "Volume": base_data["Volume"] + random.randint(10, 500),
             }
             
-            flow = generate_bandar_flow(ticker, change_pct)
+            # Copy history to avoid mutating shared state during iteration
+            current_history = history[:-1] + [latest_tick]
             
-            # Publish to Kafka
-            producer.send(TOPIC_MARKET, key=ticker.encode('utf-8'), value=tick)
-            producer.send(TOPIC_BANDAR, key=ticker.encode('utf-8'), value=flow)
+            msg = {
+                "ticker": ticker,
+                "history": current_history
+            }
             
-            print(f"[{tick['timestamp']}] Tick: {ticker} @ {live_price} ({change_pct}%)")
+            # Publish RAW history to Kafka
+            producer.send(TOPIC_MARKET, key=ticker.encode('utf-8'), value=msg)
             
-            # Emit incredibly fast (2-3 times per second) without hitting API limits!
+            print(f"[{datetime.now().strftime('%H:%M:%S')}] Raw Tick: {ticker} @ {live_price} ({change_pct}%)")
+            
             time.sleep(random.uniform(0.3, 0.6))
             
     except KeyboardInterrupt:

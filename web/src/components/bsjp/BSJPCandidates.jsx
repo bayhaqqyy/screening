@@ -54,64 +54,78 @@ const BSJPCandidates = () => {
         <table className="w-full text-left border-separate border-spacing-0">
           <thead>
             <tr className="text-[10px] uppercase tracking-widest text-outline border-b border-outline-variant/10">
-              <th className="px-6 py-4 font-bold">Ticker</th>
-              <th className="px-6 py-4 font-bold text-right">Last Price</th>
-              <th className="px-6 py-4 font-bold text-right">Dip%</th>
-              <th className="px-6 py-4 font-bold">Late Accum</th>
-              <th className="px-6 py-4 font-bold">Top Broker</th>
-              <th className="px-6 py-4 font-bold text-right">Score</th>
-              <th className="px-6 py-4 font-bold text-center">Action</th>
+              <th className="px-4 py-4 font-bold">Ticker</th>
+              <th className="px-4 py-4 font-bold text-right">Entry</th>
+              <th className="px-4 py-4 font-bold text-right">Live Price</th>
+              <th className="px-4 py-4 font-bold text-right">P&L %</th>
+              <th className="px-4 py-4 font-bold text-right">Target (TP)</th>
+              <th className="px-4 py-4 font-bold text-right">Stop (SL)</th>
+              <th className="px-4 py-4 font-bold text-right">Score</th>
+              <th className="px-4 py-4 font-bold text-center">Status</th>
+              <th className="px-4 py-4 font-bold text-center">Action</th>
             </tr>
           </thead>
           {loading ? (
              <tbody className="divide-y divide-outline-variant/5">
-                <tr><td colSpan="7" className="px-6 py-8 text-center text-sm text-on-surface-variant">Scanning market...</td></tr>
+                <tr><td colSpan="9" className="px-6 py-8 text-center text-sm text-on-surface-variant">Scanning market...</td></tr>
              </tbody>
           ) : data.length === 0 ? (
              <tbody className="divide-y divide-outline-variant/5">
-                <tr><td colSpan="7" className="px-6 py-8 text-center text-sm text-on-surface-variant">No candidates found currently.</td></tr>
+                <tr><td colSpan="9" className="px-6 py-8 text-center text-sm text-on-surface-variant">No candidates found currently.</td></tr>
              </tbody>
           ) : (
           <tbody className="divide-y divide-outline-variant/5">
             {data.map((item, index) => {
               const payload = item.payload || {};
-              const price = payload.price || 0;
-              const dip = payload.dip_pct || 0;
-              const accumPct = payload.accum_pct || 0;
-              const brokers = payload.top_brokers ? payload.top_brokers.join(', ') : 'N/A';
+              const entryPrice = payload.entry_price || payload.price || 0;
+              const currentPrice = payload.price || entryPrice;
+              const tp = payload.target || entryPrice * 1.05;
+              const sl = payload.stop_loss || entryPrice * 0.95;
               
-              const isHigh = item.score > 80;
+              const pnlPct = entryPrice > 0 ? ((currentPrice - entryPrice) / entryPrice) * 100 : 0;
+              const pnlColor = pnlPct > 0 ? 'text-secondary' : pnlPct < 0 ? 'text-error' : 'text-on-surface-variant';
+              
+              let tradeStatus = 'WAIT';
+              let statusColor = 'text-on-surface-variant bg-surface-container-highest';
+              if (currentPrice >= tp || currentPrice <= sl) {
+                  tradeStatus = 'OUT';
+                  statusColor = currentPrice >= tp ? 'text-secondary bg-secondary-container' : 'text-error bg-error-container';
+              } else if (currentPrice <= entryPrice * 1.015 && currentPrice >= entryPrice * 0.985) {
+                  tradeStatus = 'ENTRY';
+                  statusColor = 'text-primary bg-primary-container';
+              }
+
+              const isHigh = item.score >= 80;
               const scoreColor = isHigh ? 'bg-secondary-container text-on-secondary-container' : 'bg-tertiary-container text-on-tertiary-container';
               const dotColor = isHigh ? 'bg-secondary shadow-[0_0_8px_rgba(74,225,118,0.4)]' : 'bg-tertiary shadow-[0_0_8px_rgba(255,185,95,0.4)]';
-              const accumColor = isHigh ? 'bg-secondary' : 'bg-tertiary';
               const rowClass = index === 0 ? 'bg-surface-container-high border-l-2 border-primary' : '';
 
               return (
                 <tr key={item.ticker} className={`group hover:bg-surface-container-high transition-colors cursor-pointer ${rowClass}`}>
-                  <td className="px-6 py-4">
+                  <td className="px-4 py-4">
                     <div className="flex items-center gap-3">
                       <div className={`w-2 h-2 rounded-full ${dotColor}`}></div>
                       <span className="font-bold text-on-surface tracking-tight tabular-nums">{item.ticker}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-right tabular-nums font-semibold">{price.toLocaleString()}</td>
-                  <td className={`px-6 py-4 text-right tabular-nums font-medium ${dip < 0 ? 'text-secondary' : 'text-on-surface-variant'}`}>
-                    {dip}%
+                  <td className="px-4 py-4 text-right tabular-nums text-on-surface-variant font-medium">{Math.round(entryPrice).toLocaleString()}</td>
+                  <td className="px-4 py-4 text-right tabular-nums font-bold text-blue-100">{Math.round(currentPrice).toLocaleString()}</td>
+                  <td className={`px-4 py-4 text-right tabular-nums font-bold ${pnlColor}`}>
+                    {pnlPct > 0 ? '+' : ''}{pnlPct.toFixed(2)}%
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="w-24 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-                      <div className={`h-full ${accumColor}`} style={{ width: `${Math.min(100, Math.max(0, accumPct))}%` }}></div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-xs bg-outline-variant/20 px-2 py-0.5 rounded tabular-nums">{brokers}</span>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <span className={`px-3 py-1 rounded font-black text-xs ${scoreColor}`}>
+                  <td className="px-4 py-4 text-right tabular-nums text-secondary/80 font-medium">{Math.round(tp).toLocaleString()}</td>
+                  <td className="px-4 py-4 text-right tabular-nums text-error/80 font-medium">{Math.round(sl).toLocaleString()}</td>
+                  <td className="px-4 py-4 text-right">
+                    <span className={`px-2 py-1 rounded font-black text-xs ${scoreColor}`}>
                       {item.score || 0}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-center">
+                  <td className="px-4 py-4 text-center">
+                    <span className={`px-2 py-1 rounded font-black text-[10px] uppercase tracking-wider ${statusColor}`}>
+                      {tradeStatus}
+                    </span>
+                  </td>
+                  <td className="px-4 py-4 text-center">
                     <button 
                       onClick={(e) => handleAddToWatchlist(e, item.ticker)}
                       disabled={addingTicker === item.ticker}
