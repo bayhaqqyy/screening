@@ -20,8 +20,8 @@ type Alert struct {
 }
 
 func GetAlerts(w http.ResponseWriter, r *http.Request) {
-	userID := getUserIDFromToken(r)
-	if userID == "" {
+	userID, err := getUserIDFromToken(r)
+	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
@@ -56,8 +56,8 @@ func GetAlerts(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateAlert(w http.ResponseWriter, r *http.Request) {
-	userID := getUserIDFromToken(r)
-	if userID == "" {
+	userID, err := getUserIDFromToken(r)
+	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
@@ -98,8 +98,8 @@ func CreateAlert(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteAlert(w http.ResponseWriter, r *http.Request) {
-	userID := getUserIDFromToken(r)
-	if userID == "" {
+	userID, err := getUserIDFromToken(r)
+	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
@@ -120,24 +120,3 @@ func DeleteAlert(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]bool{"success": true})
 }
 
-// Helper (Assuming this isn't globally exposed yet, we redefine it or put it in a utils package)
-func getUserIDFromToken(r *http.Request) string {
-	authHeader := r.Header.Get("Authorization")
-	if authHeader == "" {
-		return ""
-	}
-	tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
-	
-	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-		return []byte(config.AppConfig.JWTSecret), nil
-	})
-	
-	if err != nil || !token.Valid {
-		return ""
-	}
-	
-	if claims, ok := token.Claims.(jwt.MapClaims); ok {
-		return claims["sub"].(string)
-	}
-	return ""
-}

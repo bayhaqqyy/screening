@@ -14,8 +14,8 @@ type UserSettings struct {
 }
 
 func GetSettings(w http.ResponseWriter, r *http.Request) {
-	userID := getUserIDFromToken(r)
-	if userID == "" {
+	userID, err := getUserIDFromToken(r)
+	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
@@ -48,8 +48,8 @@ func GetSettings(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateSettings(w http.ResponseWriter, r *http.Request) {
-	userID := getUserIDFromToken(r)
-	if userID == "" {
+	userID, err := getUserIDFromToken(r)
+	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}

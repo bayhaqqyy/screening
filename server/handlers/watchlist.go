@@ -20,18 +20,6 @@ type WatchlistItem struct {
 	AddedAt   string  `json:"added_at"`
 }
 
-func getUserIDFromToken(r *http.Request) (string, error) {
-	authHeader := r.Header.Get("Authorization")
-	tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
-	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-		return []byte(config.AppConfig.JWTSecret), nil
-	})
-	if err != nil || !token.Valid {
-		return "", err
-	}
-	claims := token.Claims.(jwt.MapClaims)
-	return claims["sub"].(string), nil
-}
 
 func GetWatchlist(w http.ResponseWriter, r *http.Request) {
 	userID, err := getUserIDFromToken(r)
