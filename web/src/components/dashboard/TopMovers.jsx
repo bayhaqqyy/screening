@@ -35,6 +35,30 @@ const TopMovers = () => {
       }
     };
     fetchMovers();
+
+    // Live update prices from WS ticks
+    const handleTick = (event) => {
+      const msg = event.detail;
+      const d = msg.data;
+      if (!d || !d.ticker) return;
+
+      setMovers(prev => {
+        let updated = [...prev];
+        const idx = updated.findIndex(m => m.ticker === d.ticker);
+        if (idx >= 0) {
+          updated[idx] = { ...updated[idx], price: d.last_price, change_pct: d.change_pct };
+          // Re-sort based on current tab
+          updated.sort((a, b) => tab === 'gainers' 
+            ? b.change_pct - a.change_pct 
+            : a.change_pct - b.change_pct
+          );
+        }
+        return updated;
+      });
+    };
+
+    window.addEventListener('ws_idx.ohlcv.enriched', handleTick);
+    return () => window.removeEventListener('ws_idx.ohlcv.enriched', handleTick);
   }, [tab]);
   
   return (

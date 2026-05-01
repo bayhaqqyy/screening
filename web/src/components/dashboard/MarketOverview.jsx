@@ -20,6 +20,30 @@ const MarketOverview = () => {
       }
     };
     fetchOverview();
+
+    // Also listen to live market ticks to update volume/change in real-time
+    let totalVolume = 0;
+    let tickCount = 0;
+    let sumChange = 0;
+
+    const handleTick = (event) => {
+      const msg = event.detail;
+      const d = msg.data;
+      if (!d) return;
+
+      totalVolume += (d.volume || 0);
+      sumChange += (d.change_pct || 0);
+      tickCount++;
+
+      setData(prev => ({
+        ...prev,
+        volume: prev.volume + (d.volume || 0),
+        change_pct: tickCount > 0 ? parseFloat((sumChange / tickCount).toFixed(2)) : prev.change_pct
+      }));
+    };
+
+    window.addEventListener('ws_idx.ohlcv.enriched', handleTick);
+    return () => window.removeEventListener('ws_idx.ohlcv.enriched', handleTick);
   }, []);
 
   const isGain = data.change_pct >= 0;

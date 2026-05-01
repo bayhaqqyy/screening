@@ -49,6 +49,7 @@ func main() {
 	r.HandleFunc("/api/search", handlers.SearchStocks).Methods("GET")
 	r.HandleFunc("/api/stock", handlers.GetStockDetail).Methods("GET")
 	r.HandleFunc("/api/stock/chart", handlers.GetStockChart).Methods("GET")
+	r.HandleFunc("/api/screener/stats", handlers.GetScreenerStats).Methods("GET")
 
 	// Watchlist routes (auth required)
 	r.HandleFunc("/api/watchlist", handlers.GetWatchlist).Methods("GET")

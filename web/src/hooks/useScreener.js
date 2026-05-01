@@ -46,16 +46,23 @@ export const useScreener = (strategy) => {
         
         if (strategy === 'bsjp') {
            const d = msg.data;
+           const flowType = d.flow_type || 'Neutral';
+           const netVol = Math.abs(d.net_volume || 0);
+           // Score: higher net_volume accumulation = higher score
+           const score = flowType === 'Accumulation' 
+             ? Math.min(100, Math.round(netVol / 5000)) 
+             : Math.round(Math.max(0, 50 - netVol / 10000));
+           
            mappedItem = {
              ticker: d.ticker || msg.key,
              strategy: 'bsjp',
-             signal: 'Accumulation',
-             score: d.accum_score || 0,
+             signal: flowType,
+             score: score,
              payload: {
                price: d.price || 0,
-               dip_pct: d.obv_trend === 'UP' ? 0.5 : -0.5,
-               accum_pct: d.accum_score || 0,
-               top_brokers: ['YP', 'CC', 'AK'] // Mocking broker for now as WS might not have it
+               dip_pct: flowType === 'Accumulation' ? 0.5 : -0.5,
+               accum_pct: score,
+               top_brokers: d.top_buyers || d.top_sellers || []
              },
              screened_at: new Date().toISOString()
            };

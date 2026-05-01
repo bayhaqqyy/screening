@@ -5,6 +5,77 @@ import { searchService } from '../services/searchService';
 import { watchlistService } from '../services/watchlistService';
 import AdvancedChart from '../components/stock/AdvancedChart';
 
+// Inline broker summary card that listens to live WS for this specific ticker
+const BrokerSummaryCard = ({ ticker }) => {
+  const [buyers, setBuyers] = useState([]);
+  const [sellers, setSellers] = useState([]);
+
+  useEffect(() => {
+    const buyerMap = {};
+    const sellerMap = {};
+
+    const handleFlow = (event) => {
+      const msg = event.detail;
+      const data = msg.data;
+      if (!data || data.ticker !== ticker) return;
+
+      (data.top_buyers || []).forEach(code => {
+        buyerMap[code] = (buyerMap[code] || 0) + 1;
+      });
+      (data.top_sellers || []).forEach(code => {
+        sellerMap[code] = (sellerMap[code] || 0) + 1;
+      });
+
+      setBuyers(Object.entries(buyerMap).sort((a, b) => b[1] - a[1]).slice(0, 3));
+      setSellers(Object.entries(sellerMap).sort((a, b) => b[1] - a[1]).slice(0, 3));
+    };
+
+    window.addEventListener('ws_idx.bandar.flow', handleFlow);
+    return () => window.removeEventListener('ws_idx.bandar.flow', handleFlow);
+  }, [ticker]);
+
+  const hasBrokerData = buyers.length > 0 || sellers.length > 0;
+
+  return (
+    <div className="glass-panel p-6 rounded-xl">
+      <h3 className="font-bold text-on-surface border-b border-outline-variant/20 pb-3 mb-4">Broker Summary</h3>
+      {!hasBrokerData ? (
+        <div className="flex items-center justify-center h-24 text-on-surface-variant text-sm text-center">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-sm animate-pulse">radio_button_checked</span>
+            Waiting for live broker flow...
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-4 text-sm">
+          <div>
+            <span className="text-[10px] uppercase font-bold text-secondary tracking-wider block mb-2">Top Buyers</span>
+            <div className="space-y-1.5">
+              {buyers.map(([code, count]) => (
+                <div key={code} className="flex justify-between items-center">
+                  <span className="bg-secondary/10 text-secondary px-2 py-0.5 rounded text-xs font-bold">{code}</span>
+                  <span className="text-on-surface-variant text-xs tabular-nums">{count} hits</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <span className="text-[10px] uppercase font-bold text-error tracking-wider block mb-2">Top Sellers</span>
+            <div className="space-y-1.5">
+              {sellers.map(([code, count]) => (
+                <div key={code} className="flex justify-between items-center">
+                  <span className="bg-error/10 text-error px-2 py-0.5 rounded text-xs font-bold">{code}</span>
+                  <span className="text-on-surface-variant text-xs tabular-nums">{count} hits</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const StockDetail = () => {
   const { ticker } = useParams();
   const navigate = useNavigate();
@@ -140,21 +211,26 @@ const StockDetail = () => {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-on-surface-variant">Volume</span>
-                <span className="font-semibold tabular-nums">N/A</span>
+                <span className="font-semibold tabular-nums">
+                  {chartData.length > 0 
+                    ? `${(chartData[chartData.length - 1].volume / 1e6).toFixed(1)}M` 
+                    : (stock.volume ? `${(stock.volume / 1e6).toFixed(1)}M` : '-')}
+                </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-on-surface-variant">P/E Ratio</span>
-                <span className="font-semibold tabular-nums">N/A</span>
+                <span className="text-on-surface-variant">Prev Close</span>
+                <span className="font-semibold tabular-nums">
+                  {stock.prev_close ? `Rp ${stock.prev_close.toLocaleString()}` : '-'}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-on-surface-variant">Sector</span>
+                <span className="font-semibold text-right">{stock.sector || '-'}</span>
               </div>
             </div>
           </div>
 
-          <div className="glass-panel p-6 rounded-xl">
-            <h3 className="font-bold text-on-surface border-b border-outline-variant/20 pb-3 mb-4">Broker Summary</h3>
-            <div className="flex items-center justify-center h-24 text-on-surface-variant text-sm text-center">
-              Broker data integration pending premium provider connection.
-            </div>
-          </div>
+          <BrokerSummaryCard ticker={ticker} />
         </div>
       </div>
     </AnimatedPage>

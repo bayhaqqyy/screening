@@ -11,7 +11,7 @@ const SectorHeatmap = () => {
       try {
         const data = await marketService.getSectors();
         if (data && data.length > 0) {
-          setSectors(data.slice(0, 6)); // We only have 6 slots in the UI layout
+          setSectors(data.slice(0, 6));
         }
       } catch (error) {
         console.error("Failed to fetch sectors:", error);
@@ -20,6 +20,10 @@ const SectorHeatmap = () => {
       }
     };
     fetchSectors();
+
+    // Re-fetch every 30s to stay in sync with backend aggregation
+    const interval = setInterval(fetchSectors, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const getSlotClasses = (index) => {
