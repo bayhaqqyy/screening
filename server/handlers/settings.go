@@ -40,8 +40,9 @@ func GetSettings(w http.ResponseWriter, r *http.Request) {
 			INSERT INTO user_settings (user_id, theme, notifications, default_strategy)
 			VALUES ($1, $2, $3, $4)
 			ON CONFLICT (user_id) DO NOTHING
-		`, userID, settings.Theme, settings.Notifications, settings.DefaultStrategy)
+		`, userID, settings.Theme, string(settings.Notifications), settings.DefaultStrategy)
 	}
+
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(settings)
@@ -78,7 +79,7 @@ func UpdateSettings(w http.ResponseWriter, r *http.Request) {
 			theme = EXCLUDED.theme,
 			notifications = EXCLUDED.notifications,
 			default_strategy = EXCLUDED.default_strategy
-	`, userID, req.Theme, req.Notifications, req.DefaultStrategy)
+	`, userID, req.Theme, string(req.Notifications), req.DefaultStrategy)
 
 	if err != nil {
 		http.Error(w, "Failed to update settings", http.StatusInternalServerError)
