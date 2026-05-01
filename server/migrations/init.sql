@@ -41,7 +41,8 @@ CREATE TABLE screener_results (
     signal      VARCHAR(20),
     score       INTEGER,
     payload     JSONB NOT NULL,        -- full screener output
-    screened_at TIMESTAMPTZ DEFAULT NOW()
+    screened_at TIMESTAMPTZ DEFAULT NOW(),
+    is_locked   BOOLEAN DEFAULT FALSE
 );
 CREATE INDEX idx_screener_strategy_date ON screener_results(strategy, screened_at DESC);
 

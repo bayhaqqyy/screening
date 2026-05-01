@@ -5,7 +5,7 @@ import threading
 import os
 import yfinance as yf
 from datetime import datetime
-from kafka import KafkaProducer
+from confluent_kafka import Producer
 import sys
 
 # Add parent directory to path to import ticker_list
@@ -85,10 +85,7 @@ def update_baseline_prices(all_tickers):
 
 def main():
     print(f"Connecting to Kafka broker at {KAFKA_BROKER}...")
-    producer = KafkaProducer(
-        bootstrap_servers=KAFKA_BROKER,
-        value_serializer=lambda v: json.dumps(v).encode('utf-8')
-    )
+    producer = Producer({'bootstrap.servers': KAFKA_BROKER})
     print("Successfully connected to Kafka.")
 
     all_tickers = load_all_tickers()
@@ -143,7 +140,8 @@ def main():
             }
             
             # Publish RAW history to Kafka
-            producer.send(TOPIC_MARKET, key=ticker.encode('utf-8'), value=msg)
+            producer.produce(TOPIC_MARKET, key=ticker.encode('utf-8'), value=json.dumps(msg).encode('utf-8'))
+            producer.poll(0)
             
             print(f"[{datetime.now().strftime('%H:%M:%S')}] Raw Tick: {ticker} @ {live_price} ({change_pct}%)")
             
@@ -154,7 +152,7 @@ def main():
     except Exception as e:
         print(f"Critical error occurred: {e}")
     finally:
-        producer.close()
+        producer.flush()
 
 if __name__ == "__main__":
     main()
