@@ -21,7 +21,7 @@ func GetSettings(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var settings UserSettings
-	err := database.DB.QueryRow(`
+	err = database.DB.QueryRow(`
 		SELECT theme, notifications, default_strategy
 		FROM user_settings
 		WHERE user_id = $1
@@ -71,7 +71,7 @@ func UpdateSettings(w http.ResponseWriter, r *http.Request) {
 		req.Notifications = json.RawMessage(`{}`)
 	}
 
-	_, err := database.DB.Exec(`
+	_, err = database.DB.Exec(`
 		INSERT INTO user_settings (user_id, theme, notifications, default_strategy)
 		VALUES ($1, $2, $3, $4)
 		ON CONFLICT (user_id) DO UPDATE SET

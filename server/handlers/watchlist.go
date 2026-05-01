@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/sahamscreen/server/config"
 	"github.com/sahamscreen/server/database"
 )
 

@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/sahamscreen/server/config"
 	"github.com/sahamscreen/server/database"
 )
 
@@ -81,7 +79,7 @@ func CreateAlert(w http.ResponseWriter, r *http.Request) {
 	req.Ticker = strings.ToUpper(req.Ticker)
 
 	var newAlert Alert
-	err := database.DB.QueryRow(`
+	err = database.DB.QueryRow(`
 		INSERT INTO alerts (user_id, ticker, condition, target_price)
 		VALUES ($1, $2, $3, $4)
 		RETURNING id, ticker, condition, target_price, triggered, created_at
@@ -110,7 +108,7 @@ func DeleteAlert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := database.DB.Exec("DELETE FROM alerts WHERE id = $1 AND user_id = $2", alertID, userID)
+	_, err = database.DB.Exec("DELETE FROM alerts WHERE id = $1 AND user_id = $2", alertID, userID)
 	if err != nil {
 		http.Error(w, "Failed to delete alert", http.StatusInternalServerError)
 		return
