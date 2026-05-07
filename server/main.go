@@ -68,6 +68,10 @@ func main() {
 	// Events
 	r.HandleFunc("/api/events", handlers.GetEvents).Methods("GET")
 
+	// TradingView webhook (public, auth via path token + optional body secret)
+	r.HandleFunc("/api/webhooks/health", handlers.WebhookHealth).Methods("GET")
+	r.HandleFunc("/api/webhooks/tradingview/{token}", handlers.TradingViewWebhook).Methods("POST")
+
 	// WebSocket
 	r.HandleFunc("/ws/stream", ws.ServeWs)
 

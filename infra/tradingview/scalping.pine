@@ -1,0 +1,70 @@
+//@version=5
+// SahamScreen — Scalping starter for TradingView Premium.
+// Mirrors run_scalping() from engine/streaming/screener_consumer.py:
+//   STRONG_BUY when RSI(14) < 30 AND close > VWAP
+//   SELL      when RSI(14) > 70
+// Adapt freely for BSJP / Swing by changing the entry rule and the
+// `_strategy` constant.
+
+strategy("SahamScreen Scalping", overlay = true, default_qty_type = strategy.percent_of_equity, default_qty_value = 10)
+
+// Inputs ---------------------------------------------------------------
+rsi_len   = input.int(14, "RSI Length")
+rsi_lo    = input.int(30, "RSI Oversold (Long)")
+rsi_hi    = input.int(70, "RSI Overbought (Exit)")
+tp_pct    = input.float(2.0, "Take Profit %", step = 0.1) / 100
+sl_pct    = input.float(1.5, "Stop Loss %",  step = 0.1) / 100
+
+// You MUST set this so the Go handler knows which screener bucket to update.
+_strategy = "scalping"
+
+// Indicators -----------------------------------------------------------
+rsi  = ta.rsi(close, rsi_len)
+vwap = ta.vwap
+
+long_cond  = rsi < rsi_lo and close > vwap
+exit_cond  = rsi > rsi_hi
+
+// Strategy entries (so backtest works in TradingView) ------------------
+if long_cond
+    strategy.entry("Long", strategy.long)
+if exit_cond
+    strategy.close("Long")
+
+// Webhook payload ------------------------------------------------------
+// Use single quotes inside the message to keep TradingView's JSON valid.
+buildPayload(_signal, _score, _tp, _sl) =>
+    '{' +
+      '"alert_id":"' + str.tostring(time) + '",' +
+      '"ticker":"' + syminfo.ticker + '",' +
+      '"exchange":"' + syminfo.prefix + '",' +
+      '"interval":"' + timeframe.period + '",' +
+      '"strategy":"' + _strategy + '",' +
+      '"signal":"' + _signal + '",' +
+      '"price":' + str.tostring(close) + ',' +
+      '"open":' + str.tostring(open) + ',' +
+      '"high":' + str.tostring(high) + ',' +
+      '"low":' + str.tostring(low) + ',' +
+      '"volume":' + str.tostring(volume) + ',' +
+      '"score":' + str.tostring(_score) + ',' +
+      '"target":' + str.tostring(_tp) + ',' +
+      '"stop_loss":' + str.tostring(_sl) + ',' +
+      '"time":"' + str.format_time(time, "yyyy-MM-dd'T'HH:mm:ssZ", "UTC") + '"' +
+    '}'
+
+// Fire the alert. Set up the TradingView alert with:
+//   Condition = this script, "Any alert() function call"
+//   Message   = leave blank (we build it here)
+//   Webhook   = https://webhook.bayhaqqy.my.id/api/webhooks/tradingview/<TOKEN>
+if long_cond
+    score = math.min(100, 80 + math.round(rsi_lo - rsi))
+    alert(buildPayload("STRONG_BUY", score, close * (1 + tp_pct), close * (1 - sl_pct)), alert.freq_once_per_bar_close)
+
+if exit_cond
+    score = math.max(10, math.round(100 - rsi))
+    alert(buildPayload("SELL", score, close * (1 + tp_pct), close * (1 - sl_pct)), alert.freq_once_per_bar_close)
+
+// Plot for debugging
+plot(vwap, "VWAP", color = color.orange)
+hline(rsi_lo, "RSI Oversold", color = color.gray)
+hline(rsi_hi, "RSI Overbought", color = color.gray)
