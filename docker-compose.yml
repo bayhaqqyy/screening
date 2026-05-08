@@ -53,6 +53,7 @@ services:
         echo 'Running migrations...';
         psql -h postgres -U sahamscreen -d sahamscreen -f /migrations/002_production_tables.sql;
         psql -h postgres -U sahamscreen -d sahamscreen -f /migrations/003_align_news_and_add_volume.sql;
+        psql -h postgres -U sahamscreen -d sahamscreen -f /migrations/004_tv_alerts.sql;
         echo 'Migrations complete!';
       "
     depends_on:
@@ -78,20 +79,22 @@ services:
     networks:
       - sahamscreen-network
 
-  engine-market:
-    build:
-      context: ./engine
-      dockerfile: Dockerfile
-    container_name: sahamscreen-engine-market
-    environment:
-      - KAFKA_BROKER=kafka:29092
-    command: ["python", "streaming/market_producer.py"]
-    depends_on:
-      kafka:
-        condition: service_healthy
-    networks:
-      - sahamscreen-network
-    restart: "always"
+  # engine-market disabled: live tick simulation is replaced by TradingView webhooks.
+  # Kept here for easy rollback during migration. Re-enable by uncommenting.
+  # engine-market:
+  #   build:
+  #     context: ./engine
+  #     dockerfile: Dockerfile
+  #   container_name: sahamscreen-engine-market
+  #   environment:
+  #     - KAFKA_BROKER=kafka:29092
+  #   command: ["python", "streaming/market_producer.py"]
+  #   depends_on:
+  #     kafka:
+  #       condition: service_healthy
+  #   networks:
+  #     - sahamscreen-network
+  #   restart: "always"
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -139,6 +142,8 @@ services:
       - DB_NAME=sahamscreen
       - JWT_SECRET=${JWT_SECRET:-super-secret-jwt-key-change-in-production}
       - KAFKA_BROKER=kafka:29092
+      - TV_WEBHOOK_PATH_TOKEN=${TV_WEBHOOK_PATH_TOKEN:-}
+      - TV_WEBHOOK_SECRET=${TV_WEBHOOK_SECRET:-}
     depends_on:
       postgres:
         condition: service_started
@@ -149,18 +154,20 @@ services:
     networks:
       - sahamscreen-network
 
-  engine-indicator:
-    build:
-      context: ./engine
-      dockerfile: Dockerfile
-    container_name: sahamscreen-engine-indicator
-    environment:
-      - KAFKA_BROKER=kafka:29092
-    command: ["python", "streaming/indicator_consumer.py"]
-    depends_on:
-      - kafka
-    networks:
-      - sahamscreen-network
+  # engine-indicator disabled: technical indicators are now computed inside the
+  # TradingView Pine Script that fires the webhook. Kept here for rollback.
+  # engine-indicator:
+  #   build:
+  #     context: ./engine
+  #     dockerfile: Dockerfile
+  #   container_name: sahamscreen-engine-indicator
+  #   environment:
+  #     - KAFKA_BROKER=kafka:29092
+  #   command: ["python", "streaming/indicator_consumer.py"]
+  #   depends_on:
+  #     - kafka
+  #   networks:
+  #     - sahamscreen-network
 
   engine-bandar:
     build:
@@ -175,24 +182,26 @@ services:
     networks:
       - sahamscreen-network
 
-  engine-screener:
-    build:
-      context: ./engine
-      dockerfile: Dockerfile
-    container_name: sahamscreen-engine-screener
-    environment:
-      - KAFKA_BROKER=kafka:29092
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_NAME=sahamscreen
-      - DB_USER=sahamscreen
-      - DB_PASS=${POSTGRES_PASSWORD:-sahamscreen_dev}
-    command: ["python", "streaming/screener_consumer.py"]
-    depends_on:
-      - kafka
-      - postgres
-    networks:
-      - sahamscreen-network
+  # engine-screener disabled: BSJP / Swing / Scalping signals now arrive via the
+  # TradingView webhook (server/handlers/webhook.go). Kept here for rollback.
+  # engine-screener:
+  #   build:
+  #     context: ./engine
+  #     dockerfile: Dockerfile
+  #   container_name: sahamscreen-engine-screener
+  #   environment:
+  #     - KAFKA_BROKER=kafka:29092
+  #     - DB_HOST=postgres
+  #     - DB_PORT=5432
+  #     - DB_NAME=sahamscreen
+  #     - DB_USER=sahamscreen
+  #     - DB_PASS=${POSTGRES_PASSWORD:-sahamscreen_dev}
+  #   command: ["python", "streaming/screener_consumer.py"]
+  #   depends_on:
+  #     - kafka
+  #     - postgres
+  #   networks:
+  #     - sahamscreen-network
 
 
   engine-fetcher:
@@ -242,6 +251,23 @@ services:
       - ./web:/app
       - /app/node_modules
     command: sh -c "npm install && npm run dev -- --host"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: sahamscreen-cloudflared
+    restart: unless-stopped
+    # Token-based mode: configure the public hostname (e.g. webhook.bayhaqqy.my.id)
+    # in the Cloudflare Zero Trust dashboard and point it at http://server:8088.
+    # See infra/cloudflared/README.md for setup steps.
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN:-}
+    depends_on:
+      - server
+    networks:
+      - sahamscreen-network
+    profiles:
+      - tunnel
 
 
 networks:
