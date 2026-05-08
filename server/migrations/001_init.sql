@@ -1,7 +1,11 @@
--- server/migrations/init.sql
+-- server/migrations/001_init.sql
+--
+-- Renamed from init.sql so it runs before later numbered migrations under
+-- postgres /docker-entrypoint-initdb.d (alphabetical order). Statements are
+-- written idempotently so the db-migrator container can replay them safely.
 
 -- Users & Auth
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email         VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
@@ -12,7 +16,7 @@ CREATE TABLE users (
 );
 
 -- User Watchlist
-CREATE TABLE watchlists (
+CREATE TABLE IF NOT EXISTS watchlists (
     id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id    UUID REFERENCES users(id) ON DELETE CASCADE,
     ticker     VARCHAR(10) NOT NULL,
@@ -22,7 +26,7 @@ CREATE TABLE watchlists (
 );
 
 -- Price Alerts
-CREATE TABLE alerts (
+CREATE TABLE IF NOT EXISTS alerts (
     id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id       UUID REFERENCES users(id) ON DELETE CASCADE,
     ticker        VARCHAR(10) NOT NULL,
@@ -34,7 +38,7 @@ CREATE TABLE alerts (
 );
 
 -- BSJP Screener Results (persisted from Kafka)
-CREATE TABLE screener_results (
+CREATE TABLE IF NOT EXISTS screener_results (
     id          BIGSERIAL PRIMARY KEY,
     strategy    VARCHAR(20) NOT NULL,  -- 'bsjp' | 'swing' | 'scalping'
     ticker      VARCHAR(10) NOT NULL,
@@ -44,10 +48,10 @@ CREATE TABLE screener_results (
     screened_at TIMESTAMPTZ DEFAULT NOW(),
     is_locked   BOOLEAN DEFAULT FALSE
 );
-CREATE INDEX idx_screener_strategy_date ON screener_results(strategy, screened_at DESC);
+CREATE INDEX IF NOT EXISTS idx_screener_strategy_date ON screener_results(strategy, screened_at DESC);
 
 -- Daily OHLCV Cache (avoid re-fetching)
-CREATE TABLE ohlcv_daily (
+CREATE TABLE IF NOT EXISTS ohlcv_daily (
     ticker     VARCHAR(10) NOT NULL,
     trade_date DATE NOT NULL,
     open       DECIMAL(15,2),
@@ -59,7 +63,7 @@ CREATE TABLE ohlcv_daily (
 );
 
 -- User Settings / Preferences
-CREATE TABLE user_settings (
+CREATE TABLE IF NOT EXISTS user_settings (
     user_id          UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
     theme            VARCHAR(10) DEFAULT 'dark',
     notifications    JSONB DEFAULT '{"bsjp": true, "swing": true, "scalping": false}',
@@ -69,4 +73,5 @@ CREATE TABLE user_settings (
 -- Insert Admin User (Password: admin123)
 -- bcrypt hash of 'admin123' is '$2a$10$w6D9t.T3L30q.qZqM/q9w.y901z4h7.YxT9UaI/xS74lYJkZ6yXgW'
 INSERT INTO users (email, password_hash, name, role) VALUES 
-('admin@sahamscreen.id', '$2a$10$w6D9t.T3L30q.qZqM/q9w.y901z4h7.YxT9UaI/xS74lYJkZ6yXgW', 'Administrator', 'admin');
+('admin@sahamscreen.id', '$2a$10$w6D9t.T3L30q.qZqM/q9w.y901z4h7.YxT9UaI/xS74lYJkZ6yXgW', 'Administrator', 'admin')
+ON CONFLICT (email) DO NOTHING;
