@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"net"
 	"net/http"
 	"strings"
 	"sync"
@@ -83,13 +84,45 @@ func CorsMiddleware(next http.Handler) http.Handler {
 }
 
 var (
-	clients = make(map[string]*client)
-	mu      sync.Mutex
+	clients      = make(map[string]*client)
+	mu           sync.Mutex
+	cleanupOnce  sync.Once
 )
 
 type client struct {
 	lastSeen time.Time
 	tokens   int
+}
+
+// startRateLimitCleanup launches the stale-bucket sweeper exactly once for the
+// life of the process. gorilla/mux invokes middleware constructors per request
+// in some setups, so a per-call `go func() { for { ... } }` would leak a
+// goroutine on every HTTP request.
+func startRateLimitCleanup() {
+	go func() {
+		for {
+			time.Sleep(time.Minute)
+			mu.Lock()
+			for ip, c := range clients {
+				if time.Since(c.lastSeen) > 3*time.Minute {
+					delete(clients, ip)
+				}
+			}
+			mu.Unlock()
+		}
+	}()
+}
+
+// clientIP extracts the bare IP from r.RemoteAddr, handling IPv6 addresses
+// (which take the form `[::1]:54321`) correctly. A naive
+// strings.Split(r.RemoteAddr, ":")[0] would map every IPv6 client to the
+// shared bucket keyed by "[".
+func clientIP(r *http.Request) string {
+	ip, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil || ip == "" {
+		return r.RemoteAddr
+	}
+	return ip
 }
 
 // RateLimitMiddleware implements a simple token bucket per IP
@@ -98,22 +131,10 @@ func RateLimitMiddleware(next http.Handler) http.Handler {
 	const rateLimit = 5
 	const burstLimit = 20
 
-	// Cleanup stale clients periodically
-	go func() {
-		for {
-			time.Sleep(time.Minute)
-			mu.Lock()
-			for ip, client := range clients {
-				if time.Since(client.lastSeen) > 3*time.Minute {
-					delete(clients, ip)
-				}
-			}
-			mu.Unlock()
-		}
-	}()
+	cleanupOnce.Do(startRateLimitCleanup)
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ip := strings.Split(r.RemoteAddr, ":")[0]
+		ip := clientIP(r)
 		// For proxies, might want to check X-Forwarded-For
 
 		mu.Lock()
