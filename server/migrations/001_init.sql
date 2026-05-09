@@ -71,7 +71,9 @@ CREATE TABLE IF NOT EXISTS user_settings (
 );
 
 -- Insert Admin User (Password: admin123)
--- bcrypt hash of 'admin123' is '$2a$10$w6D9t.T3L30q.qZqM/q9w.y901z4h7.YxT9UaI/xS74lYJkZ6yXgW'
-INSERT INTO users (email, password_hash, name, role) VALUES 
-('admin@sahamscreen.id', '$2a$10$w6D9t.T3L30q.qZqM/q9w.y901z4h7.YxT9UaI/xS74lYJkZ6yXgW', 'Administrator', 'admin')
+-- bcrypt cost-10 hash of 'admin123', verified with golang.org/x/crypto/bcrypt.
+-- Migration 005 also UPDATEs this row on existing installs whose seed used
+-- an invalid placeholder hash that did not actually verify against admin123.
+INSERT INTO users (email, password_hash, name, role) VALUES
+('admin@sahamscreen.id', '$2b$10$LYKuivom1p4HfGxD3QLQt.DJ.mF6LgBe4ykfrO6rdz6hkxp.Q4j3K', 'Administrator', 'admin')
 ON CONFLICT (email) DO NOTHING;
