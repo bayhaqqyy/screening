@@ -156,20 +156,25 @@ services:
     networks:
       - sahamscreen-network
 
-  # engine-indicator disabled: technical indicators are now computed inside the
-  # TradingView Pine Script that fires the webhook. Kept here for rollback.
-  # engine-indicator:
-  #   build:
-  #     context: ./engine
-  #     dockerfile: Dockerfile
-  #   container_name: sahamscreen-engine-indicator
-  #   environment:
-  #     - KAFKA_BROKER=kafka:29092
-  #   command: ["python", "streaming/indicator_consumer.py"]
-  #   depends_on:
-  #     - kafka
-  #   networks:
-  #     - sahamscreen-network
+  # engine-indicator: re-enabled so engine-screener has access to RSI / VWAP /
+  # MACD / EMA fields when evaluating Swing and Scalping. engine-fetcher also
+  # produces idx.ohlcv.enriched without TA fields (that flow keeps
+  # stock_info live even if engine-indicator is slow); engine-indicator
+  # republishes the same topic with TA fields filled in. The Go consumer's
+  # persistMarketTick is idempotent so the dual producer is safe.
+  engine-indicator:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+    container_name: sahamscreen-engine-indicator
+    environment:
+      - KAFKA_BROKER=kafka:29092
+    command: ["python", "streaming/indicator_consumer.py"]
+    depends_on:
+      - kafka
+    networks:
+      - sahamscreen-network
+    restart: "always"
 
   engine-bandar:
     build:
