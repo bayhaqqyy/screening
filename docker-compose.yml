@@ -55,6 +55,7 @@ services:
         psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/002_production_tables.sql;
         psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/003_align_news_and_add_volume.sql;
         psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/004_tv_alerts.sql;
+        psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/005_fix_admin_password.sql;
         echo 'Migrations complete!';
       "
     depends_on:
@@ -183,26 +184,29 @@ services:
     networks:
       - sahamscreen-network
 
-  # engine-screener disabled: BSJP / Swing / Scalping signals now arrive via the
-  # TradingView webhook (server/handlers/webhook.go). Kept here for rollback.
-  # engine-screener:
-  #   build:
-  #     context: ./engine
-  #     dockerfile: Dockerfile
-  #   container_name: sahamscreen-engine-screener
-  #   environment:
-  #     - KAFKA_BROKER=kafka:29092
-  #     - DB_HOST=postgres
-  #     - DB_PORT=5432
-  #     - DB_NAME=sahamscreen
-  #     - DB_USER=sahamscreen
-  #     - DB_PASS=${POSTGRES_PASSWORD:-sahamscreen_dev}
-  #   command: ["python", "streaming/screener_consumer.py"]
-  #   depends_on:
-  #     - kafka
-  #     - postgres
-  #   networks:
-  #     - sahamscreen-network
+  # engine-screener: re-enabled so BSJP / Swing / Scalping pages have data
+  # even before TradingView Pine alerts are wired up. The TradingView webhook
+  # in server/handlers/webhook.go writes to the same screener_results table
+  # with source='tradingview', so the two sources coexist without conflict.
+  engine-screener:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+    container_name: sahamscreen-engine-screener
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=sahamscreen
+      - DB_USER=sahamscreen
+      - DB_PASS=${POSTGRES_PASSWORD:-sahamscreen_dev}
+    command: ["python", "streaming/screener_consumer.py"]
+    depends_on:
+      - kafka
+      - postgres
+    networks:
+      - sahamscreen-network
+    restart: "always"
 
 
   engine-fetcher:
