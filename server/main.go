@@ -19,13 +19,6 @@ func main() {
 	database.ConnectDB()
 
 	r := mux.NewRouter()
-	// Order matters: gorilla/mux applies middleware in registration order
-	// (outermost first). CORS must wrap RateLimit so 429 responses still
-	// carry Access-Control-Allow-Origin headers — otherwise browsers will
-	// block the response and the JS layer can't tell rate-limited apart
-	// from a generic network/CORS failure.
-	r.Use(middleware.CorsMiddleware)
-	r.Use(middleware.RateLimitMiddleware)
 
 	// Health check
 	r.HandleFunc("/api/health", func(w http.ResponseWriter, r *http.Request) {
@@ -96,8 +89,25 @@ func main() {
 	kafka.StartConsumers()
 	workers.StartAlertWorker()
 
+	// Wrap the router with global middleware via http.Handler chaining
+	// instead of r.Use(). gorilla/mux's r.Use() only fires on routes it
+	// can match — when the browser sends a CORS preflight OPTIONS request
+	// for a route registered as GET-only (e.g. /api/market/sectors), mux
+	// falls through to NotFoundHandler and r.Use'd middleware never runs,
+	// so the preflight response has no Access-Control-Allow-Origin header
+	// and the browser blocks the subsequent real request entirely. Wrapping
+	// at the http.ListenAndServe level fires the middleware on every
+	// request, including 404s and arbitrary OPTIONS preflights.
+	//
+	// Order: outermost is CORS so even a 429 from RateLimit (or a 404 from
+	// the router) still carries the CORS headers the browser needs to
+	// surface the response to JS.
+	var handler http.Handler = r
+	handler = middleware.RateLimitMiddleware(handler)
+	handler = middleware.CorsMiddleware(handler)
+
 	log.Printf("Server starting on port %s...", config.AppConfig.Port)
-	if err := http.ListenAndServe(":"+config.AppConfig.Port, r); err != nil {
+	if err := http.ListenAndServe(":"+config.AppConfig.Port, handler); err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 	}
 }
