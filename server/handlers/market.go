@@ -33,9 +33,14 @@ type SectorPerf struct {
 
 func GetMarketOverview(w http.ResponseWriter, r *http.Request) {
 	var resp MarketOverviewResponse
+	// Pick the freshest row by updated_at, NOT the highest id. The seeded
+	// row (id=1) is what aggregateMarketOverview() UPSERTs every 30s, but
+	// historical seed re-runs (the migrator running on every up) can leave
+	// stale empty rows with higher SERIAL ids — picking by id would surface
+	// those zero rows instead of the live aggregate.
 	err := database.DB.QueryRow(`
 		SELECT index_value, change_pct, volume, valuation, foreign_flow, updated_at
-		FROM market_overview ORDER BY id DESC LIMIT 1
+		FROM market_overview ORDER BY updated_at DESC LIMIT 1
 	`).Scan(&resp.IndexValue, &resp.ChangePct, &resp.Volume, &resp.Valuation, &resp.ForeignFlow, &resp.UpdatedAt)
 
 	if err != nil {

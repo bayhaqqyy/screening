@@ -55,10 +55,14 @@ CREATE TABLE IF NOT EXISTS market_overview (
     foreign_flow BIGINT DEFAULT 0,
     updated_at  TIMESTAMPTZ DEFAULT NOW()
 );
--- Seed a row
-INSERT INTO market_overview (index_value, change_pct, volume, valuation, foreign_flow)
-VALUES (0, 0, 0, 0, 0)
-ON CONFLICT DO NOTHING;
+-- Seed exactly one row pinned to id=1 so the migrator running on every
+-- `docker compose up` is idempotent. Without an explicit id + ON CONFLICT
+-- target on the PRIMARY KEY, the SERIAL default would allocate a fresh id
+-- on every migrator run and accumulate empty rows alongside the one
+-- aggregateMarketOverview() actually maintains.
+INSERT INTO market_overview (id, index_value, change_pct, volume, valuation, foreign_flow)
+VALUES (1, 0, 0, 0, 0, 0)
+ON CONFLICT (id) DO NOTHING;
 
 -- Sector performance cache
 CREATE TABLE IF NOT EXISTS sector_performance (

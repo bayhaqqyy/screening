@@ -19,8 +19,13 @@ func main() {
 	database.ConnectDB()
 
 	r := mux.NewRouter()
-	r.Use(middleware.RateLimitMiddleware)
+	// Order matters: gorilla/mux applies middleware in registration order
+	// (outermost first). CORS must wrap RateLimit so 429 responses still
+	// carry Access-Control-Allow-Origin headers — otherwise browsers will
+	// block the response and the JS layer can't tell rate-limited apart
+	// from a generic network/CORS failure.
 	r.Use(middleware.CorsMiddleware)
+	r.Use(middleware.RateLimitMiddleware)
 
 	// Health check
 	r.HandleFunc("/api/health", func(w http.ResponseWriter, r *http.Request) {

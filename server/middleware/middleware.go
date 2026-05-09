@@ -61,7 +61,11 @@ func CorsMiddleware(next http.Handler) http.Handler {
 			w.Header().Set("Access-Control-Allow-Origin", "*")
 		} else {
 			for _, o := range allowedOrigins {
-				if o == origin {
+				// Trim whitespace so a comma-separated list with spaces
+				// (e.g. "http://a, http://b") still matches against the
+				// browser's Origin header which never has surrounding
+				// whitespace.
+				if strings.TrimSpace(o) == origin {
 					allowed = true
 					w.Header().Set("Access-Control-Allow-Origin", origin)
 					break
