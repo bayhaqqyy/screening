@@ -2,12 +2,17 @@ import { useState, useEffect, useRef } from 'react';
 
 const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8088/ws/stream';
 
-export const useWebSocket = () => {
+export const useWebSocket = (enabled = true) => {
   const [messages, setMessages] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
   const ws = useRef(null);
   
   useEffect(() => {
+    if (!enabled) {
+      // Don't connect if not enabled (e.g. user not authenticated)
+      return;
+    }
+
     const connect = () => {
       // Create WebSocket connection.
       ws.current = new WebSocket(WS_URL);
@@ -50,7 +55,7 @@ export const useWebSocket = () => {
         ws.current.close();
       }
     };
-  }, []);
+  }, [enabled]);
 
   return { messages, isConnected };
 };

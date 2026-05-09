@@ -19,6 +19,7 @@ func main() {
 	database.ConnectDB()
 
 	r := mux.NewRouter()
+	r.Use(middleware.RateLimitMiddleware)
 	r.Use(middleware.CorsMiddleware)
 
 	// Health check
@@ -30,7 +31,7 @@ func main() {
 	// Auth routes (public)
 	r.HandleFunc("/api/auth/login", handlers.Login).Methods("POST", "OPTIONS")
 	r.HandleFunc("/api/auth/register", handlers.Register).Methods("POST", "OPTIONS")
-	r.HandleFunc("/api/auth/profile", handlers.UpdateProfile).Methods("PUT", "OPTIONS")
+	r.HandleFunc("/api/auth/forgot-password", handlers.ForgotPassword).Methods("POST", "OPTIONS")
 
 	// Market data routes (public)
 	r.HandleFunc("/api/market/overview", handlers.GetMarketOverview).Methods("GET")
@@ -38,41 +39,52 @@ func main() {
 	r.HandleFunc("/api/market/sectors", handlers.GetSectors).Methods("GET")
 	r.HandleFunc("/api/market/status", handlers.GetMarketStatus).Methods("GET")
 
-	// Screener routes
+	// Screener routes — static path BEFORE the parameterized one so
+	// gorilla/mux doesn't match /api/screener/stats as {strategy}=stats.
+	r.HandleFunc("/api/screener/stats", handlers.GetScreenerStats).Methods("GET")
 	r.HandleFunc("/api/screener/{strategy}", handlers.GetScreenerResults).Methods("GET")
 
-	// News routes
+	// News routes (public)
 	r.HandleFunc("/api/news", handlers.GetNews).Methods("GET")
 	r.HandleFunc("/api/news/featured", handlers.GetFeaturedNews).Methods("GET")
 
-	// Search routes
+	// Search routes (public)
 	r.HandleFunc("/api/search", handlers.SearchStocks).Methods("GET")
 	r.HandleFunc("/api/stock", handlers.GetStockDetail).Methods("GET")
 	r.HandleFunc("/api/stock/chart", handlers.GetStockChart).Methods("GET")
-	r.HandleFunc("/api/screener/stats", handlers.GetScreenerStats).Methods("GET")
 
-	// Watchlist routes (auth required)
-	r.HandleFunc("/api/watchlist", handlers.GetWatchlist).Methods("GET")
-	r.HandleFunc("/api/watchlist", handlers.AddToWatchlist).Methods("POST", "OPTIONS")
-	r.HandleFunc("/api/watchlist", handlers.RemoveFromWatchlist).Methods("DELETE", "OPTIONS")
-
-	// Alerts routes (auth required)
-	r.HandleFunc("/api/alerts", handlers.GetAlerts).Methods("GET")
-	r.HandleFunc("/api/alerts", handlers.CreateAlert).Methods("POST", "OPTIONS")
-	r.HandleFunc("/api/alerts", handlers.DeleteAlert).Methods("DELETE", "OPTIONS")
-
-	// Settings routes (auth required)
-	r.HandleFunc("/api/settings", handlers.GetSettings).Methods("GET")
-	r.HandleFunc("/api/settings", handlers.UpdateSettings).Methods("PUT", "OPTIONS")
-
-	// Events
+	// Events (public)
 	r.HandleFunc("/api/events", handlers.GetEvents).Methods("GET")
 
-	// TradingView webhook (public, auth via path token + optional body secret)
+	// TradingView webhook (public; auth is path token + optional body secret).
+	// Mounted on the root router so it is NOT subject to AuthMiddleware.
 	r.HandleFunc("/api/webhooks/health", handlers.WebhookHealth).Methods("GET")
 	r.HandleFunc("/api/webhooks/tradingview/{token}", handlers.TradingViewWebhook).Methods("POST")
 
-	// WebSocket
+	// Protected routes (require a valid JWT). Use a subrouter so AuthMiddleware
+	// applies uniformly without leaking onto the public routes above.
+	protected := r.PathPrefix("/api").Subrouter()
+	protected.Use(middleware.AuthMiddleware)
+
+	// Auth (protected)
+	protected.HandleFunc("/auth/profile", handlers.UpdateProfile).Methods("PUT", "OPTIONS")
+	protected.HandleFunc("/auth/refresh", handlers.RefreshToken).Methods("POST", "OPTIONS")
+
+	// Watchlist
+	protected.HandleFunc("/watchlist", handlers.GetWatchlist).Methods("GET")
+	protected.HandleFunc("/watchlist", handlers.AddToWatchlist).Methods("POST", "OPTIONS")
+	protected.HandleFunc("/watchlist", handlers.RemoveFromWatchlist).Methods("DELETE", "OPTIONS")
+
+	// Alerts
+	protected.HandleFunc("/alerts", handlers.GetAlerts).Methods("GET")
+	protected.HandleFunc("/alerts", handlers.CreateAlert).Methods("POST", "OPTIONS")
+	protected.HandleFunc("/alerts", handlers.DeleteAlert).Methods("DELETE", "OPTIONS")
+
+	// Settings
+	protected.HandleFunc("/settings", handlers.GetSettings).Methods("GET")
+	protected.HandleFunc("/settings", handlers.UpdateSettings).Methods("PUT", "OPTIONS")
+
+	// WebSocket (mounted on root router, no auth — same as before)
 	r.HandleFunc("/ws/stream", ws.ServeWs)
 
 	go ws.AppHub.Run()

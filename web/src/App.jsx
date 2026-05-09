@@ -43,9 +43,8 @@ function AppRoutes() {
     }
   }, [user]);
 
-  if (user) {
-    useWebSocket(); // Starts connection globally
-  }
+  // Always call hook (Rules of Hooks) — it internally handles reconnection
+  useWebSocket(!!user);
 
   return (
     <AnimatePresence mode="wait">

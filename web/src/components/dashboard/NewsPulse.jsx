@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useNews } from '../../hooks/useNews';
 
 const formatTimeAgo = (dateString) => {
@@ -22,11 +23,26 @@ const NewsPulse = () => {
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-bold tracking-tight">Market Pulse News</h3>
-        <button className="text-sm text-primary font-semibold hover:underline">View All Feed</button>
+        <Link to="/news" className="text-sm text-primary font-semibold hover:underline">View All Feed</Link>
       </div>
       
       {loading ? (
-        <div className="text-center text-sm text-on-surface-variant py-8">Loading news...</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="block glass-panel inner-stroke rounded-xl p-5 animate-pulse">
+              <div className="flex items-start justify-between mb-3">
+                <div className="h-4 w-24 bg-surface-container-highest rounded"></div>
+                <div className="h-3 w-16 bg-surface-container-highest rounded"></div>
+              </div>
+              <div className="h-5 w-full bg-surface-container-highest rounded mb-2"></div>
+              <div className="h-5 w-3/4 bg-surface-container-highest rounded mb-3"></div>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-surface-container-highest"></div>
+                <div className="h-3 w-20 bg-surface-container-highest rounded"></div>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : displayNews.length === 0 ? (
         <div className="text-center text-sm text-on-surface-variant py-8">No recent news available.</div>
       ) : (
