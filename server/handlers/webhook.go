@@ -1,10 +1,13 @@
 package handlers
 
 import (
+	"crypto/sha256"
 	"crypto/subtle"
 	"database/sql"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -95,6 +98,15 @@ func TradingViewWebhook(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
+	}
+
+	// When TradingView omits {{strategy.order.id}} (plain alerts), the
+	// alert_id arrives empty and the partial unique index in 004_tv_alerts
+	// can't dedupe. Fall back to a deterministic synthetic id derived from
+	// (ticker, strategy, payload, 1-min time bucket) so a misfiring TV
+	// alert that retries the same payload within a minute still dedupes.
+	if normalized.AlertID == "" {
+		normalized.AlertID = synthesizeAlertID(normalized, rawBody, time.Now().UTC())
 	}
 
 	rawJSON := json.RawMessage(rawBody)
@@ -217,6 +229,21 @@ func stripExchangePrefix(t string) string {
 		return t[i+1:]
 	}
 	return t
+}
+
+// synthesizeAlertID produces a stable 32-hex-char fingerprint when the
+// TradingView payload doesn't carry an alert_id. Using a 1-minute time
+// bucket means the same alert retried within a minute is treated as a
+// duplicate (matches typical TV retry/burst behaviour) but a real
+// follow-up alert in the next minute still gets a fresh row. The format
+// "syn-<16hex>-<unix-bucket>" stays under tv_alerts.alert_id VARCHAR(64).
+func synthesizeAlertID(p TVAlertPayload, rawBody []byte, now time.Time) string {
+	bucket := now.Unix() / 60
+	h := sha256.New()
+	fmt.Fprintf(h, "%s|%s|%d|", p.Ticker, p.Strategy, bucket)
+	h.Write(rawBody)
+	digest := hex.EncodeToString(h.Sum(nil))
+	return fmt.Sprintf("syn-%s-%d", digest[:16], bucket)
 }
 
 // persistTVAlert writes the audit row. Returns (id, duplicate, err).
