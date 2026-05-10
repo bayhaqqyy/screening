@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 	"log"
 	"time"
@@ -29,8 +30,22 @@ type MarketTick struct {
 	Open      float64 `json:"open"`
 	High      float64 `json:"high"`
 	Low       float64 `json:"low"`
+	Close     float64 `json:"close"`
 	Volume    int64   `json:"volume"`
 	ChangePct float64 `json:"change_pct"`
+	PrevClose float64 `json:"prev_close"`
+}
+
+// ScreenerUpdate matches the message published by
+// engine/streaming/screener_consumer.py to idx.screener.updates so the Go
+// consumer can persist screener results into the screener_results table.
+type ScreenerUpdate struct {
+	Ticker   string          `json:"ticker"`
+	Strategy string          `json:"strategy"`
+	Signal   string          `json:"signal"`
+	Score    int             `json:"score"`
+	Payload  json.RawMessage `json:"payload"`
+	Source   string          `json:"source"`
 }
 
 type BandarFlow struct {
@@ -80,6 +95,8 @@ func consumeTopic(topic string) {
 			persistBandarFlow(m.Value)
 		case "idx.news.updates":
 			persistNews(m.Value)
+		case "idx.screener.updates":
+			persistScreenerResult(m.Value)
 		}
 
 		// 2. Broadcast to WebSocket clients (existing behavior)
@@ -99,13 +116,110 @@ func persistMarketTick(data []byte) {
 
 	// UPSERT into stock_info — update price, change_pct, volume
 	_, err := database.DB.Exec(`
-		UPDATE stock_info 
-		SET last_price = $1, change_pct = $2, volume = $3
+		UPDATE stock_info
+		SET last_price = $1, change_pct = $2, volume = $3, updated_at = NOW()
 		WHERE ticker = $4
 	`, tick.LastPrice, tick.ChangePct, tick.Volume, tick.Ticker)
-
 	if err != nil {
 		log.Printf("Failed to update stock_info for %s: %v", tick.Ticker, err)
+	}
+
+	// UPSERT today's OHLCV row so /api/stock/chart has data without needing
+	// the (currently disabled) engine-indicator pipeline. Fill missing fields
+	// from last_price so a tick without a full OHLC payload still produces a
+	// valid candle.
+	openVal := tick.Open
+	highVal := tick.High
+	lowVal := tick.Low
+	closeVal := tick.Close
+	if closeVal == 0 {
+		closeVal = tick.LastPrice
+	}
+	if openVal == 0 {
+		openVal = closeVal
+	}
+	if highVal == 0 {
+		highVal = closeVal
+	}
+	if lowVal == 0 {
+		lowVal = closeVal
+	}
+
+	_, err = database.DB.Exec(`
+		INSERT INTO ohlcv_daily (ticker, trade_date, open, high, low, close, volume)
+		VALUES ($1, CURRENT_DATE, $2, $3, $4, $5, $6)
+		ON CONFLICT (ticker, trade_date) DO UPDATE SET
+			open   = EXCLUDED.open,
+			high   = GREATEST(ohlcv_daily.high, EXCLUDED.high),
+			low    = LEAST(ohlcv_daily.low, EXCLUDED.low),
+			close  = EXCLUDED.close,
+			volume = EXCLUDED.volume
+	`, tick.Ticker, openVal, highVal, lowVal, closeVal, tick.Volume)
+	if err != nil {
+		log.Printf("Failed to upsert ohlcv_daily for %s: %v", tick.Ticker, err)
+	}
+}
+
+// persistScreenerResult writes engine-side BSJP/Swing/Scalping signals into
+// screener_results so the /api/screener/{strategy} endpoint can serve them.
+// The TradingView webhook handler does its own UPSERT separately; the two
+// sources are distinguished by the `source` column ('engine' vs 'tradingview')
+// so each can be filtered or audited independently.
+func persistScreenerResult(data []byte) {
+	var upd ScreenerUpdate
+	if err := json.Unmarshal(data, &upd); err != nil {
+		return
+	}
+	if upd.Ticker == "" || upd.Strategy == "" {
+		return
+	}
+	source := upd.Source
+	if source == "" {
+		source = "engine"
+	}
+
+	payload := upd.Payload
+	if len(payload) == 0 {
+		payload = json.RawMessage("{}")
+	}
+
+	// Match the upsert pattern used by handlers/webhook.go: latest row
+	// per (strategy, ticker) is updated in place; otherwise insert a
+	// new one. BSJP rows are locked at end-of-day to match the engine.
+	var rowID int64
+	var isLocked bool
+	err := database.DB.QueryRow(`
+		SELECT id, COALESCE(is_locked, false) FROM screener_results
+		WHERE strategy = $1 AND ticker = $2
+		ORDER BY screened_at DESC LIMIT 1
+	`, upd.Strategy, upd.Ticker).Scan(&rowID, &isLocked)
+
+	if err == sql.ErrNoRows {
+		_, err = database.DB.Exec(`
+			INSERT INTO screener_results (strategy, ticker, signal, score, payload, screened_at, is_locked, source)
+			VALUES ($1, $2, $3, $4, $5, NOW(), false, $6)
+		`, upd.Strategy, upd.Ticker, upd.Signal, upd.Score, []byte(payload), source)
+		if err != nil {
+			log.Printf("persistScreenerResult insert failed for %s/%s: %v", upd.Ticker, upd.Strategy, err)
+		}
+		return
+	}
+	if err != nil {
+		log.Printf("persistScreenerResult lookup failed for %s/%s: %v", upd.Ticker, upd.Strategy, err)
+		return
+	}
+
+	if isLocked && upd.Strategy == "bsjp" {
+		return
+	}
+
+	_, err = database.DB.Exec(`
+		UPDATE screener_results
+		SET signal=$1, score=$2, payload=$3, screened_at=NOW(), source=$4
+		WHERE id=$5
+	`, upd.Signal, upd.Score, []byte(payload), source, rowID)
+	if err != nil {
+		log.Printf("persistScreenerResult update failed for %s/%s: %v", upd.Ticker, upd.Strategy, err)
 	}
 }
 

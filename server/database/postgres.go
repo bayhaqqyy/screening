@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
 	_ "github.com/lib/pq"
 	"github.com/sahamscreen/server/config"
@@ -22,6 +23,11 @@ func ConnectDB() {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
+	// Connection pool configuration for production
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(5)
+	db.SetConnMaxLifetime(5 * time.Minute)
+
 	err = db.Ping()
 	if err != nil {
 		log.Fatal("Failed to ping database:", err)
@@ -30,3 +36,4 @@ func ConnectDB() {
 	DB = db
 	log.Println("Database connection established")
 }
+

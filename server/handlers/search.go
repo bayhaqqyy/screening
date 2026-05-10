@@ -99,10 +99,10 @@ func GetStockChart(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rows, err := database.DB.Query(`
-		SELECT to_char(date, 'YYYY-MM-DD'), open, high, low, close, volume
+		SELECT to_char(trade_date, 'YYYY-MM-DD'), open, high, low, close, volume
 		FROM ohlcv_daily
 		WHERE ticker = $1
-		ORDER BY date ASC
+		ORDER BY trade_date ASC
 		LIMIT 365
 	`, ticker)
 
