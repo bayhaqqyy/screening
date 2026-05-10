@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AnimatedPage from '../components/layout/AnimatedPage';
+import { api } from '../services/api';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    // Password reset via email is not yet implemented.
-    // Show a helpful message to the user.
-    setSubmitted(true);
+    
+    try {
+      await api.post('/auth/forgot-password', { email });
+      setSubmitted(true);
+    } catch (err) {
+      setError(err.message || 'Failed to send reset link');
+    }
   };
   const [error, setError] = useState('');
 
@@ -29,6 +34,11 @@ const ForgotPassword = () => {
 
           {!submitted ? (
             <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <div className="bg-error/10 text-error text-xs font-bold p-3 rounded-lg text-center">
+                  {error}
+                </div>
+              )}
               <div className="group">
                 <label className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-1">Email Address</label>
                 <input 

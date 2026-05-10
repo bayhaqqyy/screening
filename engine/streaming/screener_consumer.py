@@ -120,10 +120,20 @@ def run_swing(df, ticker):
     }
 
 def process_message(data, conn, producer):
+    # idx.ohlcv.enriched receives two message shapes:
+    #   1. engine-indicator: {ticker, history: [...], latest: {...}}  <-- usable
+    #   2. engine-fetcher (post-PR-#5): {ticker, last_price, open, ...} flat
+    #      (this shape is intended for the Go consumer's persistMarketTick;
+    #       it has no 'history' so screening cannot run on it).
+    # Skip flat messages quickly instead of letting the generic except spam
+    # the logs with KeyError('history') for every fetcher tick.
+    if 'history' not in data:
+        return
+
     ticker = data['ticker']
     history = data['history']
     df = pd.DataFrame(history)
-    
+
     if len(df) < 20:
         return
 

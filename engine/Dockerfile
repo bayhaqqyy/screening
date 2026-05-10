@@ -2,6 +2,8 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
+ENV PYTHONUNBUFFERED=1
+
 # Install dependencies required for confluent-kafka and pandas
 RUN apt-get update && \
     apt-get install -y gcc g++ librdkafka-dev && \

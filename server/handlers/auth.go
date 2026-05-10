@@ -150,3 +150,60 @@ func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 		"user":    user,
 	})
 }
+
+// RefreshToken issues a fresh JWT for an authenticated caller. The current
+// token is parsed via getUserIDFromToken (helpers.go), and the user is
+// re-fetched from the DB to make sure the role/email are current.
+func RefreshToken(w http.ResponseWriter, r *http.Request) {
+	userID, err := getUserIDFromToken(r)
+	if err != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	var user models.User
+	err = database.DB.QueryRow("SELECT id, email, password_hash, name, role FROM users WHERE id = $1", userID).
+		Scan(&user.ID, &user.Email, &user.PasswordHash, &user.Name, &user.Role)
+	if err != nil {
+		http.Error(w, "Invalid user", http.StatusUnauthorized)
+		return
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub":   user.ID,
+		"email": user.Email,
+		"role":  user.Role,
+		"exp":   time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	tokenString, err := token.SignedString([]byte(config.AppConfig.JWTSecret))
+	if err != nil {
+		http.Error(w, "Failed to generate token", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"token": tokenString,
+		"user":  user,
+	})
+}
+
+// ForgotPassword is a placeholder that always returns the same generic
+// response so we don't leak account existence. Real email-delivery
+// integration is left for later.
+func ForgotPassword(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Email string `json:"email"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"success": true,
+		"message": "If the email exists, a reset link has been sent.",
+	})
+}

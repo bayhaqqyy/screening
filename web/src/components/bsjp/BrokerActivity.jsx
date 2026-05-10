@@ -86,10 +86,6 @@ const BrokerActivity = () => {
           ))
         )}
       </div>
-      
-      <button className="w-full mt-6 py-2 rounded-lg border border-outline-variant/20 text-[10px] font-bold uppercase tracking-widest text-outline hover:bg-surface-container-highest transition-colors">
-        View All Brokers
-      </button>
     </div>
   );
 };

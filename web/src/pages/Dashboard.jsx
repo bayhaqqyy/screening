@@ -16,6 +16,9 @@ const Dashboard = () => {
         <SectorHeatmap />
       </section>
       
+      <section className="mt-8">
+        <NewsPulse />
+      </section>
     </AnimatedPage>
   );
 };

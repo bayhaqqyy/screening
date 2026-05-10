@@ -18,6 +18,7 @@ type Config struct {
 	KafkaBroker        string
 	TVWebhookPathToken string
 	TVWebhookSecret    string
+	AllowedOrigins     string
 }
 
 var AppConfig Config
@@ -39,6 +40,7 @@ func LoadConfig() {
 		KafkaBroker:        getEnv("KAFKA_BROKER", "localhost:9092"),
 		TVWebhookPathToken: getEnv("TV_WEBHOOK_PATH_TOKEN", ""),
 		TVWebhookSecret:    getEnv("TV_WEBHOOK_SECRET", ""),
+		AllowedOrigins:     getEnv("ALLOWED_ORIGINS", "http://localhost:5173"),
 	}
 }
 

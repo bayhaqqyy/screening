@@ -13,6 +13,7 @@ from data.ticker_list import get_yfinance_tickers
 
 KAFKA_BROKER = os.getenv("KAFKA_BROKER", "localhost:9092")
 TOPIC_RAW = "idx.ohlcv.raw"
+TOPIC_ENRICHED = "idx.ohlcv.enriched"
 
 def get_producer():
     try:
@@ -25,6 +26,8 @@ def download_all_idx(period="60d"):
     """
     Download OHLCV untuk SELURUH saham IDX.
     Dibagi batch agar tidak di-rate-limit Yahoo.
+    Produce ke BOTH idx.ohlcv.raw (for indicator consumer if enabled)
+    AND idx.ohlcv.enriched (direct feed into Go consumer for stock_info updates).
     """
     all_tickers = get_yfinance_tickers()
     BATCH_SIZE = 50  # 50 saham per batch
@@ -78,10 +81,39 @@ def download_all_idx(period="60d"):
                     }
                     
                     if producer:
+                        # 1. Produce raw for any indicator consumers
                         producer.produce(
                             TOPIC_RAW,
                             key=ticker_code,
                             value=json.dumps(message)
+                        )
+                        
+                        # 2. Produce enriched tick directly so Go consumer
+                        #    can update stock_info immediately (bypass disabled
+                        #    engine-indicator).
+                        latest = history[-1]
+                        # Compute prev_close from second-to-last day if available
+                        prev_close = history[-2].get('Close', latest.get('Close', 0)) if len(history) >= 2 else latest.get('Close', 0)
+                        last_price = latest.get('Close', 0)
+                        change_pct = 0.0
+                        if prev_close and prev_close > 0:
+                            change_pct = round(((last_price - prev_close) / prev_close) * 100, 2)
+                        
+                        enriched_msg = {
+                            'ticker': ticker_code,
+                            'last_price': last_price,
+                            'open': latest.get('Open', 0),
+                            'high': latest.get('High', 0),
+                            'low': latest.get('Low', 0),
+                            'close': last_price,
+                            'volume': int(latest.get('Volume', 0)),
+                            'change_pct': change_pct,
+                            'prev_close': prev_close,
+                        }
+                        producer.produce(
+                            TOPIC_ENRICHED,
+                            key=ticker_code,
+                            value=json.dumps(enriched_msg)
                         )
                 except Exception as e:
                     print(f"Error processing {ticker}: {e}")
@@ -89,7 +121,7 @@ def download_all_idx(period="60d"):
             
             if producer:
                 producer.flush()
-                print(f"Batch {i//BATCH_SIZE + 1}: {len(batch)} tickers sent to Kafka")
+                print(f"Batch {i//BATCH_SIZE + 1}: {len(batch)} tickers sent to Kafka (raw + enriched)")
             
         except Exception as e:
             print(f"Batch error: {e}")

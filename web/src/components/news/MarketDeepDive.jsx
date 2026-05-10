@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useNews } from '../../hooks/useNews';
 
 const formatTimeAgo = (dateString) => {
@@ -31,11 +32,33 @@ const MarketDeepDive = ({ activeFilter = 'Semua' }) => {
     <section className="space-y-6 pt-4">
       <div className="flex items-center justify-between border-b border-outline-variant/20 pb-4">
         <h3 className="text-xl font-bold tracking-tight">Market Deep Dive</h3>
-        <button className="text-sm font-semibold text-blue-400 hover:underline">View All Archive</button>
+        <Link to="/news" className="text-sm font-semibold text-blue-400 hover:underline">View All Archive</Link>
       </div>
       
       {loading ? (
-        <div className="text-center text-sm text-on-surface-variant py-8">Loading deep dive articles...</div>
+        <div className="space-y-3">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="block glass-panel p-5 rounded-xl border border-outline-variant/10 flex flex-col md:flex-row gap-6 items-center animate-pulse">
+              <div className="w-full md:w-48 h-32 rounded-lg bg-surface-container-highest shrink-0"></div>
+              <div className="flex-1 space-y-3 w-full">
+                <div className="flex items-center space-x-3">
+                  <div className="h-4 w-16 bg-surface-container-highest rounded-sm"></div>
+                  <div className="h-3 w-24 bg-surface-container-highest rounded"></div>
+                </div>
+                <div className="h-6 w-3/4 bg-surface-container-highest rounded"></div>
+                <div className="h-4 w-full bg-surface-container-highest rounded"></div>
+                <div className="h-4 w-5/6 bg-surface-container-highest rounded"></div>
+                <div className="flex gap-2 pt-1">
+                  <div className="h-5 w-12 bg-surface-container-highest rounded-full"></div>
+                  <div className="h-5 w-16 bg-surface-container-highest rounded-full"></div>
+                </div>
+              </div>
+              <div className="hidden md:block shrink-0 px-4">
+                <div className="h-6 w-6 rounded-full bg-surface-container-highest"></div>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : filteredNews.length === 0 ? (
         <div className="text-center text-sm text-on-surface-variant py-8">No articles found.</div>
       ) : (
