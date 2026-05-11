@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Fix network issues (DNS/IPv6) by disabling sumDB and setting proxy
 ENV GOSUMDB=off
-ENV GOPROXY=https://proxy.golang.org,direct
+ENV GOPROXY=direct
 ENV CGO_ENABLED=0
 
 COPY . .
