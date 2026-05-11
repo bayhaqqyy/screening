@@ -286,32 +286,38 @@ func upsertScreenerResult(p TVAlertPayload) error {
 		"alert_time":    p.Time,
 		"source":        "tradingview",
 	}
+	var rowID int64
+	var isLocked bool
+	var existingPayload []byte
+	scanErr := database.DB.QueryRow(`
+		SELECT id, COALESCE(is_locked, false), payload FROM screener_results
+		WHERE strategy = $1 AND ticker = $2
+		ORDER BY screened_at DESC LIMIT 1
+	`, p.Strategy, p.Ticker).Scan(&rowID, &isLocked, &existingPayload)
+
+	if scanErr == nil && len(existingPayload) > 0 {
+		var ep map[string]any
+		if json.Unmarshal(existingPayload, &ep) == nil {
+			if existingEntry, ok := ep["entry_price"]; ok {
+				payload["entry_price"] = existingEntry
+			}
+		}
+	}
+
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
 		return err
 	}
 
-	// Look for an existing row for this (strategy, ticker) to UPDATE in
-	// place; otherwise INSERT a new one. Mirrors what
-	// engine/streaming/screener_consumer.py does so the existing
-	// /api/screener/{strategy} query (DISTINCT ON ticker) keeps working.
-	var rowID int64
-	var isLocked bool
-	err = database.DB.QueryRow(`
-		SELECT id, COALESCE(is_locked, false) FROM screener_results
-		WHERE strategy = $1 AND ticker = $2
-		ORDER BY screened_at DESC LIMIT 1
-	`, p.Strategy, p.Ticker).Scan(&rowID, &isLocked)
-
 	switch {
-	case errors.Is(err, sql.ErrNoRows):
+	case errors.Is(scanErr, sql.ErrNoRows):
 		_, err = database.DB.Exec(`
 			INSERT INTO screener_results (strategy, ticker, signal, score, payload, screened_at, is_locked, source)
 			VALUES ($1, $2, $3, $4, $5, NOW(), false, 'tradingview')
 		`, p.Strategy, p.Ticker, p.Signal, p.Score, payloadBytes)
 		return err
-	case err != nil:
-		return err
+	case scanErr != nil:
+		return scanErr
 	}
 
 	if isLocked && p.Strategy == "bsjp" {

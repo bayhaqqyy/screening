@@ -65,7 +65,7 @@ const MarketDeepDive = ({ activeFilter = 'Semua' }) => {
       <div className="space-y-3">
         {filteredNews.map((newsItem, idx) => {
           const title = newsItem.title;
-          const link = newsItem.url;
+          const link = newsItem.url || newsItem.link || '#';
           // Summary might not be available from our current backend
           const desc = newsItem.summary || ''; 
           const source = `${newsItem.source || 'Market'} • ${formatTimeAgo(newsItem.published_at || new Date().toISOString())}`;

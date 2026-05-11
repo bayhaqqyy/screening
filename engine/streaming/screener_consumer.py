@@ -119,6 +119,13 @@ def run_swing(df, ticker):
         }
     }
 
+def freeze_entry_price(existing_payload, new_payload):
+    if not existing_payload:
+        return new_payload
+    if 'entry_price' in existing_payload:
+        new_payload['entry_price'] = existing_payload['entry_price']
+    return new_payload
+
 def process_message(data, conn, producer):
     # idx.ohlcv.enriched receives two message shapes:
     #   1. engine-indicator: {ticker, history: [...], latest: {...}}  <-- usable
@@ -190,7 +197,7 @@ def process_message(data, conn, producer):
             for r in results:
                 # Issue #1: Check for locking mechanism
                 cur.execute("""
-                    SELECT id, is_locked FROM screener_results 
+                    SELECT id, is_locked, payload FROM screener_results 
                     WHERE strategy = %s AND ticker = %s 
                     ORDER BY screened_at DESC LIMIT 1
                 """, (r['strategy'], r['ticker']))
@@ -204,9 +211,11 @@ def process_message(data, conn, producer):
                         should_lock = True
                 
                 if row:
-                    row_id, is_locked = row[0], row[1]
+                    row_id, is_locked, existing_payload = row[0], row[1], row[2]
                     if is_locked and r['strategy'] == 'bsjp':
                         continue # Skip updating if locked
+                    
+                    r['payload'] = freeze_entry_price(existing_payload, r['payload'])
                     
                     cur.execute("""
                         UPDATE screener_results 

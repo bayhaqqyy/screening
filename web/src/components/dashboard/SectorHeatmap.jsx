@@ -40,6 +40,11 @@ const SectorHeatmap = () => {
     return { bg: "bg-on-surface-variant/5", border: "border-outline-variant/10", hover: "hover:bg-on-surface-variant/10", textCls: "text-on-surface-variant" };
   };
 
+  const formatSector = (s) => {
+    if (!s) return "N/A";
+    return s.replace(/^IDX/i, '');
+  };
+
   return (
     <div className="col-span-12 lg:col-span-7 bg-surface-container-low rounded-xl p-6 flex flex-col">
       <div className="flex items-center justify-between mb-6">
@@ -56,7 +61,7 @@ const SectorHeatmap = () => {
           const isGain = sector.change_pct > 0;
           return (
             <div key={sector.sector} className={`${getSlotClasses(index)} ${style.bg} rounded-lg p-4 flex flex-col justify-between border ${style.border} ${style.hover} transition-colors cursor-pointer`}>
-              <span className={`text-[10px] md:text-xs font-bold uppercase tracking-widest ${style.textCls} truncate`}>{sector.sector}</span>
+              <span className={`text-[10px] md:text-xs font-bold uppercase tracking-widest ${style.textCls} truncate`}>{formatSector(sector.sector)}</span>
               <span className={`${index === 0 ? 'text-2xl' : 'text-lg'} font-black tabular-nums`}>
                 {isGain ? '+' : ''}{sector.change_pct}%
               </span>

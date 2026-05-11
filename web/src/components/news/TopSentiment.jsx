@@ -49,7 +49,7 @@ const TopSentiment = () => {
           const primaryTag = tags.length > 0 ? tags[0] : '#Market';
 
           return (
-          <a key={idx} href={item.url} target="_blank" rel="noopener noreferrer" className="block p-4 rounded-xl bg-surface-container-high border border-outline-variant/10 hover:bg-surface-container-highest transition-all group cursor-pointer outline-none focus:ring-2 focus:ring-primary">
+          <a key={idx} href={item.url || item.link || '#'} target="_blank" rel="noopener noreferrer" className="block p-4 rounded-xl bg-surface-container-high border border-outline-variant/10 hover:bg-surface-container-highest transition-all group cursor-pointer outline-none focus:ring-2 focus:ring-primary">
             <div className="flex justify-between items-start mb-2">
               <span className={`${sentimentClass} text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase`}>{sentimentLabel}</span>
               <span className="text-[10px] text-on-surface-variant tabular-nums">{formatTimeAgo(item.published_at || new Date().toISOString())}</span>

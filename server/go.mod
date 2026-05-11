@@ -10,6 +10,7 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/segmentio/kafka-go v0.4.47
 	golang.org/x/crypto v0.21.0
+	github.com/DATA-DOG/go-sqlmock v1.5.2
 )
 
 require (

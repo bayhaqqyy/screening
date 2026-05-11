@@ -75,8 +75,8 @@ const WatchlistTable = () => {
              const isGain = chg >= 0;
              const chgColor = isGain ? 'text-secondary' : 'text-error';
              const vol = detail.volume ? `${(detail.volume / 1000000).toFixed(1)}M` : 'N/A';
-             const dateObj = new Date(row.created_at);
-             const addedAt = isNaN(dateObj) ? 'Just now' : dateObj.toLocaleDateString();
+             const dateObj = row.created_at ? new Date(row.created_at) : new Date();
+             const addedAt = isNaN(dateObj) ? 'Just now' : dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
 
              return (
               <tr key={row.ticker} className="hover:bg-surface-container-high/40 transition-colors group">

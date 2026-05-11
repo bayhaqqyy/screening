@@ -288,71 +288,81 @@ func persistIndexUpdate(data []byte) {
 func aggregateMarketOverview() {
 	for {
 		time.Sleep(30 * time.Second)
+		DoAggregateMarketOverview()
+	}
+}
 
-		// Compute aggregate stats from stock_info
-		var totalVolume int64
-		var totalValuation int64
-		var avgChangePct float64
-		var count int
+// DoAggregateMarketOverview performs a single aggregation pass.
+// Exported so it can be called from tests.
+func DoAggregateMarketOverview() {
+	// Compute aggregate stats from stock_info
+	var totalVolume int64
+	var totalValuation int64
+	var avgChangePct float64
+	var count int
 
-		err := database.DB.QueryRow(`
-			SELECT 
-				COALESCE(SUM(volume), 0),
-				COALESCE(SUM(market_cap), 0),
-				COALESCE(AVG(change_pct), 0),
-				COUNT(*)
-			FROM stock_info
-			WHERE last_price > 0 AND change_pct != 0
-		`).Scan(&totalVolume, &totalValuation, &avgChangePct, &count)
+	err := database.DB.QueryRow(`
+		SELECT 
+			COALESCE(SUM(volume), 0),
+			COALESCE(SUM(market_cap), 0),
+			COALESCE(AVG(change_pct), 0),
+			COUNT(*)
+		FROM stock_info
+		WHERE last_price > 0 AND change_pct != 0
+	`).Scan(&totalVolume, &totalValuation, &avgChangePct, &count)
 
-		if err != nil || count == 0 {
-			continue
-		}
+	if err != nil || count == 0 {
+		return
+	}
 
-		// Use real IHSG value if available (set by persistIndexUpdate from ^JKSE),
-		// otherwise fall back to synthetic weighted average.
-		var existingIndex float64
+	// Use real IHSG value if available (set by persistIndexUpdate from ^JKSE),
+	// otherwise fall back to synthetic weighted average.
+	var existingIndex float64
+	var existingChangePct float64
+	database.DB.QueryRow(`
+		SELECT COALESCE(index_value, 0), COALESCE(change_pct, 0) FROM market_overview WHERE id = 1
+	`).Scan(&existingIndex, &existingChangePct)
+
+	var indexValue float64
+	var finalChangePct float64
+	if existingIndex > 0 {
+		// Real IHSG from ^JKSE is already set; keep it.
+		indexValue = existingIndex
+		finalChangePct = existingChangePct
+	} else {
+		// Fallback: synthetic weighted average
 		database.DB.QueryRow(`
-			SELECT COALESCE(index_value, 0) FROM market_overview WHERE id = 1
-		`).Scan(&existingIndex)
+			SELECT COALESCE(SUM(last_price * market_cap) / NULLIF(SUM(market_cap), 0), 0)
+			FROM stock_info WHERE last_price > 0 AND market_cap > 0
+		`).Scan(&indexValue)
+		finalChangePct = avgChangePct
+	}
 
-		var indexValue float64
-		if existingIndex > 0 {
-			// Real IHSG from ^JKSE is already set; keep it.
-			indexValue = existingIndex
-		} else {
-			// Fallback: synthetic weighted average
-			database.DB.QueryRow(`
-				SELECT COALESCE(SUM(last_price * market_cap) / NULLIF(SUM(market_cap), 0), 0)
-				FROM stock_info WHERE last_price > 0 AND market_cap > 0
-			`).Scan(&indexValue)
-		}
+	// Estimate foreign flow as net of top gainers vs losers volume (simplified proxy)
+	var foreignFlow int64
+	database.DB.QueryRow(`
+		SELECT COALESCE(
+			SUM(CASE WHEN change_pct > 0 THEN volume ELSE -volume END),
+		0) FROM stock_info WHERE change_pct != 0
+	`).Scan(&foreignFlow)
 
-		// Estimate foreign flow as net of top gainers vs losers volume (simplified proxy)
-		var foreignFlow int64
-		database.DB.QueryRow(`
-			SELECT COALESCE(
-				SUM(CASE WHEN change_pct > 0 THEN volume ELSE -volume END),
-			0) FROM stock_info WHERE change_pct != 0
-		`).Scan(&foreignFlow)
+	// UPSERT market_overview (we keep a single row with id=1 for simplicity)
+	_, err = database.DB.Exec(`
+		INSERT INTO market_overview (id, index_value, change_pct, volume, valuation, foreign_flow, updated_at)
+		VALUES (1, $1, $2, $3, $4, $5, NOW())
+		ON CONFLICT (id) DO UPDATE SET
+			index_value = $1,
+			change_pct = $2,
+			volume = $3,
+			valuation = $4,
+			foreign_flow = $5,
+			updated_at = NOW()
+	`, indexValue, finalChangePct, totalVolume, totalValuation, foreignFlow)
 
-		// UPSERT market_overview (we keep a single row with id=1 for simplicity)
-		_, err = database.DB.Exec(`
-			INSERT INTO market_overview (id, index_value, change_pct, volume, valuation, foreign_flow, updated_at)
-			VALUES (1, $1, $2, $3, $4, $5, NOW())
-			ON CONFLICT (id) DO UPDATE SET
-				index_value = $1,
-				change_pct = $2,
-				volume = $3,
-				valuation = $4,
-				foreign_flow = $5,
-				updated_at = NOW()
-		`, indexValue, avgChangePct, totalVolume, totalValuation, foreignFlow)
-
-		if err != nil {
-			log.Printf("Failed to update market_overview: %v", err)
-			continue
-		}
+	if err != nil {
+		log.Printf("Failed to update market_overview: %v", err)
+		return
+	}
 
 		// Compute sector performance from stock_info grouped by sector
 		// Remove `change_pct != 0` as some valid sectors might be flat.
