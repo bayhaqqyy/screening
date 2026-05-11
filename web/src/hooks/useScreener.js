@@ -7,11 +7,19 @@ export const useScreener = (strategy) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const parsePayload = (item) => {
+      let payload = item.payload;
+      if (typeof payload === 'string') {
+        try { payload = JSON.parse(payload); } catch { payload = {}; }
+      }
+      return { ...item, payload: payload || {} };
+    };
+
     const fetchData = async () => {
       try {
         setLoading(true);
         const result = await screenerService.getResults(strategy);
-        setData(result || []);
+        setData((result || []).map(parsePayload));
       } catch (err) {
         setError(err.message);
       } finally {

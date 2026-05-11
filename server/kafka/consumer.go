@@ -18,6 +18,7 @@ func StartConsumers() {
 	go consumeTopic("idx.bandar.flow")
 	go consumeTopic("idx.news.updates")
 	go consumeTopic("idx.screener.updates")
+	go consumeTopic("idx.index.update")
 	go aggregateMarketOverview() // periodic aggregation
 	go cleanupOldNews()          // retention policy for news
 }
@@ -34,6 +35,12 @@ type MarketTick struct {
 	Volume    int64   `json:"volume"`
 	ChangePct float64 `json:"change_pct"`
 	PrevClose float64 `json:"prev_close"`
+}
+
+type IndexUpdate struct {
+	IndexValue float64 `json:"index_value"`
+	ChangePct  float64 `json:"change_pct"`
+	Volume     int64   `json:"volume"`
 }
 
 // ScreenerUpdate matches the message published by
@@ -97,6 +104,8 @@ func consumeTopic(topic string) {
 			persistNews(m.Value)
 		case "idx.screener.updates":
 			persistScreenerResult(m.Value)
+		case "idx.index.update":
+			persistIndexUpdate(m.Value)
 		}
 
 		// 2. Broadcast to WebSocket clients (existing behavior)
@@ -149,7 +158,7 @@ func persistMarketTick(data []byte) {
 		INSERT INTO ohlcv_daily (ticker, trade_date, open, high, low, close, volume)
 		VALUES ($1, CURRENT_DATE, $2, $3, $4, $5, $6)
 		ON CONFLICT (ticker, trade_date) DO UPDATE SET
-			open   = EXCLUDED.open,
+			open   = ohlcv_daily.open,
 			high   = GREATEST(ohlcv_daily.high, EXCLUDED.high),
 			low    = LEAST(ohlcv_daily.low, EXCLUDED.low),
 			close  = EXCLUDED.close,
@@ -252,6 +261,28 @@ func persistNews(data []byte) {
 	}
 }
 
+// persistIndexUpdate writes real IHSG index data from ^JKSE to market_overview
+func persistIndexUpdate(data []byte) {
+	var idx IndexUpdate
+	if err := json.Unmarshal(data, &idx); err != nil {
+		return
+	}
+	if idx.IndexValue == 0 {
+		return
+	}
+
+	// Update only index_value and change_pct from real IHSG data;
+	// volume/valuation/foreign_flow are still aggregated from stock_info.
+	_, err := database.DB.Exec(`
+		UPDATE market_overview
+		SET index_value = $1, change_pct = $2, updated_at = NOW()
+		WHERE id = 1
+	`, idx.IndexValue, idx.ChangePct)
+	if err != nil {
+		log.Printf("Failed to persist IHSG index update: %v", err)
+	}
+}
+
 // aggregateMarketOverview runs every 30 seconds and computes
 // market-wide stats from stock_info, then writes to market_overview
 func aggregateMarketOverview() {
@@ -278,12 +309,24 @@ func aggregateMarketOverview() {
 			continue
 		}
 
-		// Estimate an IHSG-like index value (simplified weighted average)
-		var indexValue float64
+		// Use real IHSG value if available (set by persistIndexUpdate from ^JKSE),
+		// otherwise fall back to synthetic weighted average.
+		var existingIndex float64
 		database.DB.QueryRow(`
-			SELECT COALESCE(SUM(last_price * market_cap) / NULLIF(SUM(market_cap), 0), 0)
-			FROM stock_info WHERE last_price > 0 AND market_cap > 0
-		`).Scan(&indexValue)
+			SELECT COALESCE(index_value, 0) FROM market_overview WHERE id = 1
+		`).Scan(&existingIndex)
+
+		var indexValue float64
+		if existingIndex > 0 {
+			// Real IHSG from ^JKSE is already set; keep it.
+			indexValue = existingIndex
+		} else {
+			// Fallback: synthetic weighted average
+			database.DB.QueryRow(`
+				SELECT COALESCE(SUM(last_price * market_cap) / NULLIF(SUM(market_cap), 0), 0)
+				FROM stock_info WHERE last_price > 0 AND market_cap > 0
+			`).Scan(&indexValue)
+		}
 
 		// Estimate foreign flow as net of top gainers vs losers volume (simplified proxy)
 		var foreignFlow int64
@@ -312,10 +355,12 @@ func aggregateMarketOverview() {
 		}
 
 		// Compute sector performance from stock_info grouped by sector
+		// Remove `change_pct != 0` as some valid sectors might be flat.
+		// Exclude null/empty sectors.
 		sectorRows, err := database.DB.Query(`
 			SELECT sector, AVG(change_pct), SUM(volume)
 			FROM stock_info
-			WHERE sector != '' AND last_price > 0 AND change_pct != 0
+			WHERE sector IS NOT NULL AND sector != '' AND sector != 'N/A' AND last_price > 0
 			GROUP BY sector
 			ORDER BY ABS(AVG(change_pct)) DESC
 		`)

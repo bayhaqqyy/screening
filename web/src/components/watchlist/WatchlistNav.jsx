@@ -10,7 +10,10 @@ const WatchlistNav = () => {
           <button className="px-6 py-2 rounded-lg text-sm font-medium text-on-surface-variant hover:text-on-surface transition-all">Energy</button>
         </div>
       </div>
-      <button className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full font-bold shadow-lg shadow-primary/10 hover:scale-[1.02] active:scale-95 transition-all">
+      <button 
+        onClick={() => document.querySelector('input[placeholder="Search stocks..."]')?.focus()}
+        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full font-bold shadow-lg shadow-primary/10 hover:scale-[1.02] active:scale-95 transition-all"
+      >
         <span className="material-symbols-outlined">add_circle</span>
         <span>Add Ticker</span>
       </button>

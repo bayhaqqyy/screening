@@ -16,15 +16,6 @@ const SecuritySection = () => {
           </div>
           <span className="material-symbols-outlined text-secondary-fixed-dim" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
         </div>
-        
-        <button className="block text-primary-fixed-dim hover:text-primary text-sm font-medium transition-colors">Change Account Password</button>
-        <button className="block text-primary-fixed-dim hover:text-primary text-sm font-medium transition-colors">Manage Connected Devices</button>
-        
-        <div className="pt-4">
-          <button className="w-full py-2 bg-error-container text-on-error-container rounded-lg text-sm font-bold hover:opacity-90 transition-opacity">
-            Deactivate Account
-          </button>
-        </div>
       </div>
     </section>
   );

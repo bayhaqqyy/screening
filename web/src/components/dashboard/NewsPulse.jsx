@@ -63,7 +63,7 @@ const NewsPulse = () => {
           }
 
           return (
-            <a key={i} href={newsItem.url} target="_blank" rel="noopener noreferrer" className="block glass-panel inner-stroke rounded-xl p-5 hover:bg-surface-container-high transition-colors cursor-pointer outline-none focus:ring-2 focus:ring-primary">
+            <div key={i} className="block glass-panel inner-stroke rounded-xl p-5 hover:bg-surface-container-high transition-colors outline-none focus:ring-2 focus:ring-primary">
               <div className="flex items-start justify-between mb-3">
                 <span className={`${sentimentCls} text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider`}>
                   {sentimentLabel}
@@ -71,15 +71,28 @@ const NewsPulse = () => {
                 <span className="text-[10px] text-on-surface-variant">{formatTimeAgo(newsItem.published_at || new Date().toISOString())}</span>
               </div>
               
-              <h4 className="font-bold text-base leading-tight mb-3 line-clamp-3">
+              <a href={newsItem.url} target="_blank" rel="noopener noreferrer" className="font-bold text-base leading-tight mb-3 line-clamp-3 hover:text-primary transition-colors block">
                 {newsItem.title}
-              </h4>
+              </a>
               
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mt-3">
                 <div className={`w-1.5 h-1.5 rounded-full ${dotCls}`}></div>
-                <span className="text-xs text-on-surface-variant">{newsItem.source || 'Market News'} • {(newsItem.related_tickers || []).join(', ')}</span>
+                <span className="text-xs text-on-surface-variant">{newsItem.source || 'Market News'} • </span>
+                <div className="flex gap-1 flex-wrap">
+                  {(newsItem.related_tickers || []).map(t => (
+                    <a 
+                      key={t} 
+                      href={`https://www.tradingview.com/chart/?symbol=IDX%3A${t}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-xs font-bold text-primary hover:underline"
+                    >
+                      {t}
+                    </a>
+                  ))}
+                </div>
               </div>
-            </a>
+            </div>
           );
         })}
       </div>

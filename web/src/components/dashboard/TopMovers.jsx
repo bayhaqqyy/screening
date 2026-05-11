@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { marketService } from '../../services/marketService';
 
@@ -18,6 +19,7 @@ const itemVariants = {
 };
 
 const TopMovers = () => {
+  const navigate = useNavigate();
   const [tab, setTab] = useState('gainers');
   const [movers, setMovers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -113,6 +115,7 @@ const TopMovers = () => {
                   variants={itemVariants}
                   whileHover={{ scale: 1.02, backgroundColor: 'rgba(53, 57, 67, 0.4)' }}
                   whileTap={{ scale: 0.98 }}
+                  onClick={() => navigate(`/stock/${stock.ticker}`)}
                   className="flex items-center p-2 rounded-lg transition-colors cursor-pointer"
                 >
                   <td className="flex-1 flex items-center gap-3">

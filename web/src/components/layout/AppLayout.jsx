@@ -2,7 +2,6 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import TopNavBar from './TopNavBar';
 import SideNavBar from './SideNavBar';
-import FloatingActionButton from '../ui/FloatingActionButton';
 import AlertNotification from './AlertNotification';
 
 const AppLayout = () => {
@@ -18,8 +17,6 @@ const AppLayout = () => {
           <AlertNotification />
         </div>
       </main>
-
-      <FloatingActionButton />
     </>
   );
 };

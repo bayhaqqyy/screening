@@ -2,33 +2,36 @@ import requests
 from datetime import datetime, timedelta
 import json
 import os
+import csv
 
 TICKER_CACHE_FILE = "data/cache/idx_tickers.json"
 CACHE_MAX_AGE_DAYS = 7  # Refresh setiap 7 hari
 
-def fetch_from_idx_website():
+def fetch_from_csv():
     """
-    Scrape dari idx.co.id
-    URL: https://www.idx.co.id/primary/StockData/GetStockData
+    Read from local idx_all_companies_info.csv
     """
-    url = "https://www.idx.co.id/primary/StockData/GetStockData"
-    params = {"start": 0, "length": 9999, "columnOrder": 0, "orderDir": "asc"}
-    headers = {"User-Agent": "Mozilla/5.0", "Referer": "https://www.idx.co.id"}
-    
-    resp = requests.get(url, params=params, headers=headers, timeout=30)
-    resp.raise_for_status()
-    data = resp.json()
+    csv_path = "idx_all_companies_info.csv"
+    # Adjust path if run from a different directory
+    if not os.path.exists(csv_path):
+        csv_path = os.path.join(os.path.dirname(__file__), "..", "idx_all_companies_info.csv")
     
     tickers = []
-    for item in data.get("data", []):
-        tickers.append({
-            "code": item["Code"],
-            "name": item["Name"],
-            "listing_date": item.get("ListingDate"),
-            "shares": item.get("Shares"),
-            "board": item.get("ListingBoard"),  # Main/Dev/Akselerasi
-        })
-    
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if row.get("Ticker"):
+                    tickers.append({
+                        "code": row["Ticker"],
+                        "name": row["Name"],
+                        "listing_date": None,
+                        "shares": None,
+                        "board": None,
+                    })
+    except Exception as e:
+        print(f"Error reading CSV: {e}")
+        
     return tickers
 
 def load_tickers(force_refresh=False):
@@ -49,12 +52,15 @@ def load_tickers(force_refresh=False):
             print(f"Cache read error: {e}")
     
     # Fetch fresh
-    print("Fetching fresh ticker list from IDX...")
+    print("Fetching fresh ticker list from local CSV...")
     try:
-        tickers = fetch_from_idx_website()
-        _save_cache(tickers)
-        print(f"Fetched {len(tickers)} tickers from IDX")
-        return tickers
+        tickers = fetch_from_csv()
+        if tickers:
+            _save_cache(tickers)
+            print(f"Loaded {len(tickers)} tickers from CSV")
+            return tickers
+        else:
+            raise Exception("CSV returned 0 tickers")
     except Exception as e:
         print(f"Fetch failed: {e}")
         # Fallback ke cache lama

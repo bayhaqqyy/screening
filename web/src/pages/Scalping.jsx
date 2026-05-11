@@ -9,16 +9,16 @@ import { useScreener } from '../hooks/useScreener';
 const Scalping = () => {
   const { data, loading } = useScreener('scalping');
   const [filters, setFilters] = useState({
-    minVol: 10,       // 10M
-    minFreq: 5000,    // not directly available in standard payload but we can mock
-    maxSpread: 1.0    // not directly available either but let's prep the structure
+    minVol: 0,        // Show all by default — user can raise threshold
+    minFreq: 5000,
+    maxSpread: 1.0
   });
 
   const filteredData = useMemo(() => {
-    if (!data) return [];
+    if (!data || data.length === 0) return [];
+    if (filters.minVol === 0) return data;
     return data.filter(item => {
-      const vol = item.payload?.volume || 0;
-      // Convert minVol (M) to actual number for comparison
+      const vol = item.payload?.volume || item.volume || 0;
       const volThreshold = filters.minVol * 1000000;
       return vol >= volThreshold;
     });

@@ -56,6 +56,7 @@ services:
         psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/003_align_news_and_add_volume.sql;
         psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/004_tv_alerts.sql;
         psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/005_fix_admin_password.sql;
+        psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/006_dedup_market_overview.sql;
         echo 'Migrations complete!';
       "
     depends_on:
