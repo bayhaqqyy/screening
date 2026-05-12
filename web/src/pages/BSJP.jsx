@@ -2,10 +2,14 @@ import React from 'react';
 import AnimatedPage from '../components/layout/AnimatedPage';
 import MarketStatus from '../components/bsjp/MarketStatus';
 import BSJPCandidates from '../components/bsjp/BSJPCandidates';
+import BSJPCandidatesV2 from '../components/bsjp/BSJPCandidatesV2';
 import AccumulationChart from '../components/bsjp/AccumulationChart';
 import StrategyPerformance from '../components/bsjp/StrategyPerformance';
-import BrokerActivity from '../components/bsjp/BrokerActivity';
+import BandarActivity from '../components/bsjp/BandarActivity';
 import BSJPPromo from '../components/bsjp/BSJPPromo';
+
+// Feature flag — set VITE_USE_TABLE_V2=true to render the Sprint 5 V2 layout.
+const USE_V2 = String(import.meta.env.VITE_USE_TABLE_V2).toLowerCase() === 'true';
 
 const BSJP = () => {
   return (
@@ -20,13 +24,13 @@ const BSJP = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <section className="lg:col-span-8 flex flex-col gap-6">
-          <BSJPCandidates />
+          {USE_V2 ? <BSJPCandidatesV2 /> : <BSJPCandidates />}
           <AccumulationChart />
         </section>
 
         <section className="lg:col-span-4 flex flex-col gap-6">
           <StrategyPerformance />
-          <BrokerActivity />
+          <BandarActivity />
           <BSJPPromo />
         </section>
       </div>

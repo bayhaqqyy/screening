@@ -17,6 +17,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/sahamscreen/server/config"
 	"github.com/sahamscreen/server/database"
+	"github.com/sahamscreen/server/internal/ta"
 	"github.com/sahamscreen/server/ws"
 )
 
@@ -270,6 +271,38 @@ func persistTVAlert(p TVAlertPayload, rawBody json.RawMessage) (int64, bool, err
 	return id, false, nil
 }
 
+// enrichPayload queries ohlcv_daily to compute support/resistance, FVG, and
+// 3-week trend for the given ticker and merges the results into payload.
+// Enrichment is best-effort: on any error the payload is returned unchanged
+// and a warning is logged so the webhook pipeline is never blocked.
+func enrichPayload(ticker string, refPrice float64, payload map[string]any) map[string]any {
+	sr, err := ta.ComputeSupportResistance(database.DB, ticker, refPrice)
+	if err != nil {
+		log.Printf("tv webhook: enrichPayload S/R for %s: %v", ticker, err)
+	} else {
+		payload["support"] = sr.Support
+		payload["resistance"] = sr.Resistance
+	}
+
+	fvg, err := ta.ComputeFVG(database.DB, ticker)
+	if err != nil {
+		log.Printf("tv webhook: enrichPayload FVG for %s: %v", ticker, err)
+	} else {
+		payload["fvg_bullish"] = fvg.Present
+		payload["fvg_high"] = fvg.GapHigh
+		payload["fvg_low"] = fvg.GapLow
+	}
+
+	trend, err := ta.ComputeTrend3W(database.DB, ticker)
+	if err != nil {
+		log.Printf("tv webhook: enrichPayload Trend3W for %s: %v", ticker, err)
+	} else {
+		payload["trend_3w"] = trend.Direction
+	}
+
+	return payload
+}
+
 func upsertScreenerResult(p TVAlertPayload) error {
 	payload := map[string]any{
 		"price":         p.Price,
@@ -286,6 +319,30 @@ func upsertScreenerResult(p TVAlertPayload) error {
 		"alert_time":    p.Time,
 		"source":        "tradingview",
 	}
+<<<<<<< Updated upstream
+=======
+	var rowID int64
+	var isLocked bool
+	var existingPayload []byte
+	scanErr := database.DB.QueryRow(`
+		SELECT id, COALESCE(is_locked, false), payload FROM screener_results
+		WHERE strategy = $1 AND ticker = $2
+		ORDER BY screened_at DESC LIMIT 1
+	`, p.Strategy, p.Ticker).Scan(&rowID, &isLocked, &existingPayload)
+
+	if scanErr == nil && len(existingPayload) > 0 {
+		var ep map[string]any
+		if json.Unmarshal(existingPayload, &ep) == nil {
+			if existingEntry, ok := ep["entry_price"]; ok {
+				payload["entry_price"] = existingEntry
+			}
+		}
+	}
+
+	// Best-effort TA enrichment — populates support, resistance, fvg_*, trend_3w.
+	payload = enrichPayload(p.Ticker, p.Price, payload)
+
+>>>>>>> Stashed changes
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
 		return err

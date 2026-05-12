@@ -2,6 +2,7 @@ import json
 import os
 import sys
 import pandas as pd
+import numpy as np
 from datetime import datetime, time as datetime_time
 import pytz
 import psycopg2
@@ -30,15 +31,7 @@ def get_db_connection():
         password=DB_PASS
     )
 
-def is_market_open():
-    tz = pytz.timezone('Asia/Jakarta')
-    now = datetime.now(tz)
-    # Market hours 09:00 - 16:00
-    if now.weekday() >= 5: # Saturday, Sunday
-        return False
-    market_open = datetime_time(9, 0)
-    market_close = datetime_time(16, 0)
-    return market_open <= now.time() <= market_close
+from utils.market_hours import is_market_open
 
 def is_bsjp_eval_time():
     tz = pytz.timezone('Asia/Jakarta')
@@ -119,6 +112,37 @@ def run_swing(df, ticker):
         }
     }
 
+<<<<<<< Updated upstream
+=======
+def freeze_entry_price(existing_payload, new_payload):
+    if not existing_payload:
+        return new_payload
+    if 'entry_price' in existing_payload:
+        new_payload['entry_price'] = existing_payload['entry_price']
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (np.integer,)):
+            return int(obj)
+        if isinstance(obj, (np.floating,)):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        if pd.isna(obj):
+            return None
+        type_name = type(obj).__name__.lower()
+        if 'int' in type_name:
+            return int(obj)
+        if 'float' in type_name:
+            return float(obj)
+        if hasattr(obj, 'item'):
+            return obj.item()
+        try:
+            return float(obj) if 'float' in type_name else int(obj)
+        except:
+            pass
+        return super().default(obj)
+
+>>>>>>> Stashed changes
 def process_message(data, conn, producer):
     # idx.ohlcv.enriched receives two message shapes:
     #   1. engine-indicator: {ticker, history: [...], latest: {...}}  <-- usable
@@ -173,7 +197,14 @@ def process_message(data, conn, producer):
                 'stop_loss': entry_price * 0.97,
                 'dip_pct': bsjp_res.get('daily_return', 0),
                 'accum_pct': bsjp_res.get('bsjp_score', 0),
-                'top_brokers': ['YP', 'CC'] # Placeholder until integrated with bandar flow
+                # NOTE: the previous `'top_brokers': ['YP', 'CC']` placeholder
+                # was removed — it leaked hardcoded broker codes into the UI
+                # and misled users into thinking those brokers were actually
+                # accumulating the ticker. Real broker data must come from an
+                # integrated IDX broker-summary feed; see the backlog item
+                # "Integrate IDX broker summary feed" in PLAN_V2.md. Until
+                # that feed is wired, the field is intentionally absent so
+                # the frontend renders its "Broker data unavailable" state.
             }
         }
         results.append(bsjp)
@@ -188,6 +219,9 @@ def process_message(data, conn, producer):
     try:
         with conn.cursor() as cur:
             for r in results:
+                # Dump the payload using the custom encoder for the DB
+                payload_json = json.dumps(r['payload'], cls=NumpyEncoder)
+                
                 # Issue #1: Check for locking mechanism
                 cur.execute("""
                     SELECT id, is_locked FROM screener_results 
@@ -208,25 +242,34 @@ def process_message(data, conn, producer):
                     if is_locked and r['strategy'] == 'bsjp':
                         continue # Skip updating if locked
                     
+<<<<<<< Updated upstream
+=======
+                    r['payload'] = freeze_entry_price(existing_payload, r['payload'])
+                    # Re-dump payload if it was frozen
+                    payload_json = json.dumps(r['payload'], cls=NumpyEncoder)
+                    
+>>>>>>> Stashed changes
                     cur.execute("""
                         UPDATE screener_results 
                         SET signal=%s, score=%s, payload=%s, screened_at=NOW(), is_locked=%s
                         WHERE id = %s
-                    """, (r['signal'], r['score'], Json(r['payload']), should_lock, row_id))
+                    """, (r['signal'], int(r['score']), payload_json, should_lock, row_id))
                 else:
                     cur.execute("""
                         INSERT INTO screener_results (strategy, ticker, signal, score, payload, screened_at, is_locked)
                         VALUES (%s, %s, %s, %s, %s, NOW(), %s)
-                    """, (r['strategy'], r['ticker'], r['signal'], r['score'], Json(r['payload']), should_lock))
+                    """, (r['strategy'], r['ticker'], r['signal'], int(r['score']), payload_json, should_lock))
                 
                 # Emit to WS topic
                 producer.produce(
                     TOPIC_SCREENER_WS,
                     key=r['ticker'],
-                    value=json.dumps(r)
+                    value=json.dumps(r, cls=NumpyEncoder)
                 )
         conn.commit()
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         print(f"DB Error: {e}")
         conn.rollback()
 

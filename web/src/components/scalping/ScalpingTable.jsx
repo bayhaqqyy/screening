@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { watchlistService } from '../../services/watchlistService';
+import TickerLink from '../ui/TickerLink';
 
 const ScalpingTable = ({ data = [], loading = false }) => {
   const [addingTicker, setAddingTicker] = useState(null);
@@ -83,7 +84,7 @@ const ScalpingTable = ({ data = [], loading = false }) => {
                       {initial}
                     </div>
                     <div>
-                      <div className="font-bold text-on-surface">{row.ticker}</div>
+                      <TickerLink ticker={row.ticker} exchange={payload.exchange} className="font-bold" />
                     </div>
                   </div>
                 </td>

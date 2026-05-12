@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { watchlistService } from '../../services/watchlistService';
+import TickerLink from '../ui/TickerLink';
 
 const SwingTable = ({ data = [], loading = false }) => {
   const [addingTicker, setAddingTicker] = useState(null);
@@ -76,7 +77,7 @@ const SwingTable = ({ data = [], loading = false }) => {
                   <tr key={row.ticker} className="hover:bg-surface-container-low transition-colors group">
                     <td className="px-4 py-4">
                       <div className="flex flex-col">
-                        <span className="text-sm font-bold text-blue-100 tabular-nums">{row.ticker}</span>
+                        <TickerLink ticker={row.ticker} exchange={row.payload?.exchange} className="text-sm" />
                       </div>
                     </td>
                     <td className="px-4 py-4">

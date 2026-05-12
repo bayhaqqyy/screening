@@ -50,7 +50,7 @@ const SectorStats = () => {
             <div key={sector.sector} className="space-y-2">
               <div className="flex justify-between text-xs font-semibold uppercase tracking-wider">
                 <span className="text-on-surface-variant truncate w-32">{sector.sector}</span>
-                <span className={colorCls}>{isGain ? '+' : ''}{sector.change_pct}%</span>
+                <span className={colorCls}>{isGain ? '+' : ''}{Number(sector.change_pct ?? 0).toFixed(2)}%</span>
               </div>
               <div className="h-1 w-full bg-surface-container-high rounded-full overflow-hidden">
                 <div className={`h-full ${bgCls} rounded-full ${shadowCls}`} style={{ width: `${progress}%` }}></div>

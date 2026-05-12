@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useScreener } from '../../hooks/useScreener';
 import { watchlistService } from '../../services/watchlistService';
+import TickerLink from '../ui/TickerLink';
 
 const BSJPCandidates = () => {
   const { data, loading } = useScreener('bsjp');
@@ -105,7 +106,7 @@ const BSJPCandidates = () => {
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-3">
                       <div className={`w-2 h-2 rounded-full ${dotColor}`}></div>
-                      <span className="font-bold text-on-surface tracking-tight tabular-nums">{item.ticker}</span>
+                      <TickerLink ticker={item.ticker} exchange={payload.exchange} className="tracking-tight" />
                     </div>
                   </td>
                   <td className="px-4 py-4 text-right tabular-nums text-on-surface-variant font-medium">{Math.round(entryPrice).toLocaleString()}</td>

@@ -169,3 +169,119 @@ func RateLimitMiddleware(next http.Handler) http.Handler {
 		}
 	})
 }
+
+
+// ---------------------------------------------------------------------------
+// Per-user, per-endpoint rate limiter — Sprint 7 addition.
+//
+// The global RateLimitMiddleware above caps *per-IP* request rate so a single
+// abusive host cannot DoS the whole API. That is not enough for
+// expensive-per-call endpoints like /api/ai/* where the cost is denominated
+// in LLM tokens rather than CPU cycles: different authenticated users behind
+// the same NAT'd WiFi would share one bucket, and a logged-in user could
+// burn another user's quota.
+//
+// PerUserEndpointRateLimit keys the bucket by (user-id, route-template) so
+// each user gets their own allowance on each protected endpoint, while
+// unauthenticated traffic falls back to IP (same key space as the global
+// limiter, just at a different layer).
+//
+// Parameters are explicit so callers can dial the limiter per route without
+// inventing new env vars: /api/ai/commentary might allow 20/min, while
+// /api/ai/daily-report only allows 2/min.
+// ---------------------------------------------------------------------------
+
+type userBucket struct {
+	tokens   float64
+	lastSeen time.Time
+}
+
+var (
+	userBuckets   = make(map[string]*userBucket)
+	userBucketsMu sync.Mutex
+)
+
+// PerUserEndpointRateLimit returns a middleware that enforces a token-bucket
+// rate limit keyed by (user-id, endpoint-name).
+//
+//	perMinute — steady-state rate in requests per minute.
+//	burst     — maximum burst size (bucket capacity).
+//	endpoint  — stable identifier mixed into the bucket key; use the route
+//	            template (e.g. "/api/ai/commentary") so two endpoints with
+//	            the same limit do not share a bucket.
+//
+// If perMinute or burst is <=0 the middleware is a no-op, which makes it
+// safe to wire everything in the router and control the limits from env.
+func PerUserEndpointRateLimit(perMinute, burst int, endpoint string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		if perMinute <= 0 || burst <= 0 {
+			return next
+		}
+		refillPerSec := float64(perMinute) / 60.0
+		capacity := float64(burst)
+
+		userBucketsCleanupOnce.Do(startUserBucketsCleanup)
+
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			key := endpoint + "|" + rateLimitSubject(r)
+
+			userBucketsMu.Lock()
+			now := time.Now()
+			b, ok := userBuckets[key]
+			if !ok {
+				b = &userBucket{tokens: capacity, lastSeen: now}
+				userBuckets[key] = b
+			} else {
+				elapsed := now.Sub(b.lastSeen).Seconds()
+				b.tokens += elapsed * refillPerSec
+				if b.tokens > capacity {
+					b.tokens = capacity
+				}
+				b.lastSeen = now
+			}
+
+			if b.tokens < 1 {
+				userBucketsMu.Unlock()
+				w.Header().Set("Retry-After", "1")
+				http.Error(w, "Too Many Requests", http.StatusTooManyRequests)
+				return
+			}
+			b.tokens--
+			userBucketsMu.Unlock()
+
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+// rateLimitSubject returns the identity the limiter keys on: the JWT subject
+// when the request is authenticated, otherwise the client IP. We read the
+// claims injected by AuthMiddleware rather than re-parsing the token so the
+// limiter costs nothing when the caller is already authenticated.
+func rateLimitSubject(r *http.Request) string {
+	if claims, ok := r.Context().Value(UserContextKey).(jwt.MapClaims); ok {
+		if sub, ok := claims["sub"].(string); ok && sub != "" {
+			return "u:" + sub
+		}
+	}
+	return "ip:" + clientIP(r)
+}
+
+var userBucketsCleanupOnce sync.Once
+
+func startUserBucketsCleanup() {
+	go func() {
+		t := time.NewTicker(2 * time.Minute)
+		defer t.Stop()
+		for range t.C {
+			cutoff := time.Now().Add(-5 * time.Minute)
+			userBucketsMu.Lock()
+			for k, b := range userBuckets {
+				if b.lastSeen.Before(cutoff) {
+					delete(userBuckets, k)
+				}
+			}
+			userBucketsMu.Unlock()
+		}
+	}()
+}

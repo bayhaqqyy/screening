@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -20,10 +21,17 @@ func main() {
 
 	r := mux.NewRouter()
 
-	// Health check
+	// Health check — enriched with Sprint 7 counters so ops can see Kafka
+	// ingest + Watchlist V2 traffic without adding a metrics server.
 	r.HandleFunc("/api/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"status": "ok", "service": "SahamScreen API"}`))
+		body := map[string]interface{}{
+			"status":    "ok",
+			"service":   "SahamScreen API",
+			"kafka":     kafka.ConsumerCounters(),
+			"watchlist": handlers.WatchlistCounters(),
+		}
+		_ = json.NewEncoder(w).Encode(body)
 	}).Methods("GET")
 
 	// Auth routes (public)
@@ -36,6 +44,8 @@ func main() {
 	r.HandleFunc("/api/market/top-movers", handlers.GetTopMovers).Methods("GET")
 	r.HandleFunc("/api/market/sectors", handlers.GetSectors).Methods("GET")
 	r.HandleFunc("/api/market/status", handlers.GetMarketStatus).Methods("GET")
+	r.HandleFunc("/api/market/bandar", handlers.GetBandarFlow).Methods("GET")
+	r.HandleFunc("/api/bandar/batch", handlers.GetBandarFlowBatch).Methods("GET")
 
 	// Screener routes — static path BEFORE the parameterized one so
 	// gorilla/mux doesn't match /api/screener/stats as {strategy}=stats.
@@ -45,6 +55,7 @@ func main() {
 	// News routes (public)
 	r.HandleFunc("/api/news", handlers.GetNews).Methods("GET")
 	r.HandleFunc("/api/news/featured", handlers.GetFeaturedNews).Methods("GET")
+	r.HandleFunc("/api/news/health", handlers.NewsHealth).Methods("GET")
 
 	// Search routes (public)
 	r.HandleFunc("/api/search", handlers.SearchStocks).Methods("GET")
@@ -71,6 +82,7 @@ func main() {
 	// Watchlist
 	protected.HandleFunc("/watchlist", handlers.GetWatchlist).Methods("GET")
 	protected.HandleFunc("/watchlist", handlers.AddToWatchlist).Methods("POST", "OPTIONS")
+	protected.HandleFunc("/watchlist", handlers.UpdateWatchlistSellPrice).Methods("PATCH", "OPTIONS")
 	protected.HandleFunc("/watchlist", handlers.RemoveFromWatchlist).Methods("DELETE", "OPTIONS")
 
 	// Alerts
@@ -82,12 +94,43 @@ func main() {
 	protected.HandleFunc("/settings", handlers.GetSettings).Methods("GET")
 	protected.HandleFunc("/settings", handlers.UpdateSettings).Methods("PUT", "OPTIONS")
 
+	// AI endpoints. Split into separate rate-limit buckets so commentary
+	// heavy-use (screener tables poll this on every row hover) cannot
+	// exhaust the daily-report budget (fires once per day from the
+	// schedule worker + occasional manual refresh).
+	//
+	// /ai/status is intentionally NOT rate-limited — it is a cheap
+	// feature-detection probe the frontend calls on every page load to
+	// decide whether to render AI affordances. Wrapping it in a limiter
+	// would cause 429s on normal navigation.
+	aiCommentaryLimit := middleware.PerUserEndpointRateLimit(
+		config.AppConfig.AIRateLimitPerMin,
+		config.AppConfig.AIRateLimitBurst,
+		"ai-commentary",
+	)
+	aiAnalysisLimit := middleware.PerUserEndpointRateLimit(
+		config.AppConfig.AIRateLimitPerMin/2, // half the commentary budget
+		config.AppConfig.AIRateLimitBurst,
+		"ai-analysis",
+	)
+	aiDailyReportLimit := middleware.PerUserEndpointRateLimit(
+		5, // very low — report is generated once/day, manual refresh is rare
+		2,
+		"ai-daily-report",
+	)
+	protected.HandleFunc("/ai/status", handlers.GetAIStatus).Methods("GET")
+	protected.Handle("/ai/commentary", aiCommentaryLimit(http.HandlerFunc(handlers.GetAICommentary))).Methods("GET")
+	protected.Handle("/ai/analysis", aiAnalysisLimit(http.HandlerFunc(handlers.GetAIAnalysis))).Methods("GET")
+	protected.Handle("/ai/daily-report", aiDailyReportLimit(http.HandlerFunc(handlers.GetAIDailyReport))).Methods("GET")
+
 	// WebSocket (mounted on root router, no auth — same as before)
 	r.HandleFunc("/ws/stream", ws.ServeWs)
 
 	go ws.AppHub.Run()
 	kafka.StartConsumers()
 	workers.StartAlertWorker()
+	workers.StartWatchlistTracker()
+	workers.StartScheduleWorker()
 
 	// Wrap the router with global middleware via http.Handler chaining
 	// instead of r.Use(). gorilla/mux's r.Use() only fires on routes it

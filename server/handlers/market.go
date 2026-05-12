@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/sahamscreen/server/database"
+	"github.com/sahamscreen/server/internal/markethours"
 )
 
 type MarketOverviewResponse struct {
@@ -119,53 +120,7 @@ func GetSectors(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetMarketStatus(w http.ResponseWriter, r *http.Request) {
-	// Return market session info based on current WIB time
-	loc, err := time.LoadLocation("Asia/Jakarta")
-	if err != nil {
-		// Fallback to UTC if timezone db not found, but approximate it
-		loc = time.FixedZone("WIB", 7*3600)
-	}
-	
-	now := time.Now().In(loc)
-	weekday := now.Weekday()
-	hour := now.Hour()
-	min := now.Minute()
-	timeVal := hour*60 + min
-
-	var session string
-	var message string
-
-	if weekday == time.Saturday || weekday == time.Sunday {
-		session = "closed"
-		message = "Weekend"
-	} else if timeVal < 8*60 + 45 {
-		session = "closed"
-		message = "Pre-Market Closed"
-	} else if timeVal < 9*60 {
-		session = "pre-market"
-		message = "Pre-Market"
-	} else if timeVal < 12*60 && weekday != time.Friday {
-		session = "live"
-		message = "Session 1"
-	} else if timeVal < 11*60 + 30 && weekday == time.Friday {
-		session = "live"
-		message = "Session 1"
-	} else if timeVal < 13*60 + 30 && weekday != time.Friday {
-		session = "break"
-		message = "Break"
-	} else if timeVal < 14*60 && weekday == time.Friday {
-		session = "break"
-		message = "Break"
-	} else if timeVal < 16*60 {
-		session = "live"
-		message = "Session 2"
-	} else if timeVal < 16*60 + 15 {
-		session = "pre-close"
-		message = "Pre-Close"
-	} else {
-		session = "closed"
-		message = "Market Closed"
-	}
+	session, message := markethours.GetMarketStatus(time.Now())
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{

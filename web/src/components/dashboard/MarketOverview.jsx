@@ -21,7 +21,10 @@ const MarketOverview = () => {
     };
     fetchOverview();
 
-    // Also listen to live market ticks to update volume/change in real-time
+    // Also listen to live market ticks to update volume/change in real-time.
+    // NOTE: change_pct here is an approximation based on per-tick averages.
+    // It is deliberately NOT written when index_value is 0 so the "Index
+    // data unavailable" placeholder cannot flicker with a misleading number.
     let totalVolume = 0;
     let tickCount = 0;
     let sumChange = 0;
@@ -35,11 +38,18 @@ const MarketOverview = () => {
       sumChange += (d.change_pct || 0);
       tickCount++;
 
-      setData(prev => ({
-        ...prev,
-        volume: prev.volume + (d.volume || 0),
-        change_pct: tickCount > 0 ? parseFloat((sumChange / tickCount).toFixed(2)) : prev.change_pct
-      }));
+      setData(prev => {
+        const next = {
+          ...prev,
+          volume: prev.volume + (d.volume || 0),
+        };
+        // Only recompute change_pct once we have a real index to pair it
+        // with. Without IHSG there is nothing for this % to sit next to.
+        if (Number(prev.index_value) > 0 && tickCount > 0) {
+          next.change_pct = parseFloat((sumChange / tickCount).toFixed(2));
+        }
+        return next;
+      });
     };
 
     window.addEventListener('ws_idx.ohlcv.enriched', handleTick);
@@ -47,7 +57,12 @@ const MarketOverview = () => {
   }, []);
 
   const isGain = data.change_pct >= 0;
-  
+  // Sprint-7 hygiene: the Go consumer no longer writes a synthetic
+  // weighted-average number when the IHSG feed is cold. index_value === 0
+  // therefore means "we have not received ^JKSE yet" rather than
+  // "IHSG closed at zero", and we surface that to the user explicitly.
+  const hasIndex = Number(data.index_value) > 0;
+
   // formatting helpers
   const formatValuation = (val) => {
     if (val > 1000000000000) return `Rp ${(val/1000000000000).toFixed(1)}T`;
@@ -69,14 +84,32 @@ const MarketOverview = () => {
       
       <div className="flex-shrink-0 z-10">
         <h2 className="text-xs font-semibold text-on-surface-variant uppercase tracking-widest mb-2">Market Overview</h2>
-        <div className="flex items-baseline gap-3">
-          <span className="text-5xl font-extrabold tabular-nums tracking-tighter">{data.index_value.toLocaleString()}</span>
-          <span className={`px-2 py-1 ${isGain ? 'bg-secondary-container text-on-secondary-container' : 'bg-error-container text-on-error-container'} rounded text-sm font-bold flex items-center gap-1`}>
-            <span className="material-symbols-outlined text-sm">{isGain ? 'trending_up' : 'trending_down'}</span>
-            {isGain ? '+' : ''}{data.change_pct}%
-          </span>
-        </div>
-        <p className="text-on-surface-variant mt-2 text-sm">IHSG Composite Index • Live</p>
+        {hasIndex ? (
+          <>
+            <div className="flex items-baseline gap-3">
+              <span className="text-5xl font-extrabold tabular-nums tracking-tighter">
+                {data.index_value.toLocaleString()}
+              </span>
+              <span className={`px-2 py-1 ${isGain ? 'bg-secondary-container text-on-secondary-container' : 'bg-error-container text-on-error-container'} rounded text-sm font-bold flex items-center gap-1`}>
+                <span className="material-symbols-outlined text-sm">{isGain ? 'trending_up' : 'trending_down'}</span>
+                {isGain ? '+' : ''}{Number(data.change_pct ?? 0).toFixed(2)}%
+              </span>
+            </div>
+            <p className="text-on-surface-variant mt-2 text-sm">IHSG Composite Index • Live</p>
+          </>
+        ) : (
+          <>
+            <div className="flex items-baseline gap-3">
+              <span className="text-3xl font-bold tracking-tight text-on-surface-variant">
+                Index data unavailable
+              </span>
+            </div>
+            <p className="text-on-surface-variant/70 mt-2 text-sm">
+              Waiting for IHSG feed (^JKSE). Synthetic fallback has been removed —
+              see PLAN_V2 hygiene notes.
+            </p>
+          </>
+        )}
       </div>
       
       <div className="flex flex-1 justify-around w-full gap-8 border-l border-outline-variant/20 pl-12 z-10">

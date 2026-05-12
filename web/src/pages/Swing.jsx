@@ -1,32 +1,27 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import AnimatedPage from '../components/layout/AnimatedPage';
-import SwingFilterBar from '../components/swing/SwingFilterBar';
 import SwingTable from '../components/swing/SwingTable';
+import SwingTableV2 from '../components/swing/SwingTableV2';
 import EventCalendar from '../components/swing/EventCalendar';
 import TechnicalHighlights from '../components/swing/TechnicalHighlights';
 import { useScreener } from '../hooks/useScreener';
 
+// Feature flag — set VITE_USE_TABLE_V2=true in the environment (or .env)
+// to swap the legacy tables for the redesigned Sprint 5 V2 layout. Defaults
+// to false so production users keep the existing experience until we flip it.
+const USE_V2 = String(import.meta.env.VITE_USE_TABLE_V2).toLowerCase() === 'true';
+
+// NOTE (Sprint-7 hygiene pass): the previous revision rendered a
+// <SwingFilterBar> with Timeframe / Indicator / Sector / Corp Action
+// dropdowns that fed a client-side `.filter()` with an explicit
+// "mock logic for others" comment. Only the `rsi_oversold` option
+// actually did anything, and even that was a substring match against
+// the free-form `signal` label rather than the real indicator field.
+// The dropdowns have been removed rather than left as a UX lie — see
+// the "Implement server-side screener filter parameters" backlog item
+// in PLAN_V2.md for the proper fix.
 const Swing = () => {
   const { data, loading } = useScreener('swing');
-  const [filters, setFilters] = useState({
-    timeframe: 'daily',
-    indicator: 'all',
-    sector: 'all',
-    corpAction: 'all'
-  });
-
-  const filteredData = useMemo(() => {
-    if (!data) return [];
-    return data.filter(item => {
-      // Very basic filtering mock since actual data might not have these fields structured this way from backend
-      if (filters.indicator !== 'all') {
-        const sig = (item.signal || '').toLowerCase();
-        if (filters.indicator === 'rsi_oversold' && !sig.includes('rsi')) return false;
-        // mock logic for others
-      }
-      return true;
-    });
-  }, [data, filters]);
 
   return (
     <AnimatedPage>
@@ -42,14 +37,16 @@ const Swing = () => {
           </div>
         </div>
       </div>
-      
-      <SwingFilterBar filters={filters} onFilterChange={setFilters} />
-      
+
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-        <SwingTable data={filteredData} loading={loading} />
+        {USE_V2 ? (
+          <SwingTableV2 data={data} loading={loading} />
+        ) : (
+          <SwingTable data={data} loading={loading} />
+        )}
         <EventCalendar />
       </div>
-      
+
       <TechnicalHighlights />
     </AnimatedPage>
   );

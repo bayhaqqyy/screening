@@ -3,6 +3,7 @@ import schedule
 import time
 import json
 import os
+import re
 import sys
 import hashlib
 import logging
@@ -69,6 +70,63 @@ BEARISH_WORDS = [
 ]
 
 
+def extract_image_url(entry):
+    """Pull an image URL out of an RSS entry using the fields most Indonesian
+    feeds actually populate, in priority order:
+
+      1. `media_content` — MRSS <media:content url="...">
+      2. `media_thumbnail` — MRSS <media:thumbnail url="...">
+      3. `enclosures` — RSS <enclosure url="..." type="image/*">
+      4. `links` with rel="enclosure" and an image type
+      5. an <img src="..."> embedded in summary/description HTML (last resort)
+
+    Returns an empty string when no usable image is found so the downstream
+    Go consumer can store '' rather than inventing a placeholder.
+    """
+    # 1. media_content (feedparser normalises MRSS to a list of dicts)
+    media = getattr(entry, 'media_content', None) or []
+    for m in media:
+        if isinstance(m, dict) and m.get('url'):
+            return m['url']
+
+    # 2. media_thumbnail
+    thumbs = getattr(entry, 'media_thumbnail', None) or []
+    for t in thumbs:
+        if isinstance(t, dict) and t.get('url'):
+            return t['url']
+
+    # 3. enclosures (legacy RSS 2.0 <enclosure>)
+    enclosures = getattr(entry, 'enclosures', None) or []
+    for enc in enclosures:
+        if not isinstance(enc, dict):
+            continue
+        enc_type = (enc.get('type') or '').lower()
+        href = enc.get('href') or enc.get('url')
+        if href and (enc_type.startswith('image/') or not enc_type):
+            return href
+
+    # 4. Atom-style links array with rel=enclosure
+    for link in getattr(entry, 'links', None) or []:
+        if not isinstance(link, dict):
+            continue
+        if link.get('rel') == 'enclosure' and link.get('type', '').startswith('image/'):
+            if link.get('href'):
+                return link['href']
+
+    # 5. Embedded <img> in description/summary as a last resort. Kept simple
+    #    (no BeautifulSoup dependency) — we pull the first src= attribute and
+    #    let the frontend fall back to its gradient if the URL is broken.
+    html = getattr(entry, 'summary', '') or getattr(entry, 'description', '') or ''
+    if html:
+        # Match src="..." or src='...'; character class handles both quote
+        # flavours in one pattern without escaping issues in a raw string.
+        m = re.search(r'''<img[^>]+src=["']([^"']+)["']''', html, re.IGNORECASE)
+        if m:
+            return m.group(1)
+
+    return ''
+
+
 def get_producer():
     try:
         return Producer({
@@ -86,6 +144,31 @@ def extract_tickers_from_text(text):
     words = set(text_upper.replace(',', ' ').replace('.', ' ').replace('-', ' ').split())
     found = [t for t in VALID_TICKERS if t in words]
     return found
+
+
+def is_emiten_related(text):
+    """Check if the text is related to stock market or specific emiten.
+
+    The keyword list covers both general market terms and specific corporate
+    actions so articles about IPOs, buybacks, mergers, etc. are not
+    accidentally rejected by the filter.
+    """
+    text_lower = text.lower()
+    keywords = [
+        # General market / emiten terms
+        'saham', 'emiten', 'ihsg', 'bursa', 'bei',
+        'dividen', 'rups', 'tbk', 'investor', 'investasi', 'modal',
+        # Corporate actions — the original list missed these, causing valid
+        # articles to be filtered out silently.
+        'ipo', 'buyback', 'akuisisi', 'merger',
+        'right issue', 'rights issue',
+        'listing', 'delisting', 'suspend',
+        'tender offer', 'stock split', 'reverse stock',
+        'obligasi',
+    ]
+    if extract_tickers_from_text(text):
+        return True
+    return any(kw in text_lower for kw in keywords)
 
 
 def analyze_sentiment(title):
@@ -125,6 +208,7 @@ def fetch_from_source(source):
             return []
 
         items = []
+        filtered_out_count = 0
         for entry in feed.entries[:10]:
             url_link = getattr(entry, 'link', '')
 
@@ -135,6 +219,11 @@ def fetch_from_source(source):
 
             title = getattr(entry, 'title', 'Untitled')
             published = getattr(entry, 'published', datetime.now().isoformat())
+
+            # Apply emiten-only filter
+            if not is_emiten_related(title):
+                filtered_out_count += 1
+                continue
 
             # Sentiment
             sentiment, sentiment_score = analyze_sentiment(title)
@@ -151,9 +240,12 @@ def fetch_from_source(source):
                 "timestamp": published,
                 "sentiment": sentiment,
                 "sentiment_score": sentiment_score,
+                "image_url": extract_image_url(entry),
             })
 
         print(f"  [{name}] Fetched {len(items)} new items")
+        if filtered_out_count > 0:
+            print(f"  [{name}] Filtered out {filtered_out_count} non-emiten items")
         return items
 
     except Exception as e:

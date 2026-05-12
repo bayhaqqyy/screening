@@ -82,13 +82,37 @@ const MarketDeepDive = ({ activeFilter = 'Semua' }) => {
           }
 
           const tags = newsItem.related_tickers || [];
-          // Use default image as backend currently doesn't scrape images
-          const image = 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=500&auto=format&fit=crop&q=60';
+          // Sprint-7 hygiene pass: the old implementation used a single
+          // hardcoded Unsplash photo as the thumbnail for EVERY item. We
+          // now mirror FeaturedNews.jsx — show the scraped `image_url`
+          // when the news_fetcher extracted one, otherwise render a
+          // gradient placeholder so nothing pretends to be an image we
+          // don't actually have.
+          const imageUrl = newsItem.image_url || '';
 
           return (
           <a key={idx} href={link} target="_blank" rel="noopener noreferrer" className="block glass-panel p-5 rounded-xl border border-outline-variant/10 flex flex-col md:flex-row gap-6 items-center hover:bg-surface-container-high/40 transition-colors cursor-pointer group outline-none focus:ring-2 focus:ring-primary">
-            <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden shrink-0">
-              <img className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="news thumbnail" src={image} />
+            <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden shrink-0 relative">
+              {imageUrl ? (
+                <img
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  alt="news thumbnail"
+                  src={imageUrl}
+                  loading="lazy"
+                  onError={(e) => {
+                    // Hide the broken image so the gradient fallback (the
+                    // sibling <div>) shows through instead of a browser
+                    // icon.
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              ) : null}
+              <div
+                className={`absolute inset-0 bg-gradient-to-br from-primary/20 to-surface-container ${
+                  imageUrl ? '-z-10' : ''
+                }`}
+                aria-hidden="true"
+              />
             </div>
             
             <div className="flex-1 space-y-2">

@@ -58,7 +58,7 @@ const SectorHeatmap = () => {
             <div key={sector.sector} className={`${getSlotClasses(index)} ${style.bg} rounded-lg p-4 flex flex-col justify-between border ${style.border} ${style.hover} transition-colors cursor-pointer`}>
               <span className={`text-[10px] md:text-xs font-bold uppercase tracking-widest ${style.textCls} truncate`}>{sector.sector}</span>
               <span className={`${index === 0 ? 'text-2xl' : 'text-lg'} font-black tabular-nums`}>
-                {isGain ? '+' : ''}{sector.change_pct}%
+                {isGain ? '+' : ''}{Number(sector.change_pct ?? 0).toFixed(2)}%
               </span>
             </div>
           )

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { marketService } from '../../services/marketService';
+import TickerLink from '../ui/TickerLink';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -123,13 +124,13 @@ const TopMovers = () => {
                       {initial}
                     </div>
                     <div>
-                      <p className="font-bold tabular-nums">{stock.ticker}</p>
+                      <TickerLink ticker={stock.ticker} />
                       <p className="text-[10px] text-on-surface-variant truncate w-32">{stock.name}</p>
                     </div>
                   </td>
                   <td className="w-24 text-right tabular-nums font-semibold">{stock.price}</td>
                   <td className={`w-24 text-right tabular-nums ${isGain ? 'text-secondary' : 'text-error'}`}>
-                    {isGain ? '+' : ''}{stock.change_pct}%
+                    {isGain ? '+' : ''}{Number(stock.change_pct ?? 0).toFixed(2)}%
                   </td>
                 </motion.tr>
               )

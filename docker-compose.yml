@@ -51,12 +51,10 @@ services:
           sleep 2;
         done;
         echo 'Running migrations...';
-        psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/001_init.sql;
-        psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/002_production_tables.sql;
-        psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/003_align_news_and_add_volume.sql;
-        psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/004_tv_alerts.sql;
-        psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/005_fix_admin_password.sql;
-        psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f /migrations/006_dedup_market_overview.sql;
+        for f in $$(ls /migrations/*.sql | sort); do
+          echo \"Applying $$f...\";
+          psql -h postgres -U sahamscreen -d sahamscreen -v ON_ERROR_STOP=1 -f \"$$f\";
+        done;
         echo 'Migrations complete!';
       "
     depends_on:
@@ -82,22 +80,14 @@ services:
     networks:
       - sahamscreen-network
 
-  # engine-market disabled: live tick simulation is replaced by TradingView webhooks.
-  # Kept here for easy rollback during migration. Re-enable by uncommenting.
-  # engine-market:
-  #   build:
-  #     context: ./engine
-  #     dockerfile: Dockerfile
-  #   container_name: sahamscreen-engine-market
-  #   environment:
-  #     - KAFKA_BROKER=kafka:29092
-  #   command: ["python", "streaming/market_producer.py"]
-  #   depends_on:
-  #     kafka:
-  #       condition: service_healthy
-  #   networks:
-  #     - sahamscreen-network
-  #   restart: "always"
+  # engine-market: REMOVED in Sprint-7 hygiene pass. The live tick
+  # producer (engine/streaming/market_producer.py) has been deleted
+  # along with this block — keeping even a commented-out service
+  # invites someone to uncomment it and start emitting synthetic OHLCV
+  # into production Kafka. Real market data comes from engine-fetcher
+  # (yfinance poll) plus the TradingView webhook in
+  # server/handlers/webhook.go. See DEPLOYMENT.md if you need a
+  # rollback path.
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -147,6 +137,18 @@ services:
       - KAFKA_BROKER=kafka:29092
       - TV_WEBHOOK_PATH_TOKEN=${TV_WEBHOOK_PATH_TOKEN:-}
       - TV_WEBHOOK_SECRET=${TV_WEBHOOK_SECRET:-}
+      # AI integration — Groq free-tier OpenAI-compatible endpoint. Stays
+      # disabled by default. Set AI_ENABLED=true and populate GROQ_API_KEY
+      # in your .env to enable outbound calls.
+      - AI_ENABLED=${AI_ENABLED:-false}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GROQ_API_URL=${GROQ_API_URL:-https://api.groq.com/openai/v1/chat/completions}
+      - GROQ_FAST_MODEL=${GROQ_FAST_MODEL:-llama-3.1-8b-instant}
+      - GROQ_PRO_MODEL=${GROQ_PRO_MODEL:-meta-llama/llama-4-scout-17b-16e-instruct}
+      - GROQ_TIMEOUT_MS=${GROQ_TIMEOUT_MS:-8000}
+      - GROQ_CACHE_TTL_SECONDS=${GROQ_CACHE_TTL_SECONDS:-120}
+      - AI_RATE_LIMIT_PER_MIN=${AI_RATE_LIMIT_PER_MIN:-20}
+      - AI_RATE_LIMIT_BURST=${AI_RATE_LIMIT_BURST:-5}
     depends_on:
       postgres:
         condition: service_started

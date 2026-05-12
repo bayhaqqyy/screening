@@ -29,7 +29,6 @@ export const useScreener = (strategy) => {
 
     fetchData();
 
-    // Now all strategies listen to the unified screener updates topic
     const targetTopic = 'idx.screener.updates';
     
     const handleWsUpdate = (event) => {
@@ -56,10 +55,33 @@ export const useScreener = (strategy) => {
       });
     };
 
+    const handleOhlcvUpdate = (event) => {
+      const msg = event.detail;
+      const tick = msg.data;
+      if (!tick || !tick.ticker) return;
+
+      setData(prevData => {
+        return prevData.map(item => {
+          if (item.ticker === tick.ticker) {
+            return {
+              ...item,
+              payload: {
+                ...item.payload,
+                price: tick.last_price
+              }
+            };
+          }
+          return item;
+        });
+      });
+    };
+
     window.addEventListener(`ws_${targetTopic}`, handleWsUpdate);
+    window.addEventListener(`ws_idx.ohlcv.enriched`, handleOhlcvUpdate);
 
     return () => {
       window.removeEventListener(`ws_${targetTopic}`, handleWsUpdate);
+      window.removeEventListener(`ws_idx.ohlcv.enriched`, handleOhlcvUpdate);
     };
   }, [strategy]);
 

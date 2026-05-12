@@ -169,15 +169,21 @@ if __name__ == "__main__":
     import os
     interval_minutes = int(os.getenv("FETCH_INTERVAL_MINUTES", "15"))
     print(f"Starting fetcher service. Will fetch every {interval_minutes} minutes.")
+    
+    from utils.market_hours import is_market_open
+    
     while True:
-        try:
-            producer = get_producer()
-            # Fetch real IHSG index first
-            fetch_ihsg_index(producer)
-            # Then download all individual tickers
-            download_all_idx()
-        except Exception as e:
-            print(f"Error in main loop: {e}")
+        if is_market_open():
+            try:
+                producer = get_producer()
+                # Fetch real IHSG index first
+                fetch_ihsg_index(producer)
+                # Then download all individual tickers
+                download_all_idx()
+            except Exception as e:
+                print(f"Error in main loop: {e}")
+        else:
+            print("Market is closed. Skipping fetch.")
         
         print(f"Sleeping for {interval_minutes} minutes...")
         time.sleep(interval_minutes * 60)

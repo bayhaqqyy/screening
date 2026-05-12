@@ -41,9 +41,11 @@ const BrokerSummaryCard = ({ ticker }) => {
       <h3 className="font-bold text-on-surface border-b border-outline-variant/20 pb-3 mb-4">Broker Summary</h3>
       {!hasBrokerData ? (
         <div className="flex items-center justify-center h-24 text-on-surface-variant text-sm text-center">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-sm animate-pulse">radio_button_checked</span>
-            Waiting for live broker flow...
+          <div className="flex flex-col items-center gap-1 px-4">
+            <span className="font-medium">Broker data unavailable</span>
+            <span className="text-[10px] text-on-surface-variant/70">
+              IDX broker summary feed is not integrated yet.
+            </span>
           </div>
         </div>
       ) : (

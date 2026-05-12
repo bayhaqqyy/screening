@@ -4,13 +4,26 @@ import { newsService } from '../../services/newsService';
 const FeaturedNews = () => {
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [healthInfo, setHealthInfo] = useState(null);
 
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
         const res = await newsService.getFeatured();
-        if (res.data) setArticle(res.data);
-      } catch { /* fallback to null */ }
+        if (res.data) {
+          setArticle(res.data);
+        } else {
+          const healthRes = await fetch('/api/news/health').then(r => r.json());
+          setHealthInfo(healthRes);
+        }
+      } catch {
+        try {
+          const healthRes = await fetch('/api/news/health').then(r => r.json());
+          setHealthInfo(healthRes);
+        } catch (e) {
+          setHealthInfo({ status: 'Error', message: 'Could not fetch health.' });
+        }
+      }
       finally { setLoading(false); }
     };
     fetchFeatured();
@@ -30,8 +43,17 @@ const FeaturedNews = () => {
 
   if (!article) {
     return (
-      <article className="lg:col-span-8 group relative rounded-xl overflow-hidden aspect-[16/9] lg:aspect-auto lg:h-[500px] bg-surface-container flex items-center justify-center">
-        <span className="text-on-surface-variant text-sm">No featured news available</span>
+      <article className="lg:col-span-8 group relative rounded-xl overflow-hidden aspect-[16/9] lg:aspect-auto lg:h-[500px] bg-surface-container flex flex-col items-center justify-center p-6 text-center border border-dashed border-outline-variant">
+        <span className="text-on-surface-variant text-sm mb-4">No featured news available</span>
+        {healthInfo && (
+          <div className="text-xs text-on-surface-variant/80 bg-surface-container-highest p-4 rounded-lg text-left max-w-sm space-y-1">
+            <p className="font-bold text-on-surface">Pipeline Diagnosis</p>
+            <p>Status: {healthInfo.status}</p>
+            <p>Message: {healthInfo.message}</p>
+            {healthInfo.diagnosis && <p>Action: {healthInfo.diagnosis}</p>}
+            {healthInfo.total_news !== undefined && <p>Total DB Records: {healthInfo.total_news}</p>}
+          </div>
+        )}
       </article>
     );
   }
