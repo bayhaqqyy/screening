@@ -359,8 +359,8 @@ def format_alert_message(ticker, strategy, signal, score, payload, bandar_data=N
         f"{bandar_text}\n"
         f"⚡ *EXECUTION MATRIX*\n"
         f"  ├ 💵 Entry Price: {price_esc}\n"
-        f"  ├ 🎯 Target (TP): {target_esc}\n"
-        f"  └ ⛔ Stop Loss (SL): {sl_esc}\n\n"
+        f"  ├ 🎯 Target \(TP\): {target_esc}\n"
+        f"  └ ⛔ Stop Loss \(SL\): {sl_esc}\n\n"
         f"🕒 Time: {wib_now_esc} WIB\n"
         f"🤖 _Automated IDX Screener Bot_"
     )
@@ -735,10 +735,33 @@ class TelegramCommandListener(threading.Thread):
                 time.sleep(5)
                 
     def is_authorized(self, chat_id):
-        if not self.allowed_chat_id:
-            return False
-        allowed_list = [c.strip() for c in str(self.allowed_chat_id).split(',')]
-        return str(chat_id) in allowed_list
+        # 1. Check if allowed via environment variable (allowed_chat_id)
+        if self.allowed_chat_id:
+            allowed_list = [c.strip() for c in str(self.allowed_chat_id).split(',')]
+            if str(chat_id) in allowed_list:
+                return True
+                
+        # 2. Check if registered and active in SQLite telegram_channels
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT chat_id FROM telegram_channels WHERE is_active = 1")
+            active_channels = [row['chat_id'] for row in cursor.fetchall()]
+            conn.close()
+            
+            for ch in active_channels:
+                # Direct match
+                if str(ch) == str(chat_id):
+                    return True
+                # Cleaned prefix match (handling chat_id:thread_id)
+                ch_clean = str(ch).split(':')[0]
+                chat_id_clean = str(chat_id).split(':')[0]
+                if ch_clean == chat_id_clean:
+                    return True
+        except Exception as e:
+            print(f"Error checking channel authorization in DB: {e}")
+            
+        return False
         
     def process_message(self, message):
         text = message.get("text", "").strip()
