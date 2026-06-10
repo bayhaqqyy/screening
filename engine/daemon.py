@@ -371,12 +371,25 @@ def send_telegram_alert(text):
         
     success = False
     for chat_id in channels:
+        actual_chat_id = chat_id
+        thread_id = None
+        if ":" in str(chat_id):
+            parts = str(chat_id).split(":")
+            actual_chat_id = parts[0]
+            try:
+                thread_id = int(parts[1])
+            except ValueError:
+                pass
+
         url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
         payload = {
-            "chat_id": chat_id,
+            "chat_id": actual_chat_id,
             "text": text,
             "parse_mode": "MarkdownV2"
         }
+        if thread_id is not None:
+            payload["message_thread_id"] = thread_id
+
         try:
             r = requests.post(url, json=payload, timeout=15)
             res_json = r.json()
@@ -646,6 +659,7 @@ class TelegramCommandListener(threading.Thread):
         self.running = True
         self.daemon = True
         self.last_update_id = 0
+        self.current_thread_id = None
         
     def run(self):
         if not self.token:
@@ -722,6 +736,7 @@ class TelegramCommandListener(threading.Thread):
             
         print(f"Received command: {cmd} from chat {chat_id}")
         
+        self.current_thread_id = message.get("message_thread_id")
         try:
             if cmd in ("/start", "/help"):
                 self.handle_help(chat_id)
@@ -747,6 +762,8 @@ class TelegramCommandListener(threading.Thread):
         except Exception as e:
             print(f"Error handling command {cmd}: {e}")
             self.send_response(chat_id, f"❌ *Error:* {escape_md_v2(str(e))}")
+        finally:
+            self.current_thread_id = None
             
     def handle_help(self, chat_id):
         help_text = (
@@ -1049,12 +1066,27 @@ class TelegramCommandListener(threading.Thread):
             self.send_response(chat_id, f"❌ Error: {escape_md_v2(str(e))}")
             
     def send_response(self, chat_id, text):
+        actual_chat_id = chat_id
+        thread_id = self.current_thread_id
+        
+        # If chat_id contains a colon, it means it was a registered channel in format chat_id:thread_id
+        if ":" in str(chat_id):
+            parts = str(chat_id).split(":")
+            actual_chat_id = parts[0]
+            try:
+                thread_id = int(parts[1])
+            except ValueError:
+                pass
+
         url = f"https://api.telegram.org/bot{self.token}/sendMessage"
         payload = {
-            "chat_id": chat_id,
+            "chat_id": actual_chat_id,
             "text": text,
             "parse_mode": "MarkdownV2"
         }
+        if thread_id is not None:
+            payload["message_thread_id"] = thread_id
+
         try:
             requests.post(url, json=payload, timeout=10)
         except Exception as e:
