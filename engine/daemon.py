@@ -336,6 +336,41 @@ def format_alert_message(ticker, strategy, signal, score, payload, bandar_data=N
     wib_now = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
     wib_now_esc = escape_md_v2(wib_now)
     
+    # Special formatting for exit/SELL alerts
+    if signal == "SELL":
+        reason = payload.get('exit_reason', 'EXIT')
+        pl_pct = payload.get('profit_loss_pct', 0.0)
+        
+        reason_esc = escape_md_v2(reason.replace('_', ' '))
+        pl_esc = escape_md_v2(f"{pl_pct:+.2f}%")
+        
+        entry_val = payload.get('entry_price') or payload.get('price') or price
+        entry_esc = escape_md_v2(f"{entry_val:,.0f}")
+        exit_price_esc = escape_md_v2(f"{price:,.0f}")
+        
+        if reason == "TAKE_PROFIT":
+            header_emoji = "🟢"
+            signal_desc = "SELL \\(TAKE PROFIT\\)"
+            pl_emoji = "🟢"
+        else: # STOP_LOSS or fallback
+            header_emoji = "🔴"
+            signal_desc = "SELL \\(STOP LOSS\\)"
+            pl_emoji = "🔴"
+            
+        msg = (
+            f"{header_emoji} *IDX EXIT SIGNAL ALERT* {header_emoji}\n\n"
+            f"📌 *Stock:* {ticker_esc}\n"
+            f"⚙️ *Strategy:* {strategy_esc}\n"
+            f"🔔 *Signal:* *{signal_desc}*\n"
+            f"{pl_emoji} *Profit/Loss:* *{pl_esc}*\n\n"
+            f"⚡ *EXIT MATRIX*\n"
+            f"  ├ 💵 Entry Price: {entry_esc}\n"
+            f"  └ 🚪 Exit Price: {exit_price_esc}\n\n"
+            f"🕒 Time: {wib_now_esc} WIB\n"
+            f"🤖 _Automated IDX Screener Bot_"
+        )
+        return msg
+
     # Emojis for status
     emoji = "🚨"
     if signal in ("STRONG_BUY", "BUY"):
@@ -475,6 +510,63 @@ def process_tickers():
                         
                     # Calculate Technical Indicators
                     df = enrich_data(df)
+                    
+                    # Monitor existing BUY signals for Take Profit (TP) or Stop Loss (SL) exits
+                    cursor = conn.cursor()
+                    cursor.execute("""
+                        SELECT strategy, signal, payload FROM screener_results 
+                        WHERE ticker = ? AND signal IN ('BUY', 'STRONG_BUY')
+                    """, (ticker,))
+                    active_signals = cursor.fetchall()
+                    
+                    current_price = float(df['Close'].iloc[-1])
+                    
+                    for active_sig in active_signals:
+                        strat_name = active_sig['strategy']
+                        try:
+                            payload_dict = json.loads(active_sig['payload'])
+                        except Exception:
+                            payload_dict = {}
+                            
+                        tp = payload_dict.get('target')
+                        sl = payload_dict.get('stop_loss')
+                        entry = payload_dict.get('entry_price') or payload_dict.get('price') or current_price
+                        
+                        exit_trigger = None
+                        if tp and current_price >= tp:
+                            exit_trigger = "TAKE_PROFIT"
+                        elif sl and current_price <= sl:
+                            exit_trigger = "STOP_LOSS"
+                            
+                        if exit_trigger:
+                            exit_score = 100
+                            exit_payload = {
+                                'price': current_price,
+                                'entry_price': entry,
+                                'target': tp,
+                                'stop_loss': sl,
+                                'exit_reason': exit_trigger,
+                                'profit_loss_pct': ((current_price - entry) / entry) * 100 if entry > 0 else 0
+                            }
+                            cursor.execute("""
+                                INSERT INTO screener_results (strategy, ticker, signal, score, payload, screened_at, is_locked)
+                                VALUES (?, ?, 'SELL', ?, ?, CURRENT_TIMESTAMP, 0)
+                                ON CONFLICT(strategy, ticker) DO UPDATE SET
+                                    signal='SELL',
+                                    score=excluded.score,
+                                    payload=excluded.payload,
+                                    screened_at=CURRENT_TIMESTAMP,
+                                    is_locked=0
+                            """, (strat_name, ticker, exit_score, json.dumps(exit_payload)))
+                            
+                            all_signals_to_alert.append({
+                                'ticker': ticker,
+                                'strategy': strat_name,
+                                'signal': 'SELL',
+                                'score': exit_score,
+                                'payload': exit_payload,
+                                'bandar_data': None
+                            })
                     
                     # 1. Evaluate Bandar Accumulation Flow
                     bandar_res = analyze_accumulation(df, ticker)
