@@ -10,6 +10,16 @@ from datetime import datetime, time as datetime_time
 import pytz
 import traceback
 import yfinance as yf
+# Disable timezone and other caches to avoid SQLite database locking issues in multi-threaded environments
+try:
+    yf.cache._TzCacheManager._tz_cache = yf.cache._TzCacheDummy()
+    yf.cache._CookieCacheManager._cookie_cache = yf.cache._CookieCacheDummy()
+    yf.cache._ISINCacheManager._isin_cache = yf.cache._ISINCacheDummy()
+except AttributeError:
+    try:
+        yf.set_tz_cache_location(None)
+    except Exception:
+        pass
 import ta
 
 # Add current and parent directory to path to allow absolute imports
