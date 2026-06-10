@@ -72,10 +72,16 @@ print(f"  - BYPASS_MARKET_HOURS: {BYPASS_MARKET_HOURS}")
 # -----------------------------------------------------------------------------
 def get_db_connection():
     os.makedirs(os.path.dirname(DATABASE_PATH), exist_ok=True)
-    conn = sqlite3.connect(DATABASE_PATH)
+    conn = sqlite3.connect(DATABASE_PATH, timeout=30.0)
+    try:
+        conn.execute("PRAGMA journal_mode=WAL;")
+        conn.execute("PRAGMA synchronous=NORMAL;")
+    except Exception as e:
+        print(f"Error setting SQLite pragmas: {e}")
     # Return rows as dict-like objects
     conn.row_factory = sqlite3.Row
     return conn
+
 
 def init_db():
     conn = get_db_connection()
@@ -427,9 +433,6 @@ def process_tickers():
         
     print(f"Loaded {len(tickers_list)} tickers. Preparing batch download...")
     
-    # SQLite Connection
-    conn = get_db_connection()
-    
     # Batch download configuration
     BATCH_SIZE = 50
     DELAY_BETWEEN_BATCHES = 3
@@ -453,6 +456,8 @@ def process_tickers():
                 threads=True,
                 progress=False
             )
+            
+            conn = get_db_connection()
             
             for full_ticker in batch:
                 ticker = full_ticker.replace('.JK', '')
@@ -631,15 +636,23 @@ def process_tickers():
                     traceback.print_exc()
                     
             conn.commit()
-            
         except Exception as batch_err:
             print(f"Error processing batch starting at {batch[0]}: {batch_err}")
             traceback.print_exc()
+            if 'conn' in locals() and conn:
+                try:
+                    conn.rollback()
+                except Exception:
+                    pass
+        finally:
+            if 'conn' in locals() and conn:
+                try:
+                    conn.close()
+                except Exception:
+                    pass
             
         # Rate limit protection between batches
         time.sleep(DELAY_BETWEEN_BATCHES)
-        
-    conn.close()
     
     # 4. Dispatch Telegram Alerts
     print(f"Screening cycle completed. Dispatched {len(all_signals_to_alert)} alerts to Telegram.")
